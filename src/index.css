@@ -18,6 +18,13 @@
   --color-border-strong: #D1D5DB;
 }
 
+@layer base {
+  body {
+    @apply text-sm md:text-base;
+  }
+}
+
+
 /* Base reset */
 html,
 body {
