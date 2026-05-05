@@ -55,6 +55,7 @@ a {
 /* Buttons */
 button {
   font: inherit;
+  cursor: pointer;
 }
 
 /* Inputs */

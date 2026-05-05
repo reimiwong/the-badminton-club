@@ -20,7 +20,7 @@ export default function Card({ title, description, link, img }: CardProps) {
       to={link.page}
       className="
         group
-        w-full max-w-[384px]
+        w-full 
         bg-white rounded-2xl
         shadow-[0_8px_24px_rgba(0,0,0,0.08)]
         overflow-hidden
