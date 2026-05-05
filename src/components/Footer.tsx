@@ -2,6 +2,8 @@ const navClass = "flex flex-col gap-3";
 const h2Class = "text-surface font-semibold text-base md:text-lg";
 const ulClass = "text-[#9CA3AF] flex flex-col gap-1";
 const contactRowClass = "flex items-center gap-2";
+const footerLinkClass =
+  "transition-colors duration-200 ease-out hover:text-primary";
 
 export default function Footer() {
   return (
@@ -27,27 +29,23 @@ export default function Footer() {
 
         {/* Quick Links */}
         <nav aria-labelledby="footer-links" className={navClass}>
-          <h2 id="footer-links" className={h2Class}>
-            Quick Links
-          </h2>
+          <h2 id="footer-links" className={h2Class}>Quick Links</h2>
           <ul className={ulClass}>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/coaches">Our Coaches</a></li>
-            <li><a href="/news">News &amp; Updates</a></li>
-            <li><a href="/membership">Membership</a></li>
+            <li><a href="/about" className={footerLinkClass}>About Us</a></li>
+            <li><a href="/coaches" className={footerLinkClass}>Our Coaches</a></li>
+            <li><a href="/news" className={footerLinkClass}>News &amp; Updates</a></li>
+            <li><a href="/membership" className={footerLinkClass}>Membership</a></li>
           </ul>
         </nav>
 
         {/* Training */}
         <nav aria-labelledby="training-links" className={navClass}>
-          <h2 id="training-links" className={h2Class}>
-            Training
-          </h2>
+          <h2 id="training-links" className={h2Class}>Training</h2>
           <ul className={ulClass}>
-            <li><a href="/book-session">Book a Session</a></li>
-            <li><a href="/private-coaching">Private Coaching</a></li>
-            <li><a href="/group-classes">Group Classes</a></li>
-            <li><a href="/tournament-prep">Tournament Prep</a></li>
+            <li><a href="/book-session" className={footerLinkClass}>Book a Session</a></li>
+            <li><a href="/private-coaching" className={footerLinkClass}>Private Coaching</a></li>
+            <li><a href="/group-classes" className={footerLinkClass}>Group Classes</a></li>
+            <li><a href="/tournament-prep" className={footerLinkClass}>Tournament Prep</a></li>
           </ul>
         </nav>
 
