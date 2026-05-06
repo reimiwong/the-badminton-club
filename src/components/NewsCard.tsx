@@ -21,8 +21,7 @@ export default function NewsCard({
   img,
 }: NewsCardProps) {
   return (
-    
-<NavLink
+   <NavLink
   to={link}
   className="
     group
@@ -32,39 +31,37 @@ export default function NewsCard({
     overflow-hidden
     flex flex-col
 
-    /* MOBILE SHADOW */
-    shadow-[0_4px_14px_rgba(0,0,0,0.06)]
+    /* MOBILE: clean, crisp separation */
+    border border-black/10
+    shadow-[0_2px_6px_rgba(0,0,0,0.04)]
 
-    /* DESKTOP / HOVER */
-    sm:shadow-[0_8px_24px_rgba(0,0,0,0.08)]
-    hover:sm:shadow-[0_16px_40px_rgba(0,0,0,0.14)]
+    /* DESKTOP: real elevation */
+    sm:border-black/5
+    sm:shadow-[0_14px_36px_rgba(0,0,0,0.18)]
+    hover:sm:shadow-[0_28px_70px_rgba(0,0,0,0.28)]
 
     transition-all duration-300 ease-out
-    hover:scale-[1.01]
+    hover:scale-[1.02]
 
     focus:outline-none
     focus-visible:ring-2
     focus-visible:ring-primary
   "
 >
-
       {/* IMAGE HEADER */}
-     
-{/* IMAGE HEADER */}
-<div className="h-[160px] sm:h-[220px] w-full bg-gray-100 overflow-hidden">
-  {img.src && (
-    <img
-      src={img.src}
-      alt={img.alt}
-      className="
-        h-full w-full object-cover
-        transition-transform duration-700 ease-out
-        group-hover:scale-[1.06]
-      "
-    />
-  )}
-</div>
-
+      <div className="h-[160px] sm:h-[220px] w-full bg-gray-100 overflow-hidden">
+        {img.src && (
+          <img
+            src={img.src}
+            alt={img.alt}
+            className="
+              h-full w-full object-cover
+              transition-transform duration-700 ease-out
+              group-hover:scale-[1.06]
+            "
+          />
+        )}
+      </div>
 
       {/* CONTENT */}
       <div className="flex flex-col flex-1 gap-4 px-6 py-6 text-left items-start">
@@ -77,26 +74,12 @@ export default function NewsCard({
         </div>
 
         {/* TITLE */}
-        <h3
-          className="
-            font-bold
-            text-[18px] sm:text-[22px]
-            leading-tight
-            line-clamp-2
-          "
-        >
+        <h3 className="font-bold text-[18px] sm:text-[22px] leading-tight line-clamp-2">
           {title}
         </h3>
 
         {/* EXCERPT */}
-        <p
-          className="
-            text-muted
-            text-sm sm:text-base
-            leading-relaxed
-            line-clamp-3
-          "
-        >
+        <p className="text-muted text-sm sm:text-base leading-relaxed line-clamp-3">
           {excerpt}
         </p>
       </div>

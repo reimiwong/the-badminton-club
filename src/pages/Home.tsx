@@ -136,63 +136,99 @@ export default function Home() {
         </section>
 
         {/* ================= STATS (BOTTOM OF VIEWPORT) ================= */}
-      <section className="bg-white py-12 shadow-[inset_0_1px_0_rgba(0,0,0,0.08)]">
-  <div className="max-w-7xl mx-auto px-6">
-    <div className="grid grid-cols-3 gap-4 sm:gap-12">
+     
+<section
+  className="
+    bg-white
+    py-8 sm:py-12 md:py-18
 
+    shadow-[inset_0_1px_0_rgba(0,0,0,0.08)]
+  "
+>
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="grid grid-cols-3 gap-3 sm:gap-12">
+
+      {/* STAT 1 */}
       <div className={statsClass}>
         <img src="./person-icon.svg" className={iconClass} alt="" />
-        <p className="text-4xl font-bold">
+        <p className="text-3xl sm:text-4xl font-bold">
           <CountUp end={500} />+
         </p>
-        <p className="text-muted">Active Members</p>
+        <p className="text-sm sm:text-base text-muted">
+          Active Members
+        </p>
       </div>
 
+      {/* STAT 2 */}
       <div className={statsClass}>
         <img src="./calendar-icon.svg" className={iconClass} alt="" />
-        <p className="text-4xl font-bold">
+        <p className="text-3xl sm:text-4xl font-bold">
           <CountUp end={120} />+
         </p>
-        <p className="text-muted">Weekly Sessions</p>
+        <p className="text-sm sm:text-base text-muted">
+          Weekly Sessions
+        </p>
       </div>
 
+      {/* STAT 3 */}
       <div className={statsClass}>
         <img src="./education-icon.svg" className={iconClass} alt="" />
-        <p className="text-4xl font-bold">
+        <p className="text-3xl sm:text-4xl font-bold">
           <CountUp end={15} />
         </p>
-        <p className="text-muted">Expert Coaches</p>
+        <p className="text-sm sm:text-base text-muted">
+          Expert Coaches
+        </p>
       </div>
 
     </div>
   </div>
 </section>
+
       </section>
       {/* ================= END FULL VIEWPORT ================= */}
 
 
 
       {/* ================= FEATURES ================= */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col gap-3">
-          <h2 className="text-4xl font-bold text-center">
-            Everything You Need
-          </h2>
-          <h3 className="text-xl text-muted text-center">
-            Professional facilities, expert coaching, and a passionate community
-          </h3>
+   <section className="py-12">
+  <div className="max-w-7xl mx-auto px-6 flex flex-col gap-3">
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-7 py-10">
-            {homeFeatures.map((feature) => (
-              <Card key={feature.title} {...feature} />
-            ))}
-          </div>
-        </div>
-      </section>
+    <h2 className="text-4xl font-bold text-center">
+      Everything You Need
+    </h2>
+
+    <h3 className="text-xl text-muted text-center">
+      Professional facilities, expert coaching, and a passionate community
+    </h3>
+
+    {/* ================= MOBILE ================= */}
+    <div className="sm:hidden grid gap-6 py-8">
+
+      {/* PRIMARY: MEMBERSHIP PLANS */}
+      <Card {...homeFeatures[0]} />
+
+      {/* SECONDARY ROW */}
+      <div className="grid grid-cols-2 gap-4">
+        <Card {...homeFeatures[1]} />
+        <Card {...homeFeatures[2]} />
+      </div>
+
+    </div>
+
+    {/* ================= DESKTOP ================= */}
+    <div className="hidden sm:grid grid-cols-3 gap-7 py-10">
+      {homeFeatures.map((feature) => (
+        <Card key={feature.title} {...feature} />
+      ))}
+    </div>
+
+  </div>
+</section>
 
       {/* ================= NEWS ================= */}
      
-<section className="bg-white/10 py-14">
+<section className="bg-white py-14">
   <div className="max-w-7xl mx-auto px-6">
 
     {/* ================= HEADER ================= */}
@@ -238,7 +274,6 @@ export default function Home() {
 
     {/* ================= NEWS ================= */}
 
-    {/* MOBILE: CAROUSEL */}
     {/* MOBILE: CAROUSEL */}
 <div className="sm:hidden">
   <div
