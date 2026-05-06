@@ -23,7 +23,7 @@ export const news: NewsItem[] = [
     date: "May 1, 2026",
     link: "/news/spring-championship-2026",
     img: {
-      src: "/images/news/spring-championship.jpg",
+      src: "./news-image1.jpg",
       alt: "Badminton shuttlecocks and rackets on a court",
     },
   },
@@ -36,7 +36,7 @@ export const news: NewsItem[] = [
     date: "April 18, 2026",
     link: "/news/new-senior-coach",
     img: {
-      src: "/images/news/new-coach.jpg",
+      src: "./news-image2.jpeg",
       alt: "Coach giving instructions during a badminton session",
     },
   }

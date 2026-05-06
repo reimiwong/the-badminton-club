@@ -12,14 +12,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col gap-10 md:flex-row md:justify-between md:gap-12">
           {/* Brand / Description */}
-          <div className={`${navClass} md:max-w-sm`}>
+          <div className={`${navClass} md:max-w-xs`}>
             <h2 className={h2Class}>The Badminton Club</h2>
             <p className="text-[#9CA3AF] leading-relaxed">
               Building a vibrant badminton community through training,
               competition, and fun.
             </p>
 
-            {/* Social icons */}
             <div className="flex gap-3 mt-2">
               <img src="./facebook-icon.svg" alt="Facebook" />
               <img src="./instagram-icon.svg" alt="Instagram" />
@@ -33,10 +32,26 @@ export default function Footer() {
               Quick Links
             </h2>
             <ul className={ulClass}>
-              <li><a href="/about" className={footerLinkClass}>About Us</a></li>
-              <li><a href="/coaches" className={footerLinkClass}>Our Coaches</a></li>
-              <li><a href="/news" className={footerLinkClass}>News & Updates</a></li>
-              <li><a href="/membership" className={footerLinkClass}>Membership</a></li>
+              <li>
+                <a href="/about" className={footerLinkClass}>
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="/coaches" className={footerLinkClass}>
+                  Our Coaches
+                </a>
+              </li>
+              <li>
+                <a href="/news" className={footerLinkClass}>
+                  News & Updates
+                </a>
+              </li>
+              <li>
+                <a href="/membership" className={footerLinkClass}>
+                  Membership
+                </a>
+              </li>
             </ul>
           </nav>
 
@@ -46,10 +61,26 @@ export default function Footer() {
               Training
             </h2>
             <ul className={ulClass}>
-              <li><a href="/book-session" className={footerLinkClass}>Book a Session</a></li>
-              <li><a href="/private-coaching" className={footerLinkClass}>Private Coaching</a></li>
-              <li><a href="/group-classes" className={footerLinkClass}>Group Classes</a></li>
-              <li><a href="/tournament-prep" className={footerLinkClass}>Tournament Prep</a></li>
+              <li>
+                <a href="/book-session" className={footerLinkClass}>
+                  Book a Session
+                </a>
+              </li>
+              <li>
+                <a href="/private-coaching" className={footerLinkClass}>
+                  Private Coaching
+                </a>
+              </li>
+              <li>
+                <a href="/group-classes" className={footerLinkClass}>
+                  Group Classes
+                </a>
+              </li>
+              <li>
+                <a href="/tournament-prep" className={footerLinkClass}>
+                  Tournament Prep
+                </a>
+              </li>
             </ul>
           </nav>
 
@@ -66,7 +97,7 @@ export default function Footer() {
               <li>
                 <div className={contactRowClass}>
                   <img src="./phone-icon.svg" alt="Phone" />
-                  <span>+353 1 234 5678</span>
+                  <span>+353 1234 5678</span>
                 </div>
               </li>
               <li>
@@ -86,7 +117,7 @@ export default function Footer() {
       {/* Copyright */}
       <div className="max-w-7xl mx-auto px-6">
         <p className="text-[#9CA3AF] text-center">
-          © 2026 Shamrock Badminton Club. All rights reserved.
+          © 2026 The Badminton Club. All rights reserved.
         </p>
       </div>
     </footer>
