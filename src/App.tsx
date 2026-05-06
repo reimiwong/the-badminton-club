@@ -3,6 +3,7 @@ import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home"
 import AboutUs from "./pages/AboutUs";
 import Booking from "./pages/Booking";
+import ContactUs from "./pages/ContactUs";
 
 export default function App() {
   return (
@@ -14,7 +15,7 @@ export default function App() {
         <Route path="/coaches" element={<div>Coaches</div>} />
         <Route path="/news" element={<div>News</div>} />
         <Route path="/membership" element={<div>Membership</div>} />
-        <Route path="/contact" element={<div>Contact</div>} />
+        <Route path="/contact" element={<ContactUs />} />
       </Route>
     </Routes>
   );
