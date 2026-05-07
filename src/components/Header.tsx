@@ -32,9 +32,8 @@ const navItems = [
   { to: "/", label: "Home", end: true },
   { to: "/about", label: "About" },
   { to: "/booking", label: "Booking" },
-  { to: "/coaches", label: "Coaches" },
+  { to: "/team", label: "Team" },
   { to: "/news", label: "News" },
-  { to: "/membership", label: "Membership" },
   { to: "/contact", label: "Contact" },
 ];
 

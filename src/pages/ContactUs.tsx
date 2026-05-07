@@ -79,7 +79,8 @@ export default function ContactUs() {
               gap-4
               p-6
               rounded-xl
-              shadow-[0_10px_30px_rgba(0,0,0,0.08)]
+             shadow-[0_30px_80px_rgba(0,0,0,0.25)]
+    border border-gray-100
               w-full md:w-1/2
             "
           >

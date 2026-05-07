@@ -17,72 +17,72 @@ export type TeamMember = {
 
 export const team: TeamMember[] = [
   {
-    name: "Alex Chen",
+    name: "Lee Chong Wei",
     role: "Lead Coach",
     image: "./lee-chong-wei-photo.jpg",
     funIntro:
       "Ex-competitive player who built the club’s training philosophy. Obsessed with clean technique and discipline.",
   },
   {
-    name: "Sarah Patel",
+    name: "Lin Dan",
     role: "Coach",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./lin-dan-photo.jpg",
     funIntro:
       "Tactician focused on doubles systems and match awareness. Notices patterns most players miss.",
   },
   {
-    name: "Mark Evans",
+    name: "Akane Yamaguchi",
     role: "Service Desk",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./akane-yamaguchi-photo.jpg",
     funIntro:
       "Keeps bookings, enquiries, and general chaos under control with surprising patience.",
   },
   {
-    name: "Daniel Wong",
+    name: "Viktor Axelsen",
     role: "Coach",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./viktor-axelson-photo.webp",
     funIntro:
       "Technical coach focused on footwork correction and efficient movement patterns.",
   },
   {
-    name: "Emily Tan",
+    name: "Peter Gade",
     role: "Junior Coach",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./peter-gade-photo.jpg",
     funIntro:
       "Works with younger players, balancing discipline with making training enjoyable.",
   },
   {
-    name: "Jason Lim",
+    name: "Taufik Hidayat",
     role: "Strength & Conditioning Coach",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./taufik-hidayat-photo.jpg",
     funIntro:
       "Builds explosive power and endurance programs tailored for badminton performance.",
   },
   {
-    name: "Priya Nair",
+    name: "Kento Momota",
     role: "Service Desk",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./kento-momota-photo.webp",
     funIntro:
       "Organised, calm, and the reason peak-time bookings don’t fall apart.",
   },
   {
-    name: "Tom Hughes",
+    name: "Carolina Marín",
     role: "Stringer",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./carolina-marin-photo.jpg",
     funIntro:
       "Keeps rackets tournament-ready. Treats string tension like a science experiment.",
   },
   {
-    name: "Aisha Rahman",
+    name: "James Carter",
     role: "Club Manager",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./random-guy-photo.webp",
     funIntro:
       "Runs the club operations side quietly but decisively. Fixes problems before they become visible.",
   },
   {
-    name: "Michael Lee",
+    name: "Shi Yuqi",
     role: "Founder",
-    image: "./lee-chong-wei-photo.jpg",
+    image: "./shi-yu-qi-photo.webp",
     funIntro:
       "Started the club with a couple of courts and a lot of ambition. Still shows up to sessions unannounced.",
   },
