@@ -10,6 +10,7 @@ export type NewsItem = {
     alt: string;
   };
 };
+
 export const news: NewsItem[] = [
   {
     id: "spring-championship-2026",
@@ -20,8 +21,8 @@ export const news: NewsItem[] = [
     date: "May 1, 2026",
     link: "/news/spring-championship-2026",
     img: {
-      src: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1200&q=80",
-      alt: "Badminton shuttlecock mid-air during competitive match",
+      src: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1600&q=80",
+      alt: "Badminton match in competitive tournament setting",
     },
   },
   {
@@ -33,8 +34,8 @@ export const news: NewsItem[] = [
     date: "April 18, 2026",
     link: "/news/new-head-coach-2026",
     img: {
-      src: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80",
-      alt: "Coach giving badminton training instructions",
+      src: "/club-photo.jpg",
+      alt: "Badminton coach instructing players during training",
     },
   },
   {
@@ -46,7 +47,7 @@ export const news: NewsItem[] = [
     date: "March 30, 2026",
     link: "/news/junior-development-program",
     img: {
-      src: "https://images.unsplash.com/photo-1594736797933-d0d6c7b3a5a2?auto=format&fit=crop&w=1200&q=80",
+      src: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=1600&q=80",
       alt: "Young badminton players training indoors",
     },
   },
@@ -59,8 +60,8 @@ export const news: NewsItem[] = [
     date: "March 12, 2026",
     link: "/news/summer-camp-2026",
     img: {
-      src: "https://images.unsplash.com/photo-1521417531039-0d9f9c7f0f3c?auto=format&fit=crop&w=1200&q=80",
-      alt: "Indoor badminton courts prepared for training camp",
+      src: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1600&q=80",
+      alt: "Indoor badminton training camp setup",
     },
   },
   {
@@ -72,8 +73,8 @@ export const news: NewsItem[] = [
     date: "February 25, 2026",
     link: "/news/membership-growth-2026",
     img: {
-      src: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1200&q=80",
-      alt: "Group celebrating badminton match victory",
+      src: "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?auto=format&fit=crop&w=1600&q=80",
+      alt: "Group celebrating badminton success",
     },
   },
   {
@@ -85,8 +86,8 @@ export const news: NewsItem[] = [
     date: "February 10, 2026",
     link: "/news/evening-court-hours",
     img: {
-      src: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80",
-      alt: "Badminton courts under indoor lighting",
+      src: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1600&q=80",
+      alt: "Badminton court under indoor evening lighting",
     },
   },
 ];
