@@ -19,11 +19,39 @@ export default function Footer() {
               competition, and fun.
             </p>
 
-            <div className="flex gap-3 mt-2">
-              <img src="images/icons/facebook-icon.svg" alt="Facebook" />
-              <img src="images/icons/instagram-icon.svg" alt="Instagram" />
-              <img src="images/icons/twitter-icon.svg" alt="Twitter / X" />
-            </div>
+        <div className="flex gap-3 mt-2">
+
+  <a
+    href="https://facebook.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="transition-transform duration-200 hover:-translate-y-1 hover:scale-110"
+    aria-label="Facebook"
+  >
+    <img src="/images/icons/facebook-icon.svg" alt="Facebook" />
+  </a>
+
+  <a
+    href="https://instagram.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="transition-transform duration-200 hover:-translate-y-1 hover:scale-110"
+    aria-label="Instagram"
+  >
+    <img src="/images/icons/instagram-icon.svg" alt="Instagram" />
+  </a>
+
+  <a
+    href="https://twitter.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="transition-transform duration-200 hover:-translate-y-1 hover:scale-110"
+    aria-label="Twitter"
+  >
+    <img src="/images/icons/twitter-icon.svg" alt="Twitter / X" />
+  </a>
+
+</div>
           </div>
 
           {/* Quick Links */}

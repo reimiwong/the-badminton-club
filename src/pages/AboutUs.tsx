@@ -1,11 +1,7 @@
+import { mileStones } from "../data/milestonesData";
+
 export default function AboutUs() {
-  const items = [
-    { year: "2010", text: "Club founded with 50 members and 2 courts" },
-    { year: "2014", text: "Expanded to 8 professional courts" },
-    { year: "2018", text: "Launched competitive training program" },
-    { year: "2022", text: "Reached 500+ active members" },
-    { year: "2026", text: "Hosting national championship events" },
-  ];
+
 
   const values = [
   {
@@ -177,7 +173,7 @@ export default function AboutUs() {
             />
 
             <div className="flex flex-col gap-10">
-              {items.map((item, idx) => (
+              {mileStones.map((mileStone, idx) => (
                 <div
                   key={idx}
                   className="relative pl-12 sm:pl-32 py-2 group"
@@ -200,11 +196,11 @@ export default function AboutUs() {
 
                   {/* content */}
                   <time className="text-xs uppercase font-semibold text-emerald-600 bg-emerald-100 px-2 py-1 rounded-full w-fit">
-                    {item.year}
+                    {mileStone.year}
                   </time>
 
                   <p className="text-lg font-semibold text-slate-900 mt-2">
-                    {item.text}
+                    {mileStone.text}
                   </p>
                 </div>
               ))}

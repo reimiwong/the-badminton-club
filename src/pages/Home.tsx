@@ -37,18 +37,24 @@ export default function Home() {
                 </p>
 
                 {/* CTA */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
 
-                  <button className="w-full sm:w-auto bg-primary text-white rounded-xl px-8 py-4 flex items-center justify-center gap-2 transition hover:opacity-90 active:scale-[0.98]">
-                    Book a Session
-                    <img src="/images/icons/right-arrow-icon.svg" className="w-4 h-4" />
-                  </button>
+  {/* PRIMARY */}
+  <button className="w-full sm:w-auto bg-primary text-white rounded-xl px-8 py-4 flex items-center justify-center gap-2 font-medium shadow-md transition-all duration-200 hover:brightness-110 hover:-translate-y-0.5 active:scale-[0.97]">
+    Book a Session
+    <img
+      src="/images/icons/right-arrow-icon.svg"
+      className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+      alt=""
+    />
+  </button>
 
-                  <button className="w-full sm:w-auto bg-white text-text rounded-xl px-6 py-4 transition hover:bg-gray-50 active:scale-[0.98]">
-                    Explore Membership
-                  </button>
+  {/* SECONDARY (FIXED VISIBILITY) */}
+  <button className="w-full sm:w-auto rounded-xl px-6 py-4 font-medium border border-black/15 text-text bg-white shadow-sm transition-all duration-200 hover:border-primary hover:text-primary hover:-translate-y-0.5 hover:shadow-md active:scale-[0.97]">
+    Explore Membership
+  </button>
 
-                </div>
+</div>
 
               </div>
 
