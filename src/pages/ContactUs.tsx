@@ -1,8 +1,9 @@
 export default function ContactUs() {
   return (
     <section className="bg-white min-h-screen flex flex-col">
+
       {/* HERO */}
-      <div className="flex flex-col items-center text-center pt-16 pb-20 bg-[#F7FAF8]">
+      <div className="flex flex-col items-center text-center pt-16 pb-20 bg-[#F7FAF8] px-6">
         <h1 className="text-5xl font-bold">
           Get in <span className="text-primary">Touch</span>
         </h1>
@@ -13,18 +14,10 @@ export default function ContactUs() {
         </h3>
       </div>
 
-      {/* MAIN LAYOUT */}
-      <div className="flex justify-center pt-16 flex-1">
-        <div
-          className="
-            flex flex-col md:flex-row
-            w-full max-w-5xl
-            pb-16
-            items-start
-            gap-10 md:gap-6
-            px-6
-          "
-        >
+      {/* MAIN CONTENT */}
+      <div className="flex justify-center py-24">
+        <div className="flex flex-col md:flex-row w-full max-w-5xl gap-10 md:gap-6 px-6 items-start">
+
           {/* CONTACT INFO */}
           <div className="w-full md:w-1/2">
             <h2 className="font-bold text-3xl">Contact Information</h2>
@@ -73,16 +66,14 @@ export default function ContactUs() {
 
           {/* FORM */}
           <form
-            className="
-              bg-[#F7FAF8]
-              flex flex-col
-              gap-4
-              p-6
-              rounded-xl
-             shadow-[0_30px_80px_rgba(0,0,0,0.25)]
-    border border-gray-100
-              w-full md:w-1/2
-            "
+           className="
+  bg-primary/1
+  flex flex-col gap-4
+  p-6 rounded-xl
+  shadow-[0_12px_40px_rgba(0,0,0,0.12)]
+  border border-gray-100
+  w-full md:w-1/2
+"
           >
             <h4 className="text-2xl font-bold">Send us a Message</h4>
 
@@ -138,59 +129,55 @@ export default function ContactUs() {
             </div>
 
             {/* BUTTON */}
-            <button className="bg-primary text-white py-2 rounded-lg hover:opacity-90">
+            <button className="bg-primary text-white py-2 rounded-lg hover:opacity-90 transition">
               Send Message
             </button>
           </form>
         </div>
-        
       </div>
 
-      {/* FIND US SECTION */}
-{/* FIND US SECTION */}
-{/* FIND US SECTION */}
-<div className="bg-[#F7FAF8] mt-16 py-20 px-6 flex justify-center">
-  <div className="w-full max-w-6xl">
+      {/* MAP SECTION */}
+      <div className="bg-[#F7FAF8]  py-20 px-6 flex justify-center">
+        <div className="w-full max-w-6xl">
 
-    <div className="relative rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+          <div className="relative rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
 
-      {/* MAP (PRIMARY FOCUS) */}
-      <div className="h-[520px] w-full">
-        <iframe
-          title="Map"
-          className="w-full h-full border-0"
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland&output=embed"
-        />
-      </div>
+            <div className="h-[520px] w-full">
+              <iframe
+                title="Map"
+                className="w-full h-full border-0"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland&output=embed"
+              />
+            </div>
 
-      {/* OVERLAY INFO */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
 
-        <div>
-          <p className="text-sm text-muted">Visit us at</p>
-          <p className="text-lg font-semibold text-text">
-            123 Sports Complex Drive, Dublin 4, Ireland
-          </p>
+              <div>
+                <p className="text-sm text-muted">Visit us at</p>
+                <p className="text-lg font-semibold text-text">
+                  123 Sports Complex Drive, Dublin 4, Ireland
+                </p>
+              </div>
+
+              <a
+                href="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland"
+                target="_blank"
+                rel="noreferrer"
+                className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition"
+              >
+                Open in Google Maps
+              </a>
+
+            </div>
+
+          </div>
+
         </div>
-
-        <a
-          href="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland"
-          target="_blank"
-          rel="noreferrer"
-          className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition"
-        >
-          Open in Google Maps
-        </a>
-
       </div>
 
-    </div>
-
-  </div>
-</div>
     </section>
   );
 }
