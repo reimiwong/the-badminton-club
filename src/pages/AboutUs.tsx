@@ -61,7 +61,7 @@ export default function AboutUs() {
                 preload="auto"
                 poster="/videos/badminton.jpg"
               >
-                <source src="/videos/badminton.mp4" type="video/mp4" />
+                <source src="/videos/promo.mp4" type="video/mp4" />
               </video>
 
               <div className="absolute inset-0 bg-gradient-to-l from-black/40 to-transparent" />
