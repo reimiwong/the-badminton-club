@@ -1,172 +1,150 @@
 export default function ContactUs() {
   return (
-    <section className="bg-white min-h-screen flex flex-col">
+    <section className="bg-white">
 
       {/* HERO */}
-      <div className="flex flex-col items-center text-center pt-16 pb-20 bg-[#F7FAF8] px-6">
+      <div className="text-center pt-20 pb-16 bg-[#F7FAF8] px-6">
         <h1 className="text-5xl font-bold">
           Get in <span className="text-primary">Touch</span>
         </h1>
 
-        <h3 className="mt-3 text-muted text-xl max-w-3xl">
-          Have questions? We'd love to hear from you. Send us a message and
-          we'll respond as soon as possible.
-        </h3>
+        <p className="mt-4 text-muted text-lg max-w-2xl mx-auto">
+          Have questions? Send us a message and we'll respond as soon as possible.
+        </p>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div className="flex justify-center py-24">
-        <div className="flex flex-col md:flex-row w-full max-w-5xl gap-10 md:gap-6 px-6 items-start">
+      {/* MAIN */}
+      <div className="py-24 px-6">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
 
           {/* CONTACT INFO */}
-          <div className="w-full md:w-1/2">
-            <h2 className="font-bold text-3xl">Contact Information</h2>
+          <div>
+            <h2 className="text-3xl font-bold">Contact Information</h2>
 
-            <p className="pt-3 text-base text-muted">
-              Visit us, call us, or drop us an email. We're here to help with any questions about our club, facilities, or programs.
+            <p className="mt-3 text-muted">
+              Visit us, call us, or email us anytime.
             </p>
 
-            {/* LOCATION */}
-            <div className="grid grid-cols-[auto_1fr] gap-3 mt-6">
-              <div className="bg-primary/10 p-3 rounded-xl h-fit">
-                <img src="/green-location-icon.svg" alt="location" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg">Location</h3>
-                <p className="text-muted">My Basement</p>
-                <p className="text-muted">Edinburgh, EDY 123</p>
-                <p className="text-muted">Scotland</p>
-              </div>
-            </div>
+            <div className="mt-8 space-y-6">
 
-            {/* PHONE */}
-            <div className="grid grid-cols-[auto_1fr] gap-3 mt-5">
-              <div className="bg-primary/10 p-3 rounded-xl h-fit">
-                <img src="/green-phone-icon.svg" alt="phone" />
+              {/* ITEM */}
+              <div className="flex gap-3">
+                <div className="bg-primary/10 p-3 rounded-xl">
+                  <img src="/images/icons/green-location-icon.svg" />
+                </div>
+                <div>
+                  <p className="font-semibold">Location</p>
+                  <p className="text-muted">My Basement, Edinburgh</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg">Phone</h3>
-                <p className="text-muted">+353 1234 5678</p>
-                <p className="text-muted">Mon–Fri 9:00–18:00</p>
-              </div>
-            </div>
 
-            {/* EMAIL */}
-            <div className="grid grid-cols-[auto_1fr] gap-3 mt-5">
-              <div className="bg-primary/10 p-3 rounded-xl h-fit">
-                <img src="/green-email-icon.svg" alt="email" />
+              <div className="flex gap-3">
+                <div className="bg-primary/10 p-3 rounded-xl">
+                  <img src="/images/icons//green-phone-icon.svg" />
+                </div>
+                <div>
+                  <p className="font-semibold">Phone</p>
+                  <p className="text-muted">+353 1234 5678</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg">Email</h3>
-                <p className="text-muted">hello@thebadmintonclub.com</p>
-                <p className="text-muted">info@thebadmintonclub.com</p>
+
+              <div className="flex gap-3">
+                <div className="bg-primary/10 p-3 rounded-xl">
+                  <img src="/images/icons/green-email-icon.svg" />
+                </div>
+                <div>
+                  <p className="font-semibold">Email</p>
+                  <p className="text-muted">hello@thebadmintonclub.com</p>
+                </div>
               </div>
+
             </div>
           </div>
 
           {/* FORM */}
-          <form
-           className="
-  bg-primary/1
-  flex flex-col gap-4
-  p-6 rounded-xl
-  shadow-[0_12px_40px_rgba(0,0,0,0.12)]
-  border border-gray-100
-  w-full md:w-1/2
-"
-          >
-            <h4 className="text-2xl font-bold">Send us a Message</h4>
+         <form className="rounded-2xl shadow-lg p-8 space-y-5 bg-white border border-black/5">
 
-            {/* NAME + EMAIL */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Your Name</label>
-                <div className="border border-black/10 bg-white rounded-lg px-4 py-3 mt-1 focus-within:ring-2 focus-within:ring-primary transition-all">
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="outline-none w-full bg-transparent"
-                  />
-                </div>
-              </div>
+  <h3 className="text-2xl font-bold">Send a Message</h3>
 
-              <div>
-                <label className="text-sm font-medium">Email Address</label>
-                <div className="border border-black/10 bg-white rounded-lg px-4 py-3 mt-1 focus-within:ring-2 focus-within:ring-primary transition-all">
-                  <input
-                    type="email"
-                    placeholder="john@example.com"
-                    className="outline-none w-full bg-transparent"
-                  />
-                </div>
-              </div>
-            </div>
+  <div className="grid md:grid-cols-2 gap-4">
 
-            {/* SUBJECT */}
-            <div>
-              <label className="text-sm font-medium">Subject</label>
-              <div className="border border-black/10 bg-white rounded-lg px-4 py-3 mt-1 focus-within:ring-2 focus-within:ring-primary transition-all">
-                <select className="outline-none w-full bg-transparent">
-                  <option value="">Select a topic</option>
-                  <option value="membership">Membership inquiry</option>
-                  <option value="coaching">Coaching information</option>
-                  <option value="booking">Booking support</option>
-                  <option value="tournament">Tournament information</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
+    <div>
+      <label className="text-sm font-medium">Name</label>
+      <input
+        className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary"
+        placeholder="John Doe"
+      />
+    </div>
 
-            {/* MESSAGE */}
-            <div>
-              <label className="text-sm font-medium">Message</label>
-              <div className="border border-black/10 bg-white rounded-lg px-4 py-3 mt-1 focus-within:ring-2 focus-within:ring-primary transition-all">
-                <textarea
-                  placeholder="Tell us how we can help you..."
-                  className="outline-none w-full h-32 resize-none bg-transparent"
-                />
-              </div>
-            </div>
+    <div>
+      <label className="text-sm font-medium">Email</label>
+      <input
+        className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary"
+        placeholder="john@example.com"
+      />
+    </div>
 
-            {/* BUTTON */}
-            <button className="bg-primary text-white py-2 rounded-lg hover:opacity-90 transition">
-              Send Message
-            </button>
-          </form>
+  </div>
+
+  <div>
+    <label className="text-sm font-medium">Subject</label>
+    <select className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary">
+      <option>Select a topic</option>
+      <option>Membership</option>
+      <option>Coaching</option>
+      <option>Booking</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div>
+    <label className="text-sm font-medium">Message</label>
+    <textarea
+      className="w-full mt-1 px-4 py-3 h-32 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary resize-none"
+      placeholder="Tell us how we can help..."
+    />
+  </div>
+
+  <button className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:opacity-90 transition">
+    Send Message
+  </button>
+
+</form>
+
         </div>
       </div>
 
-      {/* MAP SECTION */}
-      <div className="bg-[#F7FAF8]  py-20 px-6 flex justify-center">
-        <div className="w-full max-w-6xl">
+      {/* MAP */}
+      <div className="bg-[#F7FAF8] py-24 px-6">
+        <div className="max-w-6xl mx-auto">
 
-          <div className="relative rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+          <div className="relative rounded-3xl overflow-hidden shadow-lg">
 
-            <div className="h-[520px] w-full">
+            <div className="h-[500px]">
               <iframe
                 title="Map"
                 className="w-full h-full border-0"
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland&output=embed"
+                src="https://www.google.com/maps?q=Ravelston%20Terrace%20Edinburgh&output=embed"
               />
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 
               <div>
-                <p className="text-sm text-muted">Visit us at</p>
-                <p className="text-lg font-semibold text-text">
-                  123 Sports Complex Drive, Dublin 4, Ireland
+                <p className="text-sm text-muted">Visit us</p>
+                <p className="font-semibold">
+                  Ravelston Terrace, Edinburgh
                 </p>
               </div>
 
               <a
-                href="https://www.google.com/maps?q=Sports%20Complex%20Drive%20Dublin%204%20Ireland"
+                href="https://www.google.com/maps?q=Ravelston+Terrace+Edinburgh"
                 target="_blank"
                 rel="noreferrer"
-                className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition"
+                className="bg-primary text-white px-5 py-2 rounded-xl hover:opacity-90 transition"
               >
                 Open in Google Maps
               </a>

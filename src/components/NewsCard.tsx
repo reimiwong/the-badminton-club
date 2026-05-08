@@ -12,7 +12,6 @@ type NewsCardProps = {
   };
   showReadMore?: boolean;
 };
-
 export default function NewsCard({
   title,
   excerpt,
@@ -20,7 +19,6 @@ export default function NewsCard({
   date,
   link,
   img,
-  showReadMore = false,
 }: NewsCardProps) {
   return (
     <NavLink
@@ -50,21 +48,19 @@ export default function NewsCard({
     >
       {/* IMAGE */}
       <div className="h-[160px] sm:h-[220px] w-full bg-gray-100 overflow-hidden">
-        {img.src && (
-          <img
-            src={img.src}
-            alt={img.alt}
-            className="
-              h-full w-full object-cover
-              transition-transform duration-700 ease-out
-              group-hover:scale-[1.06]
-            "
-          />
-        )}
+        <img
+          src={img.src}
+          alt={img.alt}
+          className="
+            h-full w-full object-cover
+            transition-transform duration-700 ease-out
+            group-hover:scale-[1.06]
+          "
+        />
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-col flex-1 gap-4 px-6 py-6 text-left items-start">
+      <div className="flex flex-col flex-1 gap-3 px-6 py-6">
 
         {/* META */}
         <div className="flex items-center gap-3 text-xs sm:text-sm">
@@ -75,32 +71,30 @@ export default function NewsCard({
         </div>
 
         {/* TITLE */}
-        <h3 className="font-bold text-[18px] sm:text-[22px] leading-tight line-clamp-2 transition-colors duration-200 group-hover:text-primary">
-  {title}
-</h3>
+        <h3 className="font-bold text-[18px] sm:text-[22px] leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+          {title}
+        </h3>
 
         {/* EXCERPT */}
-     <p className="text-muted text-sm sm:text-base leading-relaxed line-clamp-3 transition-opacity duration-200 group-hover:opacity-80">
-  {excerpt}
-</p>
+        <p className="text-muted text-sm sm:text-base leading-relaxed line-clamp-3 group-hover:opacity-80 transition-opacity">
+          {excerpt}
+        </p>
 
-        {/* READ MORE */}
-        {showReadMore && (
-          <span className="group mt-auto text-primary font-medium inline-flex items-center gap-1">
-            Read More
-            <img
-              src="./green-arrow.svg"
-              alt=""
-              aria-hidden="true"
-              className="
-                transition-transform
-                duration-200
-                ease-out
-                group-hover:translate-x-1
-              "
-            />
-          </span>
-        )}
+        {/* READ MORE (BOTTOM LEFT FIXED) */}
+        <div className="mt-auto flex items-center justify-start gap-2 text-primary font-medium">
+          <span>Read More</span>
+
+          <img
+            src="/images/icons/green-arrow-icon.svg"
+            alt=""
+            aria-hidden="true"
+            className="
+              w-4 h-4
+              transition-transform duration-200 ease-out
+              group-hover:translate-x-1
+            "
+          />
+        </div>
 
       </div>
     </NavLink>

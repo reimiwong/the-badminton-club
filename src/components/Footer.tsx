@@ -20,9 +20,9 @@ export default function Footer() {
             </p>
 
             <div className="flex gap-3 mt-2">
-              <img src="./facebook-icon.svg" alt="Facebook" />
-              <img src="./instagram-icon.svg" alt="Instagram" />
-              <img src="./twitter-icon.svg" alt="Twitter / X" />
+              <img src="images/icons/facebook-icon.svg" alt="Facebook" />
+              <img src="images/icons/instagram-icon.svg" alt="Instagram" />
+              <img src="images/icons/twitter-icon.svg" alt="Twitter / X" />
             </div>
           </div>
 
@@ -90,19 +90,19 @@ export default function Footer() {
             <ul className={ulClass}>
               <li>
                 <div className={contactRowClass}>
-                  <img src="./location-icon.svg" alt="Location" />
+                  <img src="images/icons/location-icon.svg" alt="Location" />
                   <span>123 Sports Complex, Edinburgh, Scotland</span>
                 </div>
               </li>
               <li>
                 <div className={contactRowClass}>
-                  <img src="./phone-icon.svg" alt="Phone" />
+                  <img src="images/icons/phone-icon.svg" alt="Phone" />
                   <span>+353 1234 5678</span>
                 </div>
               </li>
               <li>
                 <div className={contactRowClass}>
-                  <img src="./email-icon.svg" alt="Email" />
+                  <img src="images/icons/email-icon.svg" alt="Email" />
                   <span>hello@thebadmintonclub.com</span>
                 </div>
               </li>

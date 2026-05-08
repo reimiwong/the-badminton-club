@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 
 type CardProps = {
@@ -27,17 +26,16 @@ export default function Card({ title, description, link, img }: CardProps) {
         flex flex-col
 
         cursor-pointer
-        transition-all
-        duration-300
-        ease-out
+        transition-all duration-300 ease-out
         hover:-translate-y-1
         hover:shadow-[0_16px_40px_rgba(0,0,0,0.14)]
+
         focus:outline-none
         focus-visible:ring-2
         focus-visible:ring-primary
       "
     >
-      {/* IMAGE HEADER */}
+      {/* IMAGE */}
       <div className="h-[220px] w-full overflow-hidden">
         <img
           src={img.src}
@@ -48,29 +46,44 @@ export default function Card({ title, description, link, img }: CardProps) {
 
       {/* CONTENT */}
       <div className="flex flex-col gap-3 p-6 flex-1 text-left items-start">
-        <h3 className="font-bold text-[22px] leading-tight">
+
+        {/* TITLE */}
+        <h3
+          className="
+            font-bold text-[22px] leading-tight
+            transition-colors duration-200
+            group-hover:text-primary
+          "
+        >
           {title}
         </h3>
 
-        <p className="text-muted text-base">
+        {/* DESCRIPTION */}
+        <p
+          className="
+            text-muted text-base
+            transition-colors duration-200 opacity-100
+            group-hover:text-gray-400
+          "
+        >
           {description}
         </p>
-<span className="group mt-auto text-primary font-medium inline-flex items-center gap-1">
-          {link.title}
-   
-<img
-  src="./green-arrow.svg"
-  alt=""
-  aria-hidden="true"
-  className="
-    transition-transform
-    duration-200
-    ease-out
-    group-hover:translate-x-1
-  "
-/>
 
+        {/* LINK */}
+        <span className="mt-auto text-primary font-medium inline-flex items-center gap-1">
+          {link.title}
+
+          <img
+            src="/images/icons/green-arrow-icon.svg"
+            alt=""
+            aria-hidden="true"
+            className="
+              transition-transform duration-200 ease-out
+              group-hover:translate-x-1
+            "
+          />
         </span>
+
       </div>
     </NavLink>
   );

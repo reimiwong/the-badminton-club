@@ -1,21 +1,24 @@
 export default function Booking() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
 
-      <div className="flex flex-col items-center gap-4 w-full max-w-md">
+      <div className="w-full max-w-md flex flex-col items-center gap-6">
 
         {/* ICON */}
         <div className="bg-primary rounded-2xl p-3 shadow-md">
-          <img src="./lock-icon.svg" className="w-10 h-10" />
+          <img src="/images/icons/lock-icon.svg" className="w-9 h-9" />
         </div>
 
-        <h1 className="text-3xl font-bold text-center">
-          Sign in to book
-        </h1>
+        {/* TEXT */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold">
+            Sign in to book
+          </h1>
 
-        <h2 className="text-center text-muted">
-          Access your booking dashboard and reserve court time
-        </h2>
+          <p className="text-muted text-sm sm:text-base">
+            Access your booking dashboard and reserve court time
+          </p>
+        </div>
 
         {/* FORM */}
         <form
@@ -23,26 +26,22 @@ export default function Booking() {
             w-full
             bg-white
             flex flex-col gap-4
-            p-5 sm:p-8
+            p-6 sm:p-8
             rounded-xl
 
-            shadow-[0_10px_30px_rgba(0,0,0,0.08)]
+            shadow-[0_8px_25px_rgba(0,0,0,0.06)]
+            hover:shadow-[0_16px_40px_rgba(0,0,0,0.1)]
+
             transition-all duration-300
-            hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)]
           "
         >
+
           {/* EMAIL */}
           <div>
             <label className="text-sm font-medium">Email Address</label>
 
-            <div
-              className="
-                flex items-center gap-2
-                border rounded-lg px-3 py-2 mt-1
-                focus-within:ring-2 focus-within:ring-primary
-              "
-            >
-              <img src="./login-mail-icon.svg" className="w-4 h-4 opacity-60" />
+            <div className="flex items-center gap-2 border rounded-lg px-3 py-2 mt-1 focus-within:ring-2 focus-within:ring-primary">
+              <img src="/images/icons/login-mail-icon.svg" className="w-4 h-4 opacity-60" />
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -55,14 +54,8 @@ export default function Booking() {
           <div>
             <label className="text-sm font-medium">Password</label>
 
-            <div
-              className="
-                flex items-center gap-2
-                border rounded-lg px-3 py-2 mt-1
-                focus-within:ring-2 focus-within:ring-primary
-              "
-            >
-              <img src="./login-lock-icon.svg" className="w-4 h-4 opacity-60" />
+            <div className="flex items-center gap-2 border rounded-lg px-3 py-2 mt-1 focus-within:ring-2 focus-within:ring-primary">
+              <img src="/images/icons/login-lock-icon.svg" className="w-4 h-4 opacity-60" />
               <input
                 type="password"
                 placeholder="Password"
@@ -72,8 +65,8 @@ export default function Booking() {
           </div>
 
           {/* OPTIONS */}
-          <div className="flex justify-between items-center text-sm mt-1 gap-3">
-            <label className="flex gap-2 items-center cursor-pointer select-none">
+          <div className="flex items-center justify-between text-sm mt-1 gap-4 flex-wrap">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" className="accent-primary" />
               <span>Remember me</span>
             </label>
@@ -87,9 +80,11 @@ export default function Booking() {
           <button
             className="
               bg-primary text-white w-full rounded-lg py-2 font-medium
+
               transition-all duration-200
               hover:opacity-90
-              active:scale-[0.99]
+              hover:-translate-y-0.5
+              active:scale-[0.98]
             "
           >
             Sign in
@@ -97,14 +92,14 @@ export default function Booking() {
         </form>
 
         {/* FOOTER */}
-        <div className="flex gap-2 text-black/40 text-sm items-center text-center flex-wrap justify-center">
-          <p>Don't have an account?</p>
+        <div className="text-sm text-black/40 flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-center">
+          <span>Don't have an account?</span>
 
           <a
             href="#"
             className="flex items-center gap-1 text-primary hover:underline"
           >
-            <img src="./login-person-icon.svg" className="w-4 h-4" />
+            <img src="/images/icons/login-person-icon.svg" className="w-4 h-4" />
             Create account
           </a>
         </div>
