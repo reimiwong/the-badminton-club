@@ -44,7 +44,7 @@ export default function ContactUs() {
                 },
                 {
                   title: "Email",
-                  text: "hello@thebadmintonclub.com",
+                  text: "hello@tbc.com",
                   icon: "/images/icons/green-email-icon.svg",
                 },
               ].map((item, i) => (
