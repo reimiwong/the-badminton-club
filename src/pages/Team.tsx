@@ -41,43 +41,73 @@ function TeamCard({ person }: { person: TeamMember }) {
         </div>
 
         {/* BACK */}
-        <div className="absolute inset-0 rounded-3xl bg-surface shadow-md p-6 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden]">
+       {/* BACK */}
+<div
+  className="
+    absolute inset-0 rounded-3xl bg-surface shadow-md
+    p-6 flex flex-col justify-between
+    [transform:rotateY(180deg)]
+    [backface-visibility:hidden]
+  "
+>
+  {/* TOP SECTION */}
+  <div className="flex flex-col gap-4">
 
-          <div>
+    <div className="flex items-center justify-between">
+      <p className="label text-primary bg-primary/10 px-3 py-1 rounded-full w-fit">
+        Player Profile
+      </p>
 
-            <p className="label mb-4">
-              About
-            </p>
+      <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+    </div>
 
-            <p className="text-body text-muted leading-relaxed">
-              {funIntro}
-            </p>
+    <p className="text-body text-muted leading-relaxed">
+      {funIntro}
+    </p>
 
-          </div>
+    {/* HIGHLIGHT BOX */}
+    <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex flex-col gap-2">
+   <p className="text-xs uppercase tracking-wide text-primary font-semibold">
+  Role
+</p>
 
-          <div className="mt-6 pt-4 border-t border-border flex items-center gap-3">
+<p className="text-body font-medium text-text">
+  {role}
+</p>
+    </div>
 
-            <img
-              src={image}
-              alt={name}
-              className="w-10 h-10 rounded-full object-cover"
-            />
+  </div>
 
-            <div>
+  {/* BOTTOM SECTION */}
+  <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
 
-              <p className="label">
-                Role
-              </p>
+    <div className="flex items-center gap-3">
 
-              <p className="text-body text-text font-medium">
-                {role}
-              </p>
+      <img
+        src={image}
+        alt={name}
+        className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+      />
 
-            </div>
+      <div>
+        <p className="text-body font-semibold text-text leading-tight">
+          {name}
+        </p>
 
-          </div>
+        <p className="text-xs text-muted">
+          Badminton Coach
+        </p>
+      </div>
 
-        </div>
+    </div>
+
+    {/* decorative badge */}
+    <div className="text-primary text-xs font-medium bg-primary/10 px-3 py-1 rounded-full">
+      Active
+    </div>
+
+  </div>
+</div>
 
       </div>
 
