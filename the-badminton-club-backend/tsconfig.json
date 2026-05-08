@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "module": "NodeNext",            // must match moduleResolution
-    "moduleResolution": "NodeNext",  // ESM-aware resolution
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "src",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "types": ["node"]          // <-- add this
   },
   "include": ["src/**/*"]
 }
