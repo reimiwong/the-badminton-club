@@ -2,9 +2,10 @@ import { news } from "../data/mockNewsData";
 import NewsCard from "../components/NewsCard";
 
 export default function News() {
+
   if (!news || news.length === 0) {
     return (
-      <div className="p-10 text-center text-muted">
+      <div className="py-20 text-center text-muted">
         No news available
       </div>
     );
@@ -13,44 +14,49 @@ export default function News() {
   const [featured, ...rest] = news;
 
   return (
-    <div>
+    <section>
 
       {/* HERO */}
-      <div className="flex flex-col items-center text-center pt-16 pb-20 bg-[#F7FAF8] px-6">
-        <h1 className="text-5xl font-bold">
+      <div className="bg-background px-6 pt-24 pb-20 text-center">
+
+        <h1 className="h1">
           News & <span className="text-primary">Updates</span>
         </h1>
 
-        <h3 className="mt-3 text-muted text-xl max-w-3xl">
+        <p className="mt-5 text-body-lg text-muted max-w-3xl mx-auto">
           Stay informed about tournaments, training programs, and club announcements
-        </h3>
+        </p>
+
       </div>
 
       {/* FEATURED */}
-      <section className="py-16 px-6 flex justify-center bg-white">
-        <div className="w-full max-w-7xl">
+      <section className="py-20 px-6 bg-surface">
+
+        <div className="max-w-7xl mx-auto">
 
           <a
             href={featured?.link ?? "#"}
             className="
               group flex flex-col md:flex-row
-              bg-white rounded-3xl overflow-hidden
-              border border-black/10
-              shadow-[0_18px_50px_rgba(0,0,0,0.15)]
-              hover:shadow-[0_30px_80px_rgba(0,0,0,0.25)]
+              bg-surface
+              rounded-3xl
+              overflow-hidden
+              border border-border
+              shadow-lg
               transition-all duration-300
+              hover:-translate-y-1
+              hover:shadow-xl
             "
           >
 
-            {/* IMAGE (FIXED) */}
+            {/* IMAGE */}
             <div className="md:w-1/2 w-full relative overflow-hidden">
 
-              <div className="absolute top-4 left-4 z-10 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
+              <div className="absolute top-4 left-4 z-10 bg-primary text-white text-xs font-medium px-3 py-1 rounded-full">
                 Featured
               </div>
 
-              {/* stable aspect ratio */}
-              <div className="w-full aspect-[16/10] md:aspect-auto md:h-[420px]">
+              <div className="w-full aspect-[16/10] md:h-[420px]">
                 <img
                   src={featured?.img?.src ?? ""}
                   alt={featured?.img?.alt ?? "featured image"}
@@ -61,46 +67,62 @@ export default function News() {
             </div>
 
             {/* CONTENT */}
-            <div className="md:w-1/2 p-8 flex flex-col justify-center gap-4 text-left">
+            <div className="md:w-1/2 p-8 flex flex-col justify-center gap-4">
 
               <div className="flex items-center gap-3 text-sm">
-                <span className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
+
+                <span className="bg-primary/10 text-primary px-3 py-1 rounded-full">
                   {featured?.category}
                 </span>
-                <span className="text-muted">{featured?.date}</span>
+
+                <span className="text-muted">
+                  {featured?.date}
+                </span>
+
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors">
+              <h2 className="h2 group-hover:text-primary transition-colors">
                 {featured?.title}
               </h2>
 
-              <p className="text-muted group-hover:opacity-80 transition-opacity">
+              <p className="text-body text-muted">
                 {featured?.excerpt}
               </p>
 
-              <div className="flex items-center gap-2 text-primary font-medium mt-2">
-                <span>Read full article</span>
-                <img
-                  src="/images/icons/green-arrow-icon.svg"
-                  alt=""
-                  aria-hidden="true"
-                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
-                />
-              </div>
+            <div className="flex items-center gap-2 text-primary font-medium mt-2 group">
+  <span>Read full article</span>
+
+  <img
+    src="/images/icons/green-arrow-icon.svg"
+    alt=""
+    aria-hidden="true"
+    className="
+      w-4 h-4
+      transition-transform duration-200 ease-out
+      group-hover:translate-x-1
+    "
+  />
+</div>
 
             </div>
 
           </a>
+
         </div>
+
       </section>
 
       {/* LATEST */}
-      <section className="p-10 px-6 flex justify-center bg-[#F7FAF8]">
-        <div className="w-full max-w-7xl flex flex-col gap-10">
+      <section className="py-20 px-6 bg-background">
 
-          <h2 className="text-3xl font-bold text-left">Latest Articles</h2>
+        <div className="max-w-7xl mx-auto">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="h2">
+            Latest Articles
+          </h2>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
             {rest.map((item) => (
               <NewsCard
                 key={item.id}
@@ -108,39 +130,72 @@ export default function News() {
                 showReadMore={true}
               />
             ))}
+
           </div>
 
         </div>
+
       </section>
 
       {/* SUBSCRIBE */}
-      <div className="bg-white flex flex-col gap-8 items-center py-18">
+      <section className="bg-surface py-24">
 
-        <img
-          className="p-3 bg-primary/10 rounded-xl"
-          src="/images/icons/green-email-icon.svg"
-          alt=""
-        />
+        <div className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center gap-6">
 
-        <h2 className="text-4xl font-bold">Never Miss an Update</h2>
-
-        <h3 className="text-muted text-xl text-center">
-          Subscribe to our newsletter for the latest news, events, and training tips
-        </h3>
-
-        <form className="flex flex-row gap-5 w-full max-w-lg">
-          <input
-            className="border flex-1 border-black/20 rounded-xl px-5 py-3"
-            placeholder="Enter your email"
-            type="email"
+          <img
+            src="/images/icons/green-email-icon.svg"
+            alt=""
+            className="p-3 bg-primary/10 rounded-xl"
           />
-          <button className="bg-primary rounded-xl px-5 py-3 text-white">
-            Subscribe
-          </button>
-        </form>
 
-      </div>
+          <h2 className="h2">
+            Never Miss an Update
+          </h2>
 
-    </div>
+          <p className="text-body-lg text-muted">
+            Subscribe to our newsletter for the latest news, events, and training tips
+          </p>
+
+          <form className="flex w-full max-w-lg gap-4 mt-4">
+
+            <input
+              className="
+                flex-1
+                rounded-xl
+                border border-border
+                bg-background
+                px-5 py-3
+                text-body
+                outline-none
+                focus:border-primary
+                focus:ring-4
+                focus:ring-primary/10
+              "
+              placeholder="Enter your email"
+              type="email"
+            />
+
+            <button
+              className="
+                bg-primary
+                text-white
+                px-5 py-3
+                rounded-xl
+                font-medium
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-lg
+              "
+            >
+              Subscribe
+            </button>
+
+          </form>
+
+        </div>
+
+      </section>
+
+    </section>
   );
 }

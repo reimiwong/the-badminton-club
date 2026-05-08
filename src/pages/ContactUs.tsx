@@ -1,150 +1,282 @@
 export default function ContactUs() {
   return (
-    <section className="bg-white">
+    <section className="bg-surface">
 
       {/* HERO */}
-      <div className="text-center pt-20 pb-16 bg-[#F7FAF8] px-6">
-        <h1 className="text-5xl font-bold">
+      <div className="bg-background px-6 pt-24 pb-20 text-center">
+        <h1 className="h1">
           Get in <span className="text-primary">Touch</span>
         </h1>
 
-        <p className="mt-4 text-muted text-lg max-w-2xl mx-auto">
-          Have questions? Send us a message and we'll respond as soon as possible.
+        <p className="mt-5 mx-auto max-w-2xl text-body-lg text-muted">
+          Have questions? Send us a message and we’ll respond as soon as possible.
         </p>
       </div>
 
       {/* MAIN */}
-      <div className="py-24 px-6">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+      <div className="px-6 py-24">
+        <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-2 items-start">
 
-          {/* CONTACT INFO */}
+          {/* LEFT */}
           <div>
-            <h2 className="text-3xl font-bold">Contact Information</h2>
 
-            <p className="mt-3 text-muted">
-              Visit us, call us, or email us anytime.
-            </p>
+            <div className="max-w-md">
+              <h2 className="h2">Contact Information</h2>
 
-            <div className="mt-8 space-y-6">
+              <p className="mt-4 text-body text-muted">
+                Visit us, call us, or email us anytime. We’re always happy to help new and existing members.
+              </p>
+            </div>
 
-              {/* ITEM */}
-              <div className="flex gap-3">
-                <div className="bg-primary/10 p-3 rounded-xl">
-                  <img src="/images/icons/green-location-icon.svg" />
-                </div>
-                <div>
-                  <p className="font-semibold">Location</p>
-                  <p className="text-muted">My Basement, Edinburgh</p>
-                </div>
-              </div>
+            {/* CONTACT CARDS */}
+            <div className="mt-10 space-y-5">
 
-              <div className="flex gap-3">
-                <div className="bg-primary/10 p-3 rounded-xl">
-                  <img src="/images/icons//green-phone-icon.svg" />
-                </div>
-                <div>
-                  <p className="font-semibold">Phone</p>
-                  <p className="text-muted">+353 1234 5678</p>
-                </div>
-              </div>
+              {[
+                {
+                  title: "Location",
+                  text: "My Basement, Edinburgh",
+                  icon: "/images/icons/green-location-icon.svg",
+                },
+                {
+                  title: "Phone",
+                  text: "+353 1234 5678",
+                  icon: "/images/icons/green-phone-icon.svg",
+                },
+                {
+                  title: "Email",
+                  text: "hello@thebadmintonclub.com",
+                  icon: "/images/icons/green-email-icon.svg",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="
+                    group flex items-start gap-4
+                    rounded-2xl
+                    border border-border
+                    bg-background
+                    p-5
+                    transition-all duration-300
+                    hover:-translate-y-1
+                    hover:shadow-lg
+                  "
+                >
+                  <div
+                    className="
+                      rounded-xl
+                      bg-primary/10
+                      p-3
+                      transition
+                      group-hover:bg-primary/15
+                    "
+                  >
+                    <img src={item.icon} alt="" className="w-6 h-6" />
+                  </div>
 
-              <div className="flex gap-3">
-                <div className="bg-primary/10 p-3 rounded-xl">
-                  <img src="/images/icons/green-email-icon.svg" />
+                  <div>
+                    <p className="h3">{item.title}</p>
+                    <p className="mt-1 text-body text-muted">{item.text}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold">Email</p>
-                  <p className="text-muted">hello@thebadmintonclub.com</p>
-                </div>
-              </div>
+              ))}
 
             </div>
+
+            {/* SOCIALS */}
+            <div className="mt-10">
+              <p className="label mb-4">Follow us</p>
+
+              <div className="flex gap-3 mt-2">
+
+  {["facebook", "instagram", "twitter"].map((icon) => (
+    <a
+      key={icon}
+      href={`https://${icon}.com`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="
+        flex items-center justify-center
+        w-10 h-10
+        rounded-xl
+        bg-surface
+        border border-border
+        transition-all duration-200 ease-out
+
+        hover:-translate-y-1
+        hover:shadow-md
+        hover:border-primary
+      "
+    >
+      <img
+        src={`/images/icons/${icon}-icon.svg`}
+        alt={icon}
+        className="w-5 h-5"
+      />
+    </a>
+  ))}
+
+</div>
+            </div>
+
           </div>
 
           {/* FORM */}
-         <form className="rounded-2xl shadow-lg p-8 space-y-5 bg-white border border-black/5">
+          <form
+            className="
+              rounded-3xl
+              border border-border
+              bg-surface
+              p-8
+              shadow-lg
+            "
+          >
 
-  <h3 className="text-2xl font-bold">Send a Message</h3>
+            <div className="mb-8">
+              <h3 className="h2">Send a Message</h3>
+              <p className="mt-2 text-body text-muted">
+                Fill out the form below and we’ll get back to you shortly.
+              </p>
+            </div>
 
-  <div className="grid md:grid-cols-2 gap-4">
+            {/* GRID */}
+            <div className="grid gap-5 md:grid-cols-2">
 
-    <div>
-      <label className="text-sm font-medium">Name</label>
-      <input
-        className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary"
-        placeholder="John Doe"
-      />
-    </div>
+              {["Name", "Email"].map((label) => (
+                <div key={label}>
+                  <label className="label text-text">{label}</label>
 
-    <div>
-      <label className="text-sm font-medium">Email</label>
-      <input
-        className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary"
-        placeholder="john@example.com"
-      />
-    </div>
+                  <input
+                    className="
+                      mt-2 w-full
+                      rounded-xl
+                      border border-border
+                      bg-background
+                      px-4 py-3
+                      text-body
+                      outline-none
+                      focus:border-primary
+                      focus:ring-4
+                      focus:ring-primary/10
+                    "
+                    placeholder={label === "Email" ? "john@example.com" : "John Doe"}
+                  />
+                </div>
+              ))}
 
-  </div>
+            </div>
 
-  <div>
-    <label className="text-sm font-medium">Subject</label>
-    <select className="w-full mt-1 px-4 py-3 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary">
-      <option>Select a topic</option>
-      <option>Membership</option>
-      <option>Coaching</option>
-      <option>Booking</option>
-      <option>Other</option>
-    </select>
-  </div>
+            {/* SUBJECT */}
+            <div className="mt-5">
+              <label className="label text-text">Subject</label>
 
-  <div>
-    <label className="text-sm font-medium">Message</label>
-    <textarea
-      className="w-full mt-1 px-4 py-3 h-32 rounded-lg bg-[#F7FAF8] border border-black/10 outline-none focus:ring-2 focus:ring-primary resize-none"
-      placeholder="Tell us how we can help..."
-    />
-  </div>
+              <select
+                className="
+                  mt-2 w-full
+                  rounded-xl
+                  border border-border
+                  bg-background
+                  px-4 py-3
+                  text-body
+                  outline-none
+                  focus:border-primary
+                  focus:ring-4
+                  focus:ring-primary/10
+                "
+              >
+                <option>Select a topic</option>
+                <option>Membership</option>
+                <option>Coaching</option>
+                <option>Booking</option>
+                <option>Other</option>
+              </select>
+            </div>
 
-  <button className="w-full bg-primary text-white py-3 rounded-lg font-medium hover:opacity-90 transition">
-    Send Message
-  </button>
+            {/* MESSAGE */}
+            <div className="mt-5">
+              <label className="label text-text">Message</label>
 
-</form>
+              <textarea
+                className="
+                  mt-2 h-36 w-full resize-none
+                  rounded-xl
+                  border border-border
+                  bg-background
+                  px-4 py-3
+                  text-body
+                  outline-none
+                  focus:border-primary
+                  focus:ring-4
+                  focus:ring-primary/10
+                "
+                placeholder="Tell us how we can help..."
+              />
+            </div>
+
+            {/* BUTTON */}
+            <button
+              className="
+                mt-6 w-full
+                flex items-center justify-center gap-2
+                rounded-xl
+                bg-primary
+                px-5 py-3.5
+                font-semibold text-white
+                transition
+                hover:-translate-y-0.5
+                hover:shadow-lg
+                active:scale-[0.985]
+              "
+            >
+              Send Message
+
+              <img
+                src="/images/icons/right-arrow-icon.svg"
+                alt=""
+                className="w-4 h-4"
+              />
+            </button>
+
+          </form>
 
         </div>
       </div>
 
       {/* MAP */}
-      <div className="bg-[#F7FAF8] py-24 px-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="bg-background px-6 py-24">
+        <div className="mx-auto max-w-6xl">
 
-          <div className="relative rounded-3xl overflow-hidden shadow-lg">
+          <div className="overflow-hidden rounded-3xl shadow-lg">
 
             <div className="h-[500px]">
               <iframe
                 title="Map"
-                className="w-full h-full border-0"
+                className="h-full w-full border-0"
                 loading="lazy"
                 allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
                 src="https://www.google.com/maps?q=Ravelston%20Terrace%20Edinburgh&output=embed"
               />
             </div>
 
-            <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col gap-4 bg-surface px-6 py-5 md:flex-row md:items-center md:justify-between">
 
               <div>
-                <p className="text-sm text-muted">Visit us</p>
-                <p className="font-semibold">
-                  Ravelston Terrace, Edinburgh
-                </p>
+                <p className="text-muted text-sm">Visit us</p>
+                <p className="mt-1 h3">Ravelston Terrace, Edinburgh</p>
               </div>
 
               <a
                 href="https://www.google.com/maps?q=Ravelston+Terrace+Edinburgh"
                 target="_blank"
                 rel="noreferrer"
-                className="bg-primary text-white px-5 py-2 rounded-xl hover:opacity-90 transition"
+                className="
+                  inline-flex items-center gap-2
+                  rounded-xl
+                  bg-primary
+                  px-5 py-3
+                  font-medium text-white
+                  transition
+                  hover:-translate-y-0.5
+                "
               >
                 Open in Google Maps
               </a>

@@ -27,19 +27,19 @@ export default function NewsCard({
         group
         w-full
         h-[380px] sm:h-[436px]
-        bg-white rounded-2xl
+
+        bg-surface
+        rounded-2xl
         overflow-hidden
         flex flex-col
 
-        border border-black/10
+        border border-border
         shadow-[0_2px_6px_rgba(0,0,0,0.04)]
 
-        sm:border-black/5
         sm:shadow-[0_14px_36px_rgba(0,0,0,0.18)]
         hover:sm:shadow-[0_28px_70px_rgba(0,0,0,0.28)]
 
         transition-all duration-300 ease-out
-        hover:scale-[1.02]
 
         focus:outline-none
         focus-visible:ring-2
@@ -47,7 +47,8 @@ export default function NewsCard({
       "
     >
       {/* IMAGE */}
-      <div className="h-[160px] sm:h-[220px] w-full bg-gray-100 overflow-hidden">
+      <div className="h-[160px] sm:h-[220px] w-full bg-background overflow-hidden">
+
         <img
           src={img.src}
           alt={img.alt}
@@ -57,6 +58,7 @@ export default function NewsCard({
             group-hover:scale-[1.06]
           "
         />
+
       </div>
 
       {/* CONTENT */}
@@ -64,36 +66,37 @@ export default function NewsCard({
 
         {/* META */}
         <div className="flex items-center gap-3 text-xs sm:text-sm">
+
           <span className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
             {category}
           </span>
-          <span className="text-muted">{date}</span>
+
+          <span className="muted">{date}</span>
+
         </div>
 
         {/* TITLE */}
-        <h3 className="font-bold text-[18px] sm:text-[22px] leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className="h3 group-hover:text-primary transition-colors line-clamp-2">
           {title}
         </h3>
 
         {/* EXCERPT */}
-        <p className="text-muted text-sm sm:text-base leading-relaxed line-clamp-3 group-hover:opacity-80 transition-opacity">
+        <p className="body muted line-clamp-3 group-hover:opacity-80 transition-opacity">
           {excerpt}
         </p>
 
-        {/* READ MORE (BOTTOM LEFT FIXED) */}
-        <div className="mt-auto flex items-center justify-start gap-2 text-primary font-medium">
+        {/* CTA */}
+        <div className="mt-auto flex items-center gap-2 text-primary font-medium">
+
           <span>Read More</span>
 
           <img
             src="/images/icons/green-arrow-icon.svg"
             alt=""
             aria-hidden="true"
-            className="
-              w-4 h-4
-              transition-transform duration-200 ease-out
-              group-hover:translate-x-1
-            "
+            className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
           />
+
         </div>
 
       </div>

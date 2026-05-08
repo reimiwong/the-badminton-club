@@ -1,78 +1,159 @@
 @import "tailwindcss";
 
+/* =========================
+   THEME TOKENS
+========================= */
 @theme {
-  /* Brand */
   --color-primary: #009E60;
   --color-accent: #22C55E;
 
-  /* Backgrounds */
   --color-background: #F7FAF8;
   --color-surface: #FFFFFF;
 
-  /* Text */
   --color-text: #111827;
   --color-muted: #6B7280;
 
-  /* Borders */
   --color-border: #E5E7EB;
-  --color-border-strong: #D1D5DB;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Sora", system-ui, sans-serif;
 }
 
-@layer base {
-  body {
-    @apply text-sm md:text-base;
-  }
-}
-
-
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE & Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari & Chrome */
-}
-
-/* Base reset */
-html,
-body {
+/* =========================
+   BASE
+========================= */
+html, body {
   height: 100%;
 }
 
 body {
   margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #F7FAF8;
-  color: #111827;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
-/* Box sizing reset */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* =========================
+   TYPOGRAPHY (GLOBAL UTILS)
+========================= */
+
+.h1 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-/* Links */
-a {
-  text-decoration: none;
-  /* IMPORTANT: removed color: inherit;
-     so Tailwind classes like text-white work properly */
+@media (min-width: 768px) {
+  .h1 { font-size: 3.75rem; }
 }
 
-/* Buttons */
-button {
-  font: inherit;
+.h2 {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.body-lg {
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+.link {
+  color: var(--color-primary);
+  transition: color 200ms ease;
+}
+
+.link:hover {
+  color: #007a4d;
+}
+
+/* =========================
+   BUTTON BASE SYSTEM
+========================= */
+
+.btn-primary,
+.btn-secondary,
+.btn-light,
+.btn-outline-light {
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.875rem 2rem;
+  transition: all 200ms ease;
+  user-select: none;
 }
 
-/* Inputs */
-input, button, textarea, select {
-  outline: none;
+/* PRIMARY */
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 158, 96, 0.25);
 }
 
-/* Focus styles */
-:focus-visible {
-  outline: none;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 16px 40px rgba(0, 158, 96, 0.35);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* SECONDARY */
+.btn-secondary {
+  background: white;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+/* LIGHT (used on gradient sections) */
+.btn-light {
+  background: white;
+  color: var(--color-primary);
+}
+
+.btn-light:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* OUTLINE LIGHT */
+.btn-outline-light {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
 }

@@ -18,7 +18,7 @@ export const homeFeatures: HomeFeature[] = [
     description: "Train with Edinburgh's finest badminton coaches",
     link: {
         title: "Meet Our Coaches",
-        page: "/coaches",
+        page: "/team",
     },
     img: {
       src: "./badminton-insight-photo.jpg",
