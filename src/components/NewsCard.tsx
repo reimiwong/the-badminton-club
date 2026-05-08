@@ -12,6 +12,7 @@ type NewsCardProps = {
   };
   showReadMore?: boolean;
 };
+
 export default function NewsCard({
   title,
   excerpt,
@@ -26,7 +27,7 @@ export default function NewsCard({
       className="
         group
         w-full
-        h-[380px] sm:h-[436px]
+        h-[380px] sm:h-[436px]   /* keeps desktop layout intact */
 
         bg-surface
         rounded-2xl
@@ -35,12 +36,10 @@ export default function NewsCard({
 
         border border-border
         shadow-[0_2px_6px_rgba(0,0,0,0.04)]
-
         sm:shadow-[0_14px_36px_rgba(0,0,0,0.18)]
         hover:sm:shadow-[0_28px_70px_rgba(0,0,0,0.28)]
 
         transition-all duration-300 ease-out
-
         focus:outline-none
         focus-visible:ring-2
         focus-visible:ring-primary
@@ -48,7 +47,6 @@ export default function NewsCard({
     >
       {/* IMAGE */}
       <div className="h-[160px] sm:h-[220px] w-full bg-background overflow-hidden">
-
         <img
           src={img.src}
           alt={img.alt}
@@ -58,47 +56,38 @@ export default function NewsCard({
             group-hover:scale-[1.06]
           "
         />
-
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-col flex-1 gap-3 px-6 py-6">
-
+      <div className="flex flex-col flex-1 gap-2 sm:gap-3 px-4 sm:px-6 py-4 sm:py-6">
         {/* META */}
-        <div className="flex items-center gap-3 text-xs sm:text-sm">
-
-          <span className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
+        <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+          <span className="bg-primary/10 text-primary font-medium px-2 sm:px-3 py-1 rounded-full">
             {category}
           </span>
-
-          <span className="muted">{date}</span>
-
+          <span className="muted text-xs sm:text-sm">{date}</span>
         </div>
 
         {/* TITLE */}
-        <h3 className="h3 group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="h3 group-hover:text-primary transition-colors line-clamp-2 sm:line-clamp-2">
           {title}
         </h3>
 
         {/* EXCERPT */}
-        <p className="body muted line-clamp-3 group-hover:opacity-80 transition-opacity">
+        <p className="body muted line-clamp-3 sm:line-clamp-3 group-hover:opacity-80 transition-opacity text-sm sm:text-body">
           {excerpt}
         </p>
 
         {/* CTA */}
-        <div className="mt-auto flex items-center gap-2 text-primary font-medium">
-
+        <div className="mt-auto flex items-center gap-2 text-primary font-medium text-sm sm:text-base">
           <span>Read More</span>
-
           <img
             src="/images/icons/green-arrow-icon.svg"
             alt=""
             aria-hidden="true"
             className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
           />
-
         </div>
-
       </div>
     </NavLink>
   );

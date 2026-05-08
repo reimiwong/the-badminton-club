@@ -2,7 +2,6 @@ import { news } from "../data/mockNewsData";
 import NewsCard from "../components/NewsCard";
 
 export default function News() {
-
   if (!news || news.length === 0) {
     return (
       <div className="py-20 text-center text-muted">
@@ -17,9 +16,9 @@ export default function News() {
     <section>
 
       {/* HERO */}
-      <div className="bg-background px-6 pt-24 pb-20 text-center">
+      <div className="bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20 text-center">
 
-        <h1 className="h1">
+        <h1 className="h1 text-4xl md:text-6xl">
           News & <span className="text-primary">Updates</span>
         </h1>
 
@@ -30,7 +29,7 @@ export default function News() {
       </div>
 
       {/* FEATURED */}
-      <section className="py-20 px-6 bg-surface">
+      <section className="py-14 md:py-20 px-6 bg-surface">
 
         <div className="max-w-7xl mx-auto">
 
@@ -67,9 +66,9 @@ export default function News() {
             </div>
 
             {/* CONTENT */}
-            <div className="md:w-1/2 p-8 flex flex-col justify-center gap-4">
+            <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center gap-4">
 
-              <div className="flex items-center gap-3 text-sm">
+              <div className="flex items-center gap-3 text-sm flex-wrap">
 
                 <span className="bg-primary/10 text-primary px-3 py-1 rounded-full">
                   {featured?.category}
@@ -81,7 +80,7 @@ export default function News() {
 
               </div>
 
-              <h2 className="h2 group-hover:text-primary transition-colors">
+              <h2 className="h2 group-hover:text-primary transition-colors text-2xl md:text-4xl">
                 {featured?.title}
               </h2>
 
@@ -89,20 +88,20 @@ export default function News() {
                 {featured?.excerpt}
               </p>
 
-            <div className="flex items-center gap-2 text-primary font-medium mt-2 group">
-  <span>Read full article</span>
+              <div className="flex items-center gap-2 text-primary font-medium mt-2 group w-fit">
+                <span>Read full article</span>
 
-  <img
-    src="/images/icons/green-arrow-icon.svg"
-    alt=""
-    aria-hidden="true"
-    className="
-      w-4 h-4
-      transition-transform duration-200 ease-out
-      group-hover:translate-x-1
-    "
-  />
-</div>
+                <img
+                  src="/images/icons/green-arrow-icon.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="
+                    w-4 h-4
+                    transition-transform duration-200 ease-out
+                    group-hover:translate-x-1
+                  "
+                />
+              </div>
 
             </div>
 
@@ -113,24 +112,32 @@ export default function News() {
       </section>
 
       {/* LATEST */}
-      <section className="py-20 px-6 bg-background">
+      <section className="py-14 md:py-20 px-6 bg-background">
 
         <div className="max-w-7xl mx-auto">
 
-          <h2 className="h2">
+          <h2 className="h2 text-2xl md:text-4xl">
             Latest Articles
           </h2>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <p className="text-muted mt-2">
+            Updates from the club
+          </p>
 
+          {/* MOBILE: horizontal scroll */}
+          <div className="sm:hidden mt-6 flex gap-4 overflow-x-auto scrollbar-hide pb-2">
             {rest.map((item) => (
-              <NewsCard
-                key={item.id}
-                {...item}
-                showReadMore={true}
-              />
+              <div key={item.id} className="min-w-[85%]">
+                <NewsCard {...item} showReadMore={true} />
+              </div>
             ))}
+          </div>
 
+          {/* DESKTOP GRID */}
+          <div className="hidden sm:grid mt-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {rest.map((item) => (
+              <NewsCard key={item.id} {...item} showReadMore={true} />
+            ))}
           </div>
 
         </div>
@@ -138,7 +145,7 @@ export default function News() {
       </section>
 
       {/* SUBSCRIBE */}
-      <section className="bg-surface py-24">
+      <section className="bg-surface py-16 md:py-24">
 
         <div className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center gap-6">
 
@@ -148,7 +155,7 @@ export default function News() {
             className="p-3 bg-primary/10 rounded-xl"
           />
 
-          <h2 className="h2">
+          <h2 className="h2 text-2xl md:text-4xl">
             Never Miss an Update
           </h2>
 
@@ -156,11 +163,11 @@ export default function News() {
             Subscribe to our newsletter for the latest news, events, and training tips
           </p>
 
-          <form className="flex w-full max-w-lg gap-4 mt-4">
+          <form className="flex flex-col sm:flex-row w-full max-w-lg gap-3 mt-4">
 
             <input
               className="
-                flex-1
+                w-full
                 rounded-xl
                 border border-border
                 bg-background
@@ -177,6 +184,7 @@ export default function News() {
 
             <button
               className="
+                w-full sm:w-auto
                 bg-primary
                 text-white
                 px-5 py-3

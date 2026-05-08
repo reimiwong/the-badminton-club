@@ -28,23 +28,23 @@ export default function AboutUs() {
     <section>
 
       {/* HERO */}
-      <div className="flex flex-col items-center text-center pt-18 pb-30 px-6">
-        <h1 className="h1 w-fit">
+      <div className="flex flex-col items-center text-center pt-14 md:pt-18 pb-16 md:pb-30 px-6">
+        <h1 className="h1 text-4xl md:text-6xl w-fit">
           Our <span className="text-primary">Story</span>
         </h1>
 
-        <p className="body-lg muted mt-4 max-w-3xl">
+        <p className="body-lg text-muted mt-4 max-w-3xl">
           Building Edinburgh's most vibrant badminton community, one rally at a time
         </p>
       </div>
 
       {/* MISSION */}
-      <section className="bg-white px-5 py-20">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-14">
+      <section className="bg-white px-5 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 md:gap-14">
 
           {/* VIDEO */}
           <div className="hidden lg:block w-full lg:w-1/2">
-            <div className="relative overflow-hidden rounded-2xl h-[420px] group">
+            <div className="relative overflow-hidden rounded-2xl h-[320px] sm:h-[420px] group">
 
               <video
                 className="
@@ -60,24 +60,8 @@ export default function AboutUs() {
                 <source src="/videos/promo.mp4" type="video/mp4" />
               </video>
 
-              {/* OVERLAY */}
-              <div
-                className="
-                  absolute inset-0 bg-black/30
-                  transition-opacity duration-500
-                  group-hover:opacity-20
-                "
-              />
-
-              {/* RING */}
-              <div
-                className="
-                  absolute inset-0
-                  ring-1 ring-white/10
-                  transition-all duration-500
-                  group-hover:ring-white/20
-                "
-              />
+              <div className="absolute inset-0 bg-black/30 transition-opacity duration-500 group-hover:opacity-20" />
+              <div className="absolute inset-0 ring-1 ring-white/10 transition-all duration-500 group-hover:ring-white/20" />
 
             </div>
           </div>
@@ -100,27 +84,30 @@ export default function AboutUs() {
               </p>
             </div>
           </div>
+
         </div>
       </section>
 
       {/* VALUES */}
-      <section className="py-24">
+      <section className="py-16 md:py-24">
         <div className="flex flex-col items-center text-center px-6">
           <h2 className="h2">What We Stand For</h2>
-
-          <p className="body muted mt-3">
+          <p className="body text-muted mt-3">
             The values that guide everything we do
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-stretch gap-6 mt-14 md:max-w-7xl mx-auto px-4">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-stretch mt-10 md:mt-14 md:max-w-7xl mx-auto px-4">
+
           {values.map((item, i) => (
             <div key={i} className="w-full flex">
+
               <div
                 className="
                   group flex flex-col h-full w-full
                   items-start text-left gap-3
-                  py-7 px-7 bg-white rounded-2xl
+                  py-6 md:py-7 px-6 md:px-7
+                  bg-white rounded-2xl
 
                   transition-all duration-300 ease-out
                   hover:-translate-y-2
@@ -151,23 +138,27 @@ export default function AboutUs() {
                   {item.text}
                 </p>
               </div>
+
             </div>
           ))}
+
         </div>
       </section>
 
       {/* TIMELINE */}
-      <section className="py-24 bg-white">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="h2 text-center mb-16">Our Journey</h2>
+          <h2 className="h2 text-center mb-12 md:mb-16">Our Journey</h2>
 
           <div className="relative">
-            <div className="absolute left-4 sm:left-24 top-6 bottom-0 w-px bg-border" />
+            <div className="absolute left-3 sm:left-24 top-6 bottom-0 w-px bg-border" />
 
             <div className="flex flex-col gap-10">
+
               {mileStones.map((mileStone, idx) => (
-                <div key={idx} className="relative pl-12 sm:pl-32 py-2">
-                  <div className="absolute left-4 sm:left-24 top-6 -translate-x-1/2">
+                <div key={idx} className="relative pl-10 sm:pl-32 py-2">
+
+                  <div className="absolute left-3 sm:left-24 top-6 -translate-x-1/2">
                     <div className="relative">
                       <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
                       <div className="w-5 h-5 bg-primary rounded-full border-4 border-white" />
@@ -181,15 +172,18 @@ export default function AboutUs() {
                   <p className="body-lg font-semibold text-text mt-3">
                     {mileStone.text}
                   </p>
+
                 </div>
               ))}
+
             </div>
           </div>
+
         </div>
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-primary to-accent py-20">
+      <section className="bg-gradient-to-br from-primary to-accent py-16 md:py-20">
         <div className="max-w-5xl mx-auto px-6 text-center">
 
           <h2 className="h2 text-white">
@@ -200,7 +194,18 @@ export default function AboutUs() {
             Whether you're picking up a racket for the first time or training for competition, there's a place for you here.
           </p>
 
-          <button className="mt-8 bg-white text-primary px-8 py-4 rounded-xl font-medium transition hover:scale-[1.02] hover:shadow-xl active:scale-[0.98]">
+          <button
+            className="
+              mt-8 w-full sm:w-auto
+              bg-white text-primary
+              px-6 sm:px-8 py-3 sm:py-4
+              rounded-xl font-medium
+              transition
+              hover:scale-[1.02]
+              hover:shadow-xl
+              active:scale-[0.98]
+            "
+          >
             Explore Membership Options
           </button>
 

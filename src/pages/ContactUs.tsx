@@ -3,19 +3,19 @@ export default function ContactUs() {
     <section className="bg-surface">
 
       {/* HERO */}
-      <div className="bg-background px-6 pt-24 pb-20 text-center">
-        <h1 className="h1">
+      <div className="bg-background px-6 pt-16 md:pt-24 pb-16 md:pb-20 text-center">
+        <h1 className="h1 text-4xl md:text-6xl">
           Get in <span className="text-primary">Touch</span>
         </h1>
 
-        <p className="mt-5 mx-auto max-w-2xl text-body-lg text-muted">
+        <p className="mt-5 mx-auto max-w-2xl text-body text-base md:text-body-lg text-muted">
           Have questions? Send us a message and we’ll respond as soon as possible.
         </p>
       </div>
 
       {/* MAIN */}
-      <div className="px-6 py-24">
-        <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-2 items-start">
+      <div className="px-6 py-16 md:py-24">
+        <div className="mx-auto grid max-w-6xl gap-10 md:gap-14 lg:grid-cols-2 items-start">
 
           {/* LEFT */}
           <div>
@@ -29,7 +29,7 @@ export default function ContactUs() {
             </div>
 
             {/* CONTACT CARDS */}
-            <div className="mt-10 space-y-5">
+            <div className="mt-10 space-y-4 md:space-y-5">
 
               {[
                 {
@@ -84,38 +84,62 @@ export default function ContactUs() {
 
             {/* SOCIALS */}
             <div className="mt-10">
-              <p className="label mb-4">Follow us</p>
 
-              <div className="flex gap-3 mt-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-px bg-primary/40" />
+                <p className="label text-muted">Follow us</p>
+              </div>
 
-  {["facebook", "instagram", "twitter"].map((icon) => (
-    <a
-      key={icon}
-      href={`https://${icon}.com`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="
-        flex items-center justify-center
-        w-10 h-10
-        rounded-xl
-        bg-surface
-        border border-border
-        transition-all duration-200 ease-out
+              <div className="flex items-center gap-3 flex-wrap">
 
-        hover:-translate-y-1
-        hover:shadow-md
-        hover:border-primary
-      "
-    >
-      <img
-        src={`/images/icons/${icon}-icon.svg`}
-        alt={icon}
-        className="w-5 h-5"
-      />
-    </a>
-  ))}
+                {["facebook", "instagram", "twitter"].map((icon) => (
+                  <a
+                    key={icon}
+                    href={`https://${icon}.com`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+                      group relative
+                      flex items-center justify-center
 
-</div>
+                      w-11 h-11
+                      rounded-2xl
+
+                      border border-border
+                      bg-background
+                      shadow-sm
+
+                      transition-all duration-300 ease-out
+
+                      hover:-translate-y-1
+                      hover:border-primary/30
+                      hover:shadow-md
+                    "
+                  >
+                    <div
+                      className="
+                        absolute inset-0 rounded-2xl
+                        bg-primary/[0.03]
+                        opacity-0
+                        transition-opacity duration-300
+                        group-hover:opacity-100
+                      "
+                    />
+
+                    <img
+                      src={`/images/icons/${icon}-icon.svg`}
+                      alt={icon}
+                      className="
+                        relative w-5 h-5
+                        transition-transform duration-300
+                        group-hover:scale-110
+                      "
+                    />
+                  </a>
+                ))}
+
+              </div>
+
             </div>
 
           </div>
@@ -126,7 +150,7 @@ export default function ContactUs() {
               rounded-3xl
               border border-border
               bg-surface
-              p-8
+              p-5 md:p-8
               shadow-lg
             "
           >
@@ -242,12 +266,12 @@ export default function ContactUs() {
       </div>
 
       {/* MAP */}
-      <div className="bg-background px-6 py-24">
+      <div className="bg-background px-6 py-16 md:py-24">
         <div className="mx-auto max-w-6xl">
 
           <div className="overflow-hidden rounded-3xl shadow-lg">
 
-            <div className="h-[500px]">
+            <div className="h-[300px] md:h-[500px]">
               <iframe
                 title="Map"
                 className="h-full w-full border-0"
