@@ -21,25 +21,35 @@ model User {
   bookings  Booking[]
 }
 
-model Booking {
-  id         Int       @id @default(autoincrement())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  session    Session   @relation(fields: [sessionId], references: [id])
-  sessionId  Int
-  createdAt  DateTime  @default(now())
+model SessionTemplate {
+  id        Int       @id @default(autoincrement())
+  title     String
+  type      String       // "Coaching" or "Match Play"
+  level     String       // "Beginner", "Intermediate", "Advanced"
+  dayOfWeek String
+  startTime String
+  duration  Int          // minutes
+  coach     String?
+  location  String?
+  capacity  Int
+  price     Int          // <-- add this
+  sessions  Session[]
 }
 
 model Session {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String?
-  date        DateTime
-  capacity    Int
-  type        String    // "Coaching" or "Casual Play"
-  level       String    // "Beginner", "Intermediate", "Advanced"
-  price       Int
-  coach       String?   // optional, can be "N/A" for casual games
-  location    String?
-  bookings    Booking[]
+  id         Int             @id @default(autoincrement())
+  template   SessionTemplate @relation(fields: [templateId], references: [id])
+  templateId Int
+  date       DateTime        // specific date of this session
+  capacity   Int             // copied from template, can adjust per session if needed
+  bookings   Booking[]       // users booked into this session
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  session   Session  @relation(fields: [sessionId], references: [id])
+  sessionId Int
+  createdAt DateTime @default(now())
 }

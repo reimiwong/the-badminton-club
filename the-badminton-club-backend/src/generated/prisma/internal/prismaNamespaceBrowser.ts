@@ -52,8 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Booking: 'Booking',
-  Session: 'Session'
+  SessionTemplate: 'SessionTemplate',
+  Session: 'Session',
+  Booking: 'Booking'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -83,6 +84,33 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const SessionTemplateScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  type: 'type',
+  level: 'level',
+  dayOfWeek: 'dayOfWeek',
+  startTime: 'startTime',
+  duration: 'duration',
+  coach: 'coach',
+  location: 'location',
+  capacity: 'capacity',
+  price: 'price'
+} as const
+
+export type SessionTemplateScalarFieldEnum = (typeof SessionTemplateScalarFieldEnum)[keyof typeof SessionTemplateScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  templateId: 'templateId',
+  date: 'date',
+  capacity: 'capacity'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
 export const BookingScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -91,22 +119,6 @@ export const BookingScalarFieldEnum = {
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
-
-
-export const SessionScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  date: 'date',
-  capacity: 'capacity',
-  type: 'type',
-  level: 'level',
-  price: 'price',
-  coach: 'coach',
-  location: 'location'
-} as const
-
-export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
 export const SortOrder = {

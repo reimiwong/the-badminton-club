@@ -28,106 +28,70 @@ export type AggregateSession = {
 
 export type SessionAvgAggregateOutputType = {
   id: number | null
+  templateId: number | null
   capacity: number | null
-  price: number | null
 }
 
 export type SessionSumAggregateOutputType = {
   id: number | null
+  templateId: number | null
   capacity: number | null
-  price: number | null
 }
 
 export type SessionMinAggregateOutputType = {
   id: number | null
-  title: string | null
-  description: string | null
+  templateId: number | null
   date: Date | null
   capacity: number | null
-  type: string | null
-  level: string | null
-  price: number | null
-  coach: string | null
-  location: string | null
 }
 
 export type SessionMaxAggregateOutputType = {
   id: number | null
-  title: string | null
-  description: string | null
+  templateId: number | null
   date: Date | null
   capacity: number | null
-  type: string | null
-  level: string | null
-  price: number | null
-  coach: string | null
-  location: string | null
 }
 
 export type SessionCountAggregateOutputType = {
   id: number
-  title: number
-  description: number
+  templateId: number
   date: number
   capacity: number
-  type: number
-  level: number
-  price: number
-  coach: number
-  location: number
   _all: number
 }
 
 
 export type SessionAvgAggregateInputType = {
   id?: true
+  templateId?: true
   capacity?: true
-  price?: true
 }
 
 export type SessionSumAggregateInputType = {
   id?: true
+  templateId?: true
   capacity?: true
-  price?: true
 }
 
 export type SessionMinAggregateInputType = {
   id?: true
-  title?: true
-  description?: true
+  templateId?: true
   date?: true
   capacity?: true
-  type?: true
-  level?: true
-  price?: true
-  coach?: true
-  location?: true
 }
 
 export type SessionMaxAggregateInputType = {
   id?: true
-  title?: true
-  description?: true
+  templateId?: true
   date?: true
   capacity?: true
-  type?: true
-  level?: true
-  price?: true
-  coach?: true
-  location?: true
 }
 
 export type SessionCountAggregateInputType = {
   id?: true
-  title?: true
-  description?: true
+  templateId?: true
   date?: true
   capacity?: true
-  type?: true
-  level?: true
-  price?: true
-  coach?: true
-  location?: true
   _all?: true
 }
 
@@ -219,15 +183,9 @@ export type SessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type SessionGroupByOutputType = {
   id: number
-  title: string
-  description: string | null
+  templateId: number
   date: Date
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach: string | null
-  location: string | null
   _count: SessionCountAggregateOutputType | null
   _avg: SessionAvgAggregateOutputType | null
   _sum: SessionSumAggregateOutputType | null
@@ -255,29 +213,19 @@ export type SessionWhereInput = {
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   id?: Prisma.IntFilter<"Session"> | number
-  title?: Prisma.StringFilter<"Session"> | string
-  description?: Prisma.StringNullableFilter<"Session"> | string | null
+  templateId?: Prisma.IntFilter<"Session"> | number
   date?: Prisma.DateTimeFilter<"Session"> | Date | string
   capacity?: Prisma.IntFilter<"Session"> | number
-  type?: Prisma.StringFilter<"Session"> | string
-  level?: Prisma.StringFilter<"Session"> | string
-  price?: Prisma.IntFilter<"Session"> | number
-  coach?: Prisma.StringNullableFilter<"Session"> | string | null
-  location?: Prisma.StringNullableFilter<"Session"> | string | null
+  template?: Prisma.XOR<Prisma.SessionTemplateScalarRelationFilter, Prisma.SessionTemplateWhereInput>
   bookings?: Prisma.BookingListRelationFilter
 }
 
 export type SessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  coach?: Prisma.SortOrderInput | Prisma.SortOrder
-  location?: Prisma.SortOrderInput | Prisma.SortOrder
+  template?: Prisma.SessionTemplateOrderByWithRelationInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
 
@@ -286,29 +234,18 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
-  title?: Prisma.StringFilter<"Session"> | string
-  description?: Prisma.StringNullableFilter<"Session"> | string | null
+  templateId?: Prisma.IntFilter<"Session"> | number
   date?: Prisma.DateTimeFilter<"Session"> | Date | string
   capacity?: Prisma.IntFilter<"Session"> | number
-  type?: Prisma.StringFilter<"Session"> | string
-  level?: Prisma.StringFilter<"Session"> | string
-  price?: Prisma.IntFilter<"Session"> | number
-  coach?: Prisma.StringNullableFilter<"Session"> | string | null
-  location?: Prisma.StringNullableFilter<"Session"> | string | null
+  template?: Prisma.XOR<Prisma.SessionTemplateScalarRelationFilter, Prisma.SessionTemplateWhereInput>
   bookings?: Prisma.BookingListRelationFilter
 }, "id">
 
 export type SessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  coach?: Prisma.SortOrderInput | Prisma.SortOrder
-  location?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
   _avg?: Prisma.SessionAvgOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
@@ -321,107 +258,101 @@ export type SessionScalarWhereWithAggregatesInput = {
   OR?: Prisma.SessionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SessionScalarWhereWithAggregatesInput | Prisma.SessionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Session"> | number
-  title?: Prisma.StringWithAggregatesFilter<"Session"> | string
-  description?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
+  templateId?: Prisma.IntWithAggregatesFilter<"Session"> | number
   date?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
   capacity?: Prisma.IntWithAggregatesFilter<"Session"> | number
-  type?: Prisma.StringWithAggregatesFilter<"Session"> | string
-  level?: Prisma.StringWithAggregatesFilter<"Session"> | string
-  price?: Prisma.IntWithAggregatesFilter<"Session"> | number
-  coach?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
-  location?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
 }
 
 export type SessionCreateInput = {
-  title: string
-  description?: string | null
   date: Date | string
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach?: string | null
-  location?: string | null
+  template: Prisma.SessionTemplateCreateNestedOneWithoutSessionsInput
   bookings?: Prisma.BookingCreateNestedManyWithoutSessionInput
 }
 
 export type SessionUncheckedCreateInput = {
   id?: number
-  title: string
-  description?: string | null
+  templateId: number
   date: Date | string
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach?: string | null
-  location?: string | null
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type SessionUpdateInput = {
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  template?: Prisma.SessionTemplateUpdateOneRequiredWithoutSessionsNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionCreateManyInput = {
   id?: number
-  title: string
-  description?: string | null
+  templateId: number
   date: Date | string
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach?: string | null
-  location?: string | null
 }
 
 export type SessionUpdateManyMutationInput = {
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type SessionListRelationFilter = {
+  every?: Prisma.SessionWhereInput
+  some?: Prisma.SessionWhereInput
+  none?: Prisma.SessionWhereInput
+}
+
+export type SessionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type SessionCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+}
+
+export type SessionAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+}
+
+export type SessionMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+}
+
+export type SessionMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
+}
+
+export type SessionSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
+  capacity?: Prisma.SortOrder
 }
 
 export type SessionScalarRelationFilter = {
@@ -429,55 +360,46 @@ export type SessionScalarRelationFilter = {
   isNot?: Prisma.SessionWhereInput
 }
 
-export type SessionCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  date?: Prisma.SortOrder
-  capacity?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  coach?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+export type SessionCreateNestedManyWithoutTemplateInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput> | Prisma.SessionCreateWithoutTemplateInput[] | Prisma.SessionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutTemplateInput | Prisma.SessionCreateOrConnectWithoutTemplateInput[]
+  createMany?: Prisma.SessionCreateManyTemplateInputEnvelope
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
 }
 
-export type SessionAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  capacity?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+export type SessionUncheckedCreateNestedManyWithoutTemplateInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput> | Prisma.SessionCreateWithoutTemplateInput[] | Prisma.SessionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutTemplateInput | Prisma.SessionCreateOrConnectWithoutTemplateInput[]
+  createMany?: Prisma.SessionCreateManyTemplateInputEnvelope
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
 }
 
-export type SessionMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  date?: Prisma.SortOrder
-  capacity?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  coach?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+export type SessionUpdateManyWithoutTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput> | Prisma.SessionCreateWithoutTemplateInput[] | Prisma.SessionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutTemplateInput | Prisma.SessionCreateOrConnectWithoutTemplateInput[]
+  upsert?: Prisma.SessionUpsertWithWhereUniqueWithoutTemplateInput | Prisma.SessionUpsertWithWhereUniqueWithoutTemplateInput[]
+  createMany?: Prisma.SessionCreateManyTemplateInputEnvelope
+  set?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  disconnect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  delete?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  update?: Prisma.SessionUpdateWithWhereUniqueWithoutTemplateInput | Prisma.SessionUpdateWithWhereUniqueWithoutTemplateInput[]
+  updateMany?: Prisma.SessionUpdateManyWithWhereWithoutTemplateInput | Prisma.SessionUpdateManyWithWhereWithoutTemplateInput[]
+  deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
 }
 
-export type SessionMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
-  date?: Prisma.SortOrder
-  capacity?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  coach?: Prisma.SortOrder
-  location?: Prisma.SortOrder
-}
-
-export type SessionSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  capacity?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+export type SessionUncheckedUpdateManyWithoutTemplateNestedInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput> | Prisma.SessionCreateWithoutTemplateInput[] | Prisma.SessionUncheckedCreateWithoutTemplateInput[]
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutTemplateInput | Prisma.SessionCreateOrConnectWithoutTemplateInput[]
+  upsert?: Prisma.SessionUpsertWithWhereUniqueWithoutTemplateInput | Prisma.SessionUpsertWithWhereUniqueWithoutTemplateInput[]
+  createMany?: Prisma.SessionCreateManyTemplateInputEnvelope
+  set?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  disconnect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  delete?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  connect?: Prisma.SessionWhereUniqueInput | Prisma.SessionWhereUniqueInput[]
+  update?: Prisma.SessionUpdateWithWhereUniqueWithoutTemplateInput | Prisma.SessionUpdateWithWhereUniqueWithoutTemplateInput[]
+  updateMany?: Prisma.SessionUpdateManyWithWhereWithoutTemplateInput | Prisma.SessionUpdateManyWithWhereWithoutTemplateInput[]
+  deleteMany?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
 }
 
 export type SessionCreateNestedOneWithoutBookingsInput = {
@@ -494,33 +416,66 @@ export type SessionUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutBookingsInput, Prisma.SessionUpdateWithoutBookingsInput>, Prisma.SessionUncheckedUpdateWithoutBookingsInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type SessionCreateWithoutTemplateInput = {
+  date: Date | string
+  capacity: number
+  bookings?: Prisma.BookingCreateNestedManyWithoutSessionInput
+}
+
+export type SessionUncheckedCreateWithoutTemplateInput = {
+  id?: number
+  date: Date | string
+  capacity: number
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutSessionInput
+}
+
+export type SessionCreateOrConnectWithoutTemplateInput = {
+  where: Prisma.SessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput>
+}
+
+export type SessionCreateManyTemplateInputEnvelope = {
+  data: Prisma.SessionCreateManyTemplateInput | Prisma.SessionCreateManyTemplateInput[]
+  skipDuplicates?: boolean
+}
+
+export type SessionUpsertWithWhereUniqueWithoutTemplateInput = {
+  where: Prisma.SessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.SessionUpdateWithoutTemplateInput, Prisma.SessionUncheckedUpdateWithoutTemplateInput>
+  create: Prisma.XOR<Prisma.SessionCreateWithoutTemplateInput, Prisma.SessionUncheckedCreateWithoutTemplateInput>
+}
+
+export type SessionUpdateWithWhereUniqueWithoutTemplateInput = {
+  where: Prisma.SessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.SessionUpdateWithoutTemplateInput, Prisma.SessionUncheckedUpdateWithoutTemplateInput>
+}
+
+export type SessionUpdateManyWithWhereWithoutTemplateInput = {
+  where: Prisma.SessionScalarWhereInput
+  data: Prisma.XOR<Prisma.SessionUpdateManyMutationInput, Prisma.SessionUncheckedUpdateManyWithoutTemplateInput>
+}
+
+export type SessionScalarWhereInput = {
+  AND?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
+  OR?: Prisma.SessionScalarWhereInput[]
+  NOT?: Prisma.SessionScalarWhereInput | Prisma.SessionScalarWhereInput[]
+  id?: Prisma.IntFilter<"Session"> | number
+  templateId?: Prisma.IntFilter<"Session"> | number
+  date?: Prisma.DateTimeFilter<"Session"> | Date | string
+  capacity?: Prisma.IntFilter<"Session"> | number
 }
 
 export type SessionCreateWithoutBookingsInput = {
-  title: string
-  description?: string | null
   date: Date | string
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach?: string | null
-  location?: string | null
+  template: Prisma.SessionTemplateCreateNestedOneWithoutSessionsInput
 }
 
 export type SessionUncheckedCreateWithoutBookingsInput = {
   id?: number
-  title: string
-  description?: string | null
+  templateId: number
   date: Date | string
   capacity: number
-  type: string
-  level: string
-  price: number
-  coach?: string | null
-  location?: string | null
 }
 
 export type SessionCreateOrConnectWithoutBookingsInput = {
@@ -540,28 +495,41 @@ export type SessionUpdateToOneWithWhereWithoutBookingsInput = {
 }
 
 export type SessionUpdateWithoutBookingsInput = {
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  template?: Prisma.SessionTemplateUpdateOneRequiredWithoutSessionsNestedInput
 }
 
 export type SessionUncheckedUpdateWithoutBookingsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  level?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.IntFieldUpdateOperationsInput | number
-  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type SessionCreateManyTemplateInput = {
+  id?: number
+  date: Date | string
+  capacity: number
+}
+
+export type SessionUpdateWithoutTemplateInput = {
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookings?: Prisma.BookingUpdateManyWithoutSessionNestedInput
+}
+
+export type SessionUncheckedUpdateWithoutTemplateInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutSessionNestedInput
+}
+
+export type SessionUncheckedUpdateManyWithoutTemplateInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -597,82 +565,61 @@ export type SessionCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Type
 
 export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  title?: boolean
-  description?: boolean
+  templateId?: boolean
   date?: boolean
   capacity?: boolean
-  type?: boolean
-  level?: boolean
-  price?: boolean
-  coach?: boolean
-  location?: boolean
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Session$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  title?: boolean
-  description?: boolean
+  templateId?: boolean
   date?: boolean
   capacity?: boolean
-  type?: boolean
-  level?: boolean
-  price?: boolean
-  coach?: boolean
-  location?: boolean
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  title?: boolean
-  description?: boolean
+  templateId?: boolean
   date?: boolean
   capacity?: boolean
-  type?: boolean
-  level?: boolean
-  price?: boolean
-  coach?: boolean
-  location?: boolean
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectScalar = {
   id?: boolean
-  title?: boolean
-  description?: boolean
+  templateId?: boolean
   date?: boolean
   capacity?: boolean
-  type?: boolean
-  level?: boolean
-  price?: boolean
-  coach?: boolean
-  location?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "capacity" | "type" | "level" | "price" | "coach" | "location", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "templateId" | "date" | "capacity", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Session$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type SessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type SessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type SessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
+}
+export type SessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  template?: boolean | Prisma.SessionTemplateDefaultArgs<ExtArgs>
+}
 
 export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Session"
   objects: {
+    template: Prisma.$SessionTemplatePayload<ExtArgs>
     bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    title: string
-    description: string | null
+    templateId: number
     date: Date
     capacity: number
-    type: string
-    level: string
-    price: number
-    coach: string | null
-    location: string | null
   }, ExtArgs["result"]["session"]>
   composites: {}
 }
@@ -1067,6 +1014,7 @@ readonly fields: SessionFieldRefs;
  */
 export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  template<T extends Prisma.SessionTemplateDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SessionTemplateDefaultArgs<ExtArgs>>): Prisma.Prisma__SessionTemplateClient<runtime.Types.Result.GetResult<Prisma.$SessionTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bookings<T extends Prisma.Session$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1098,15 +1046,9 @@ export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface SessionFieldRefs {
   readonly id: Prisma.FieldRef<"Session", 'Int'>
-  readonly title: Prisma.FieldRef<"Session", 'String'>
-  readonly description: Prisma.FieldRef<"Session", 'String'>
+  readonly templateId: Prisma.FieldRef<"Session", 'Int'>
   readonly date: Prisma.FieldRef<"Session", 'DateTime'>
   readonly capacity: Prisma.FieldRef<"Session", 'Int'>
-  readonly type: Prisma.FieldRef<"Session", 'String'>
-  readonly level: Prisma.FieldRef<"Session", 'String'>
-  readonly price: Prisma.FieldRef<"Session", 'Int'>
-  readonly coach: Prisma.FieldRef<"Session", 'String'>
-  readonly location: Prisma.FieldRef<"Session", 'String'>
 }
     
 
@@ -1361,6 +1303,10 @@ export type SessionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.SessionCreateManyInput | Prisma.SessionCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1431,6 +1377,10 @@ export type SessionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Sessions to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SessionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

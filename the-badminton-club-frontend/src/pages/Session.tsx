@@ -3,14 +3,16 @@ import React, { useEffect, useState } from "react";
 
 interface Session {
   id: number;
-  title: string;
   date: string;
   capacity: number;
   bookings: { id: number }[];
-  type: "Coaching" | "Match Play";
-  level: "Beginner" | "Intermediate" | "Advanced";
-  price: number;
-  coach: string | null;
+  template: {
+    title: string;
+    type: "Coaching" | "Match Play";
+    level: "Beginner" | "Intermediate" | "Advanced";
+    coach: string | null;
+    price: number;
+  };
 }
 
 const SessionsPage: React.FC = () => {
@@ -38,7 +40,7 @@ const SessionsPage: React.FC = () => {
     return [weekStart, weekEnd];
   };
 
- const [weekStart, weekEnd] = React.useMemo(() => getWeekRange(currentWeekStart), [currentWeekStart]);
+  const [weekStart, weekEnd] = React.useMemo(() => getWeekRange(currentWeekStart), [currentWeekStart]);
 
   const prevWeek = () => {
     setCurrentWeekStart(prev => {
@@ -56,33 +58,31 @@ const SessionsPage: React.FC = () => {
     });
   };
 
-useEffect(() => {
-  async function fetchSessions() {
-    try {
-      const res = await fetch("http://localhost:5000/api/sessions");
-      const data: Session[] = await res.json();
-      setSessions(data);
+  useEffect(() => {
+    async function fetchSessions() {
+      try {
+        const res = await fetch("http://localhost:5000/api/sessions");
+        const data: Session[] = await res.json();
+        setSessions(data);
 
-      // Only set the week start if it actually changes
-      if (data.length > 0) {
-        const firstSessionDate = new Date(data[0].date);
-        const [start] = getWeekRange(firstSessionDate);
-        if (start.getTime() !== currentWeekStart.getTime()) {
-          setCurrentWeekStart(start);
+        if (data.length > 0) {
+          const firstSessionDate = new Date(data[0].date);
+          const [start] = getWeekRange(firstSessionDate);
+          if (start.getTime() !== currentWeekStart.getTime()) {
+            setCurrentWeekStart(start);
+          }
         }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
-  }
-  fetchSessions();
-
-}, []); // Only run on mount
+    fetchSessions();
+  }, []); // run once
 
   useEffect(() => {
     let filtered = [...sessions];
-    if (typeFilter !== "All") filtered = filtered.filter(s => s.type === typeFilter);
-    if (levelFilter !== "All") filtered = filtered.filter(s => s.level === levelFilter);
+    if (typeFilter !== "All") filtered = filtered.filter(s => s.template.type === typeFilter);
+    if (levelFilter !== "All") filtered = filtered.filter(s => s.template.level === levelFilter);
 
     filtered = filtered.filter(s => {
       const date = new Date(s.date);
@@ -177,8 +177,8 @@ useEffect(() => {
               <div className="bg-primary h-3 w-full"></div>
               <div className="p-4 flex flex-col gap-2 text-muted">
                 <div className="flex items-center justify-between">
-                  <h4 className="h4 text-black font-bold">{session.title}</h4>
-                  <p className="bg-primary/20 px-2 py-1 rounded-md text-sm text-primary font-medium">{session.type}</p>
+                  <h4 className="h4 text-black font-bold">{session.template.title}</h4>
+                  <p className="bg-primary/20 px-2 py-1 rounded-md text-sm text-primary font-medium">{session.template.type}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <img className="w-5 h-5" src="/images/icons/clock-icon.svg" alt="Time"/>
@@ -186,15 +186,15 @@ useEffect(() => {
                 </div>
                 <div className="flex items-center gap-2">
                   <img className="w-5 h-5" src="/images/icons/coach-icon.svg" alt="Coach"/>
-                  <p>Coach: {session.coach || "N/A"}</p>
-                </div>
+                  <p>Coach: {session.template.coach || "N/A"}</p>
+                               </div>
                 <div className="flex items-center gap-2">
                   <img className="w-5 h-5" src="/images/icons/players-icon.svg" alt="Players"/>
                   <p>{spotsLeft} of {session.capacity} spots available</p>
                 </div>
-                <p>Level: <span className="font-bold text-black">{session.level}</span></p>
+                <p>Level: <span className="font-bold text-black">{session.template.level}</span></p>
                 <div className="mt-4 pt-2 border-t border-gray-300/50 w-full flex justify-between items-center">
-                  <h3 className="font-bold h3 text-black">£{session.price}</h3>
+                  <h3 className="font-bold h3 text-black">£{session.template.price}</h3>
                   <button
                     className={`px-4 py-2 rounded-md font-medium text-white transition-all duration-150 cursor-pointer ${
                       spotsLeft > 0 ? "bg-primary/90 hover:bg-primary" : "bg-gray-300 cursor-not-allowed"

@@ -1,15 +1,32 @@
-// src/routes/sessions.ts
-import { Router } from "express";
-import { prisma } from "../lib/prisma.js";
+// routes/sessions.js
+import express from "express";
+import { prisma } from "../lib/prisma.js"; // adjust import if needed
 
-const router = Router();
+const router = express.Router();
 
-// Get all sessions
 router.get("/", async (req, res) => {
   try {
-    const sessions = await prisma.session.findMany({
-      include: { bookings: true }, // optional: see how full each session is
-    });
+  const sessions = await prisma.session.findMany({
+  include: {
+    template: {
+      select: {
+        id: true,
+        title: true,
+        type: true,
+        level: true,
+        dayOfWeek: true,
+        startTime: true,
+        duration: true,
+        coach: true,
+        location: true,
+        capacity: true,
+        price: true,
+      }
+    },
+    bookings: true,
+  },
+  orderBy: { date: "asc" }
+});
     res.json(sessions);
   } catch (err) {
     console.error(err);
