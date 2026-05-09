@@ -34,37 +34,39 @@ async function main() {
       coach: "Alex Wong",
       location: "Court 1"
     },
-    // --- Games Sessions ---
+
+    // --- Match Play Sessions ---
     {
-      title: "Beginner Games - Thursday",
+      title: "Beginner Match Play - Thursday",
       date: new Date("2026-05-08T17:00:00Z"),
       capacity: 12,
-      type: "Games Session",
+      type: "Match Play",
       level: "Beginner",
       price: 15,
       coach: "N/A",
       location: "Court 2"
     },
     {
-      title: "Intermediate Games - Friday",
+      title: "Intermediate Match Play - Friday",
       date: new Date("2026-05-09T17:00:00Z"),
       capacity: 12,
-      type: "Games Session",
+      type: "Match Play",
       level: "Intermediate",
       price: 15,
       coach: "N/A",
       location: "Court 2"
     },
     {
-      title: "Advanced Games - Saturday",
+      title: "Advanced Match Play - Saturday",
       date: new Date("2026-05-10T18:00:00Z"),
       capacity: 12,
-      type: "Games Session",
+      type: "Match Play",
       level: "Advanced",
       price: 20,
       coach: "N/A",
       location: "Court 2"
     },
+
     // Extra coaching sessions
     {
       title: "Beginner Coaching - Sunday",
