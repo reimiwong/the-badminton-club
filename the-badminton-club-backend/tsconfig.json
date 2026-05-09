@@ -11,5 +11,5 @@
     "ignoreDeprecations": "6.0",
     "types": ["node"]          // <-- add this
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "prisma.config.ts", "prisma.config.ts"]
 }
