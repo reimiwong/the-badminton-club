@@ -7,76 +7,205 @@ interface Session {
   date: string;
   capacity: number;
   bookings: { id: number }[];
-  type: "Coaching" | "Casual Play";
+  type: "Coaching" | "Match Play";
   level: "Beginner" | "Intermediate" | "Advanced";
   price: number;
-  coach: string;
+  coach: string | null;
 }
 
 const SessionsPage: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [filteredSessions, setFilteredSessions] = useState<Session[]>([]);
+  const [typeFilter, setTypeFilter] = useState<"All" | "Coaching" | "Match Play">("All");
+  const [levelFilter, setLevelFilter] = useState<"All" | "Beginner" | "Intermediate" | "Advanced">("All");
+  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
 
-  // Fetch sessions from backend
-  useEffect(() => {
-    async function fetchSessions() {
-      try {
-        const res = await fetch("http://localhost:5000/api/sessions");
-        const data: Session[] = await res.json();
-        setSessions(data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchSessions();
-  }, []);
+  // Limit navigation ±2 months
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setMonth(today.getMonth() - 2);
+  const maxDate = new Date(today);
+  maxDate.setMonth(today.getMonth() + 2);
 
-  const handleBook = (sessionId: number) => {
-    // TODO: call POST /api/bookings with JWT
-    console.log("Book session", sessionId);
+  // Calculate week start (Monday) and end (Sunday)
+  const getWeekRange = (date: Date) => {
+    const day = date.getDay();
+    const diffToMonday = date.getDate() - day + (day === 0 ? -6 : 1);
+    const weekStart = new Date(date);
+    weekStart.setDate(diffToMonday);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    return [weekStart, weekEnd];
   };
 
-  return (
-    <div className="container mx-auto p-6">
-      <h1 className="h1 mb-4">Book a Session</h1>
-      <p className="body mb-6">
-        Choose from casual play or professional coaching sessions
-      </p>
+ const [weekStart, weekEnd] = React.useMemo(() => getWeekRange(currentWeekStart), [currentWeekStart]);
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {sessions.map((session) => {
-          const spotsTaken = session.bookings.length;
-          const spotsLeft = session.capacity - spotsTaken;
+  const prevWeek = () => {
+    setCurrentWeekStart(prev => {
+      const newDate = new Date(prev);
+      newDate.setDate(prev.getDate() - 7);
+      return newDate < minDate ? prev : newDate;
+    });
+  };
+
+  const nextWeek = () => {
+    setCurrentWeekStart(prev => {
+      const newDate = new Date(prev);
+      newDate.setDate(prev.getDate() + 7);
+      return newDate > maxDate ? prev : newDate;
+    });
+  };
+
+useEffect(() => {
+  async function fetchSessions() {
+    try {
+      const res = await fetch("http://localhost:5000/api/sessions");
+      const data: Session[] = await res.json();
+      setSessions(data);
+
+      // Only set the week start if it actually changes
+      if (data.length > 0) {
+        const firstSessionDate = new Date(data[0].date);
+        const [start] = getWeekRange(firstSessionDate);
+        if (start.getTime() !== currentWeekStart.getTime()) {
+          setCurrentWeekStart(start);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  fetchSessions();
+
+}, []); // Only run on mount
+
+  useEffect(() => {
+    let filtered = [...sessions];
+    if (typeFilter !== "All") filtered = filtered.filter(s => s.type === typeFilter);
+    if (levelFilter !== "All") filtered = filtered.filter(s => s.level === levelFilter);
+
+    filtered = filtered.filter(s => {
+      const date = new Date(s.date);
+      return date >= weekStart && date <= weekEnd;
+    });
+
+    setFilteredSessions(filtered);
+  }, [sessions, typeFilter, levelFilter, weekStart, weekEnd]);
+
+  const handleBook = (sessionId: number) => console.log("Book session", sessionId);
+
+  const formatDate = (date: Date) =>
+    date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+
+  return (
+    <div className="container mx-auto max-w-[1200px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20 ">
+      <h1 className="h1 mb-4">Book a Session</h1>
+      <p className="body mb-6 text-muted">Choose from match play or professional coaching sessions</p>
+
+      {/* Week Navigator */}
+      <div className="flex items-center justify-between mb-6 bg-white rounded-lg shadow-md px-4 py-6">
+        <button onClick={prevWeek} className="px-2 py-1 hover:text-gray-500 cursor-pointer">
+          <img src="/images/icons/left-icon.svg" className="transition-transform duration-200 hover:-translate-x-1" alt="Previous week"/>
+        </button>
+
+        <div className="flex flex-col text-center">
+          <p className="text-black/50 text-sm">Week of</p>
+          <span className="font-medium text-black">{formatDate(weekStart)} - {formatDate(weekEnd)}</span>
+        </div>
+
+        <button onClick={nextWeek} className="px-2 py-1 hover:text-gray-500 cursor-pointer">
+          <img src="/images/icons/right-icon.svg" className="transition-transform duration-200 hover:translate-x-1" alt="Next week"/>
+        </button>
+      </div>
+
+      {/* Filter Section */}
+      <div className="bg-white p-4 rounded-lg shadow mb-6 flex flex-col gap-4">
+        <div className="flex items-center gap-2 mb-2">
+          <img className="w-7 h-7" src="/images/icons/filter-icon.svg" />
+          <h4 className="h4 font-bold">Filter Sessions</h4>
+        </div>
+
+        <div className="flex justify-between flex-wrap gap-4">
+          {/* Session Type */}
+          <div className="flex flex-col gap-2">
+            <span className="font-bold text-muted">Session Type</span>
+            <div className="flex gap-2 flex-wrap">
+              {["All", "Match Play", "Coaching"].map(type => (
+                <button
+                  key={type}
+                  className={`px-3 py-1 rounded-md font-medium cursor-pointer transition-all duration-150 ${
+                    typeFilter === type ? "bg-primary/90 text-white shadow-md" : "bg-gray-200 text-black hover:bg-gray-300"
+                  }`}
+                  onClick={() => setTypeFilter(type as "All" | "Coaching" | "Match Play")}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Skill Level */}
+          <div className="flex flex-col gap-2">
+            <span className="font-bold text-muted">Skill Level</span>
+            <div className="flex gap-2 flex-wrap">
+              {["All", "Beginner", "Intermediate", "Advanced"].map(level => (
+                <button
+                  key={level}
+                  className={`px-3 py-1 rounded-md font-medium cursor-pointer transition-all duration-150 ${
+                    levelFilter === level ? "bg-primary/90 text-white shadow-md" : "bg-gray-200 text-black hover:bg-gray-300"
+                  }`}
+                  onClick={() => setLevelFilter(level as "All" | "Beginner" | "Intermediate" | "Advanced")}
+                >
+                  {level}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Session Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredSessions.map(session => {
+          const spotsLeft = session.capacity - session.bookings.length;
 
           return (
             <div
               key={session.id}
-              className="bg-white rounded-lg p-4 shadow flex flex-col justify-between"
+              className="flex flex-col rounded-lg shadow bg-white overflow-hidden cursor-pointer transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
             >
-              <div>
-                <h2 className="h3">{session.title}</h2>
-                <p className="body mt-1">
-                  {new Date(session.date).toLocaleDateString()} |{" "}
-                  {new Date(session.date).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-                <p className="body mt-1">
-                  Coach: {session.coach}
-                </p>
-                <p className="body mt-1">
-                  {spotsLeft} of {session.capacity} spots available
-                </p>
-                <p className="body mt-1">Level: {session.level}</p>
-                <p className="body mt-1 font-semibold">€{session.price}</p>
+              <div className="bg-primary h-3 w-full"></div>
+              <div className="p-4 flex flex-col gap-2 text-muted">
+                <div className="flex items-center justify-between">
+                  <h4 className="h4 text-black font-bold">{session.title}</h4>
+                  <p className="bg-primary/20 px-2 py-1 rounded-md text-sm text-primary font-medium">{session.type}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img className="w-5 h-5" src="/images/icons/clock-icon.svg" alt="Time"/>
+                  <p>{new Date(session.date).toLocaleDateString()} | {new Date(session.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img className="w-5 h-5" src="/images/icons/coach-icon.svg" alt="Coach"/>
+                  <p>Coach: {session.coach || "N/A"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <img className="w-5 h-5" src="/images/icons/players-icon.svg" alt="Players"/>
+                  <p>{spotsLeft} of {session.capacity} spots available</p>
+                </div>
+                <p>Level: <span className="font-bold text-black">{session.level}</span></p>
+                <div className="mt-4 pt-2 border-t border-gray-300/50 w-full flex justify-between items-center">
+                  <h3 className="font-bold h3 text-black">£{session.price}</h3>
+                  <button
+                    className={`px-4 py-2 rounded-md font-medium text-white transition-all duration-150 cursor-pointer ${
+                      spotsLeft > 0 ? "bg-primary/90 hover:bg-primary" : "bg-gray-300 cursor-not-allowed"
+                    }`}
+                    onClick={() => handleBook(session.id)}
+                    disabled={spotsLeft <= 0}
+                  >
+                    {spotsLeft > 0 ? "Book" : "Full"}
+                  </button>
+                </div>
               </div>
-              <button
-                className="btn-primary mt-4 w-full"
-                onClick={() => handleBook(session.id)}
-                disabled={spotsLeft <= 0}
-              >
-                {spotsLeft > 0 ? "Book" : "Full"}
-              </button>
             </div>
           );
         })}
