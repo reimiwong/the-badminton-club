@@ -26,7 +26,7 @@ const mobileNavLinkClass = ({ isActive }: NavLinkRenderProps) =>
 const navItems = [
   { to: "/", label: "Home", end: true },
   { to: "/about", label: "About" },
-  { to: "/booking", label: "Booking" },
+  { to: "/session", label: "Sessions" },
   { to: "/team", label: "Team" },
   { to: "/news", label: "News" },
   { to: "/contact", label: "Contact" },
@@ -79,7 +79,7 @@ export default function Header() {
             </NavLink>
           ))}
 
-          <NavLink to="/booking" className={buttonClass}>
+          <NavLink to="/session" className={buttonClass}>
             Book Now
           </NavLink>
 

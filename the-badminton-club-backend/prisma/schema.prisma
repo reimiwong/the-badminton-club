@@ -33,7 +33,13 @@ model Booking {
 model Session {
   id          Int       @id @default(autoincrement())
   title       String
+  description String?
   date        DateTime
   capacity    Int
+  type        String    // "Coaching" or "Casual Play"
+  level       String    // "Beginner", "Intermediate", "Advanced"
+  price       Int
+  coach       String?   // optional, can be "N/A" for casual games
+  location    String?
   bookings    Booking[]
 }

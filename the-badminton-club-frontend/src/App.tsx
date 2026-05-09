@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
-import Booking from "./pages/Booking";
+import SessionsPage from "./pages/Session";
 import ContactUs from "./pages/ContactUs";
 import Team from "./pages/Team";
 import News from "./pages/News";
@@ -17,7 +17,7 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutUs />} />
-          <Route path="/booking" element={<Booking />} />
+          <Route path="/session" element={<SessionsPage />} />
           <Route path="/team" element={<Team />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<ContactUs />} />
