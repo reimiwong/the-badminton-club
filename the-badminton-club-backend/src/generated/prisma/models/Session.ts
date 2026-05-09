@@ -29,32 +29,52 @@ export type AggregateSession = {
 export type SessionAvgAggregateOutputType = {
   id: number | null
   capacity: number | null
+  price: number | null
 }
 
 export type SessionSumAggregateOutputType = {
   id: number | null
   capacity: number | null
+  price: number | null
 }
 
 export type SessionMinAggregateOutputType = {
   id: number | null
   title: string | null
+  description: string | null
   date: Date | null
   capacity: number | null
+  type: string | null
+  level: string | null
+  price: number | null
+  coach: string | null
+  location: string | null
 }
 
 export type SessionMaxAggregateOutputType = {
   id: number | null
   title: string | null
+  description: string | null
   date: Date | null
   capacity: number | null
+  type: string | null
+  level: string | null
+  price: number | null
+  coach: string | null
+  location: string | null
 }
 
 export type SessionCountAggregateOutputType = {
   id: number
   title: number
+  description: number
   date: number
   capacity: number
+  type: number
+  level: number
+  price: number
+  coach: number
+  location: number
   _all: number
 }
 
@@ -62,32 +82,52 @@ export type SessionCountAggregateOutputType = {
 export type SessionAvgAggregateInputType = {
   id?: true
   capacity?: true
+  price?: true
 }
 
 export type SessionSumAggregateInputType = {
   id?: true
   capacity?: true
+  price?: true
 }
 
 export type SessionMinAggregateInputType = {
   id?: true
   title?: true
+  description?: true
   date?: true
   capacity?: true
+  type?: true
+  level?: true
+  price?: true
+  coach?: true
+  location?: true
 }
 
 export type SessionMaxAggregateInputType = {
   id?: true
   title?: true
+  description?: true
   date?: true
   capacity?: true
+  type?: true
+  level?: true
+  price?: true
+  coach?: true
+  location?: true
 }
 
 export type SessionCountAggregateInputType = {
   id?: true
   title?: true
+  description?: true
   date?: true
   capacity?: true
+  type?: true
+  level?: true
+  price?: true
+  coach?: true
+  location?: true
   _all?: true
 }
 
@@ -180,8 +220,14 @@ export type SessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type SessionGroupByOutputType = {
   id: number
   title: string
+  description: string | null
   date: Date
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach: string | null
+  location: string | null
   _count: SessionCountAggregateOutputType | null
   _avg: SessionAvgAggregateOutputType | null
   _sum: SessionSumAggregateOutputType | null
@@ -210,16 +256,28 @@ export type SessionWhereInput = {
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   id?: Prisma.IntFilter<"Session"> | number
   title?: Prisma.StringFilter<"Session"> | string
+  description?: Prisma.StringNullableFilter<"Session"> | string | null
   date?: Prisma.DateTimeFilter<"Session"> | Date | string
   capacity?: Prisma.IntFilter<"Session"> | number
+  type?: Prisma.StringFilter<"Session"> | string
+  level?: Prisma.StringFilter<"Session"> | string
+  price?: Prisma.IntFilter<"Session"> | number
+  coach?: Prisma.StringNullableFilter<"Session"> | string | null
+  location?: Prisma.StringNullableFilter<"Session"> | string | null
   bookings?: Prisma.BookingListRelationFilter
 }
 
 export type SessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  coach?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
 
@@ -229,16 +287,28 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SessionWhereInput[]
   NOT?: Prisma.SessionWhereInput | Prisma.SessionWhereInput[]
   title?: Prisma.StringFilter<"Session"> | string
+  description?: Prisma.StringNullableFilter<"Session"> | string | null
   date?: Prisma.DateTimeFilter<"Session"> | Date | string
   capacity?: Prisma.IntFilter<"Session"> | number
+  type?: Prisma.StringFilter<"Session"> | string
+  level?: Prisma.StringFilter<"Session"> | string
+  price?: Prisma.IntFilter<"Session"> | number
+  coach?: Prisma.StringNullableFilter<"Session"> | string | null
+  location?: Prisma.StringNullableFilter<"Session"> | string | null
   bookings?: Prisma.BookingListRelationFilter
 }, "id">
 
 export type SessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  coach?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SessionCountOrderByAggregateInput
   _avg?: Prisma.SessionAvgOrderByAggregateInput
   _max?: Prisma.SessionMaxOrderByAggregateInput
@@ -252,58 +322,106 @@ export type SessionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SessionScalarWhereWithAggregatesInput | Prisma.SessionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Session"> | number
   title?: Prisma.StringWithAggregatesFilter<"Session"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
   date?: Prisma.DateTimeWithAggregatesFilter<"Session"> | Date | string
   capacity?: Prisma.IntWithAggregatesFilter<"Session"> | number
+  type?: Prisma.StringWithAggregatesFilter<"Session"> | string
+  level?: Prisma.StringWithAggregatesFilter<"Session"> | string
+  price?: Prisma.IntWithAggregatesFilter<"Session"> | number
+  coach?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
+  location?: Prisma.StringNullableWithAggregatesFilter<"Session"> | string | null
 }
 
 export type SessionCreateInput = {
   title: string
+  description?: string | null
   date: Date | string
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach?: string | null
+  location?: string | null
   bookings?: Prisma.BookingCreateNestedManyWithoutSessionInput
 }
 
 export type SessionUncheckedCreateInput = {
   id?: number
   title: string
+  description?: string | null
   date: Date | string
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach?: string | null
+  location?: string | null
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type SessionUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookings?: Prisma.BookingUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionCreateManyInput = {
   id?: number
   title: string
+  description?: string | null
   date: Date | string
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach?: string | null
+  location?: string | null
 }
 
 export type SessionUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionScalarRelationFilter = {
@@ -314,32 +432,52 @@ export type SessionScalarRelationFilter = {
 export type SessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  coach?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type SessionAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type SessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  coach?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type SessionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  coach?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type SessionSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  price?: Prisma.SortOrder
 }
 
 export type SessionCreateNestedOneWithoutBookingsInput = {
@@ -356,17 +494,33 @@ export type SessionUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutBookingsInput, Prisma.SessionUpdateWithoutBookingsInput>, Prisma.SessionUncheckedUpdateWithoutBookingsInput>
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type SessionCreateWithoutBookingsInput = {
   title: string
+  description?: string | null
   date: Date | string
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach?: string | null
+  location?: string | null
 }
 
 export type SessionUncheckedCreateWithoutBookingsInput = {
   id?: number
   title: string
+  description?: string | null
   date: Date | string
   capacity: number
+  type: string
+  level: string
+  price: number
+  coach?: string | null
+  location?: string | null
 }
 
 export type SessionCreateOrConnectWithoutBookingsInput = {
@@ -387,15 +541,27 @@ export type SessionUpdateToOneWithWhereWithoutBookingsInput = {
 
 export type SessionUpdateWithoutBookingsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type SessionUncheckedUpdateWithoutBookingsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -432,8 +598,14 @@ export type SessionCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Type
 export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  description?: boolean
   date?: boolean
   capacity?: boolean
+  type?: boolean
+  level?: boolean
+  price?: boolean
+  coach?: boolean
+  location?: boolean
   bookings?: boolean | Prisma.Session$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
@@ -441,25 +613,43 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type SessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  description?: boolean
   date?: boolean
   capacity?: boolean
+  type?: boolean
+  level?: boolean
+  price?: boolean
+  coach?: boolean
+  location?: boolean
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  description?: boolean
   date?: boolean
   capacity?: boolean
+  type?: boolean
+  level?: boolean
+  price?: boolean
+  coach?: boolean
+  location?: boolean
 }, ExtArgs["result"]["session"]>
 
 export type SessionSelectScalar = {
   id?: boolean
   title?: boolean
+  description?: boolean
   date?: boolean
   capacity?: boolean
+  type?: boolean
+  level?: boolean
+  price?: boolean
+  coach?: boolean
+  location?: boolean
 }
 
-export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "date" | "capacity", ExtArgs["result"]["session"]>
+export type SessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "capacity" | "type" | "level" | "price" | "coach" | "location", ExtArgs["result"]["session"]>
 export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bookings?: boolean | Prisma.Session$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
@@ -475,8 +665,14 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
+    description: string | null
     date: Date
     capacity: number
+    type: string
+    level: string
+    price: number
+    coach: string | null
+    location: string | null
   }, ExtArgs["result"]["session"]>
   composites: {}
 }
@@ -903,8 +1099,14 @@ export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.
 export interface SessionFieldRefs {
   readonly id: Prisma.FieldRef<"Session", 'Int'>
   readonly title: Prisma.FieldRef<"Session", 'String'>
+  readonly description: Prisma.FieldRef<"Session", 'String'>
   readonly date: Prisma.FieldRef<"Session", 'DateTime'>
   readonly capacity: Prisma.FieldRef<"Session", 'Int'>
+  readonly type: Prisma.FieldRef<"Session", 'String'>
+  readonly level: Prisma.FieldRef<"Session", 'String'>
+  readonly price: Prisma.FieldRef<"Session", 'Int'>
+  readonly coach: Prisma.FieldRef<"Session", 'String'>
+  readonly location: Prisma.FieldRef<"Session", 'String'>
 }
     
 

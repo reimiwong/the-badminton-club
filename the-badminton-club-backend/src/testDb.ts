@@ -1,5 +1,5 @@
-import "dotenv/config";
 import { prisma } from "./lib/prisma.js";
+import "dotenv/config";
 
 async function main() {
   console.log("Connecting to DB...");

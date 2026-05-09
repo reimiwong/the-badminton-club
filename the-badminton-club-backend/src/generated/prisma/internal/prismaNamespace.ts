@@ -691,8 +691,14 @@ export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeo
 export const SessionScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  description: 'description',
   date: 'date',
-  capacity: 'capacity'
+  capacity: 'capacity',
+  type: 'type',
+  level: 'level',
+  price: 'price',
+  coach: 'coach',
+  location: 'location'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
@@ -712,6 +718,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
