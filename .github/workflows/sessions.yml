@@ -22,8 +22,12 @@ jobs:
         working-directory: ./the-badminton-club-backend
         run: npm ci
 
+      - name: Install ts-node and TypeScript
+        working-directory: ./the-badminton-club-backend
+        run: npm install -D ts-node typescript @types/node
+
       - name: Run weekly sessions script
         working-directory: ./the-badminton-club-backend
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: node src/admin.ts
+        run: npx ts-node src/admin.ts
