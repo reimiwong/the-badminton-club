@@ -12,7 +12,7 @@ const weekdays: Record<string, number> = {
   Saturday: 6,
 };
 
-// Get date for a specific weekday of a base Monday
+// Get date for a specific weekday relative to a base Monday
 function getDateForWeek(baseMonday: Date, dayName: string, hour = 18, minute = 0) {
   const dayOffset = weekdays[dayName];
   if (dayOffset === undefined) throw new Error(`Invalid day: ${dayName}`);
@@ -34,53 +34,48 @@ export async function generateWeeklySessions() {
   }
 
   const today = new Date();
-  // Monday of this week
-  const thisWeekMonday = new Date(today);
-  thisWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-  thisWeekMonday.setHours(0, 0, 0, 0);
+  // Get Monday of next week
+  const nextWeekMonday = new Date(today);
+  nextWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7) + 7);
+  nextWeekMonday.setHours(0, 0, 0, 0);
 
-  // Monday of next week
-  const nextWeekMonday = new Date(thisWeekMonday);
-  nextWeekMonday.setDate(thisWeekMonday.getDate() + 7);
+  console.log(`Generating sessions for week starting ${nextWeekMonday.toDateString()}...`);
 
-  const weeks = [thisWeekMonday, nextWeekMonday];
+  for (const template of templates) {
+    const [hour, minute] = template.startTime.split(":").map(Number);
+    const sessionDate = getDateForWeek(nextWeekMonday, template.dayOfWeek, hour, minute);
 
-  for (const weekStart of weeks) {
-    for (const template of templates) {
-      const [hour, minute] = template.startTime.split(":").map(Number);
-      const date = getDateForWeek(weekStart, template.dayOfWeek, hour, minute);
+    // Skip if session already exists for this template/date
+    const exists = await prisma.session.findFirst({
+      where: {
+        templateId: template.id,
+        date: sessionDate,
+      },
+    });
+    if (exists) continue;
 
-      const description =
-        template.type === "Coaching"
-          ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
-          : `Casual or competitive ${template.level.toLowerCase()} match play session. Bring your racket!`;
+    const description =
+      template.type === "Coaching"
+        ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
+        : `Casual or competitive ${template.level.toLowerCase()} match play session. Bring your racket!`;
 
-      // Upsert ensures no duplicates
-      await prisma.session.upsert({
-        where: {
-          templateId_date: {
-            templateId: template.id,
-            date,
-          },
-        },
-        update: {}, // do nothing if exists
-        create: {
-          templateId: template.id,
-          title: template.title,
-          description,
-          date,
-          location: template.location ?? "TBD",
-          latitude: template.latitude ?? null,
-          longitude: template.longitude ?? null,
-          level: template.level,
-          capacity: template.capacity,
-          price: template.price,
-          coach: template.coach ?? null,
-        },
-      });
+    await prisma.session.create({
+      data: {
+        templateId: template.id,
+        title: template.title,
+        description,
+        date: sessionDate,
+        location: template.location ?? "TBD",
+        latitude: template.latitude ?? null,
+        longitude: template.longitude ?? null,
+        level: template.level,
+        capacity: template.capacity,
+        price: template.price,
+        coach: template.coach ?? null,
+      },
+    });
 
-      console.log(`Upserted session: ${template.title} (${template.type}) on ${date.toDateString()}`);
-    }
+    console.log(`Created session: ${template.title} (${template.type}) on ${sessionDate.toDateString()}`);
   }
 
   console.log("Weekly sessions generated successfully.");
