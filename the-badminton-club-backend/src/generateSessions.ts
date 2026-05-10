@@ -12,7 +12,7 @@ const weekdays: Record<string, number> = {
   Saturday: 6,
 };
 
-// Get date for a specific weekday relative to a base Monday
+// Get the date for a specific weekday of a base Monday
 function getDateForWeek(baseMonday: Date, dayName: string, hour = 18, minute = 0) {
   const dayOffset = weekdays[dayName];
   if (dayOffset === undefined) throw new Error(`Invalid day: ${dayName}`);
@@ -34,25 +34,28 @@ export async function generateWeeklySessions() {
   }
 
   const today = new Date();
-  // Get Monday of next week
-  const nextWeekMonday = new Date(today);
-  nextWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7) + 7);
-  nextWeekMonday.setHours(0, 0, 0, 0);
+  // Monday of this week
+  const thisWeekMonday = new Date(today);
+  thisWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+  thisWeekMonday.setHours(0, 0, 0, 0);
 
-  console.log(`Generating sessions for week starting ${nextWeekMonday.toDateString()}...`);
+  console.log(`Generating sessions for week starting ${thisWeekMonday.toDateString()}`);
 
   for (const template of templates) {
     const [hour, minute] = template.startTime.split(":").map(Number);
-    const sessionDate = getDateForWeek(nextWeekMonday, template.dayOfWeek, hour, minute);
+    const sessionDate = getDateForWeek(thisWeekMonday, template.dayOfWeek, hour, minute);
 
-    // Skip if session already exists for this template/date
+    // Prevent duplicates
     const exists = await prisma.session.findFirst({
       where: {
         templateId: template.id,
         date: sessionDate,
       },
     });
-    if (exists) continue;
+    if (exists) {
+      console.log(`Session already exists: ${template.title} on ${sessionDate.toDateString()}`);
+      continue;
+    }
 
     const description =
       template.type === "Coaching"
