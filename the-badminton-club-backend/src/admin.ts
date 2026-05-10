@@ -32,8 +32,8 @@ export async function generateWeeklySessions() {
   console.log(`Created ${sessionsToCreate.length} sessions.`);
 }
 
-// If you want it runnable locally
-if (require.main === module) {
+// ESM-safe CLI runner
+if (import.meta.url === `file://${process.argv[1]}`) {
   generateWeeklySessions()
     .then(() => prisma.$disconnect())
     .catch((e) => {
