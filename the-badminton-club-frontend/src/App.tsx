@@ -1,16 +1,20 @@
+// src/App.tsx
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import SessionsPage from "./pages/Sessions";
+import SessionDetail from "./pages/SessionsDetail";
 import ContactUs from "./pages/ContactUs";
 import Team from "./pages/Team";
 import News from "./pages/News";
 import ScrollToTop from "./utils/ScrollToTop";
-import SignIn from "./pages/SignIn"
-import SessionDetail from "./pages/SessionsDetail";
-import Booking from "./pages/Booking"
+import SignIn from "./pages/SignIn";
+import Booking from "./pages/Booking";
 import BookingSuccess from "./pages/BookingSuccess";
+import AccountSettings from "./pages/AccountSettings"; // <-- import your new page
+import MySessions from "./pages/MySessions";
+import PurchaseHistory from "./pages/PurchaseHistory";
 
 export default function App() {
   return (
@@ -28,7 +32,11 @@ export default function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
+          <Route path="/my-sessions" element={<MySessions />} />
+          <Route path="/purchase-history" element={<PurchaseHistory />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/signin" element={<SignIn />} />
+
         </Route>
       </Routes>
     </>

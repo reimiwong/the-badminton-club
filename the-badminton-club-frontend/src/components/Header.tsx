@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
-import type { NavLinkRenderProps } from "react-router-dom";
+// src/components/Header.tsx
+import { NavLink, useNavigate, type NavLinkRenderProps } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const buttonClass =
@@ -32,9 +32,22 @@ const navItems = [
   { to: "/contact", label: "Contact" },
 ];
 
+interface User {
+  username: string;
+  email: string;
+}
+
 export default function Header() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // mobile nav
+  const [userOpen, setUserOpen] = useState(false); // top-right dropdown
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+
+  // Dummy authenticated user
+  const [user, setUser] = useState<User | null>({
+    username: "raymondwong1998",
+    email: "raymondwong1998@outlook.com",
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -42,50 +55,98 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const handleSignOut = () => {
+    setUser(null);
+    localStorage.removeItem("authToken"); // if stored
+    setUserOpen(false);
+    navigate("/signin");
+  };
+
   return (
     <header
-      className={`
-        sticky top-0 z-50 bg-surface
-        transition-all duration-300 ease-out
-        ${scrolled
-          ? "shadow-md py-2 bg-surface/95 backdrop-blur"
-          : "py-4"
-        }
-      `}
+      className={`sticky top-0 z-50 bg-surface transition-all duration-300 ease-out ${
+        scrolled ? "shadow-md py-2 bg-surface/95 backdrop-blur" : "py-4"
+      }`}
     >
-
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-
         {/* LOGO */}
-       <NavLink
-  to="/"
-  className="h3 text-text transition-all duration-200 hover:text-primary hover:-translate-y-0.5"
-  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
->
-  The Badminton Club
-</NavLink>
+        <NavLink
+          to="/"
+          className="h3 text-text transition-all duration-200 hover:text-primary hover:-translate-y-0.5"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          The Badminton Club
+        </NavLink>
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-8">
-
           {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={navLinkClass}
-            >
+            <NavLink key={item.to} to={item.to} end={item.end} className={navLinkClass}>
               {item.label}
             </NavLink>
           ))}
 
-          <NavLink to="/signin" className={buttonClass}>
-            Book Now
-          </NavLink>
+          {/* Show Book Now only if not logged in */}
+          {!user && (
+            <NavLink to="/signin" className={buttonClass}>
+              Book Now
+            </NavLink>
+          )}
 
+          {/* User dropdown */}
+ 
+{user && (
+  <div className="relative">
+    <button
+      className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer"
+      onClick={() => setUserOpen(!userOpen)}
+    >
+      {/* Circle with first letter */}
+      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center  text-sm">
+        {user.username[0].toUpperCase()}
+      </div>
+      <span className="font-medium text-gray-800">{user.username}</span>
+    </button>
+
+    {userOpen && (
+      <div className="absolute top-full left-0 mt-2 w-64 bg-white shadow-lg rounded-xl py-2 flex flex-col z-50">
+        <div className="px-4 py-2 border-b border-gray-200">
+          <p className="font-semibold">{user.username}</p>
+          <p className="text-gray-500 text-sm">{user.email}</p>
+        </div>
+
+        <NavLink
+          to="/my-sessions"
+          className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-muted"
+        >
+          <img className="h-5 w-5" src="/images/icons/gray-calendar-icon.svg" /> My Sessions
+        </NavLink>
+        <NavLink
+          to="/purchase-history"
+          className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-muted"
+        >
+          <img className="h-5 w-5" src="/images/icons/gray-credit-card-icon.svg" />  Purchase History
+        </NavLink>
+        <NavLink
+          to="/account-settings"
+          className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 text-muted"
+        >
+         <img className="h-5 w-5" src="/images/icons/gray-settings-icon.svg" /> Account Settings
+        </NavLink>
+
+       <button
+  className="flex gap-2 px-4 py-2 text-[#D32F2F] hover:bg-red-50 text-left"
+  onClick={handleSignOut}
+>
+           <img className="h-5 w-5" src="/images/icons/log-out-icon.svg" />  Sign Out
+        </button>
+      </div>
+    )}
+  </div>
+)}
         </nav>
 
-        {/* MOBILE BUTTON */}
+        {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-2xl transition-transform duration-200 hover:scale-110 active:scale-95"
           onClick={() => setOpen(!open)}
@@ -93,18 +154,14 @@ export default function Header() {
         >
           ☰
         </button>
-
       </div>
 
       {/* MOBILE NAV */}
       <nav
-        className={`
-          md:hidden flex flex-col gap-4 px-6
-          transition-all duration-300 ease-out overflow-hidden
-          ${open ? "max-h-96 py-4 opacity-100" : "max-h-0 opacity-0 py-0"}
-        `}
+        className={`md:hidden flex flex-col gap-4 px-6 transition-all duration-300 ease-out overflow-hidden ${
+          open ? "max-h-96 py-4 opacity-100" : "max-h-0 opacity-0 py-0"
+        }`}
       >
-
         {navItems.map((item) => (
           <NavLink
             key={item.to}
@@ -117,16 +174,33 @@ export default function Header() {
           </NavLink>
         ))}
 
-        <NavLink
-          to="/booking"
-          className={buttonClass}
-          onClick={() => setOpen(false)}
-        >
-          Book Now
-        </NavLink>
+        {/* Show Book Now only if not logged in */}
+        {!user && (
+          <NavLink to="/booking" className={buttonClass} onClick={() => setOpen(false)}>
+            Book Now
+          </NavLink>
+        )}
 
+        {user && (
+          <>
+            <NavLink to="/my-sessions" className="px-4 py-2 hover:bg-gray-100" onClick={() => setOpen(false)}>
+              My Sessions
+            </NavLink>
+            <NavLink to="/purchase-history" className="px-4 py-2 hover:bg-gray-100" onClick={() => setOpen(false)}>
+              Purchase History
+            </NavLink>
+            <NavLink to="/account-settings" className="px-4 py-2 hover:bg-gray-100" onClick={() => setOpen(false)}>
+              Account Settings
+            </NavLink>
+            <button
+              className="px-4 py-2 text-red-600 hover:bg-gray-100 text-left"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </button>
+          </>
+        )}
       </nav>
-
     </header>
   );
 }
