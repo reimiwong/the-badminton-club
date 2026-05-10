@@ -1,7 +1,7 @@
 // src/seed.ts
 import { prisma } from "./lib/prisma.js";
 
-// Helper to get next occurrence of a day (0 = Sunday, 6 = Saturday)
+// Helper: get next occurrence of a weekday
 function nextDayOfWeek(dayName: string, hour = 18, minute = 0) {
   const dayMap: Record<string, number> = {
     Sunday: 0,
@@ -19,10 +19,9 @@ function nextDayOfWeek(dayName: string, hour = 18, minute = 0) {
   const date = new Date(now);
   date.setHours(hour, minute, 0, 0);
 
-  const diff = (targetDay + 7 - date.getDay()) % 7;
-  if (diff === 0 && date < now) date.setDate(date.getDate() + 7);
-  else date.setDate(date.getDate() + diff);
-
+  let diff = (targetDay + 7 - date.getDay()) % 7;
+  if (diff === 0 && date < now) diff = 7;
+  date.setDate(date.getDate() + diff);
   return date;
 }
 
@@ -33,47 +32,42 @@ async function main() {
   await prisma.sessionTemplate.deleteMany();
   await prisma.user.deleteMany();
 
-  console.log("Seeding templates...");
+  console.log("Seeding session templates...");
 
   const skillLevels = ["Beginner", "Intermediate", "Advanced"];
-  const coachingDays = ["Tuesday", "Thursday", "Saturday"];
-  const matchPlayDays = ["Monday", "Wednesday", "Friday"];
+  const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const timeSlots = {
+    Coaching: ["10:00", "12:00", "14:00"],
+    "Match Play": ["16:00", "18:00", "20:00"],
+  };
+  const coaches = ["Lee Chong Wei", "Lin Dan", "Kento Momota", "Peter Gade", "Viktor Axelsen"];
+  const locations = [
+    { name: "Mary Erskine School", lat: 55.9492, lng: -3.1900 },
+    { name: "Meadowbank Sports Centre", lat: 55.9520, lng: -3.1690 },
+  ];
 
-  // Coaching templates
-  for (const day of coachingDays) {
+  // Seed templates
+  for (const day of weekdays) {
     for (const level of skillLevels) {
+      const type = Math.random() > 0.5 ? "Coaching" : "Match Play";
+      const slot = timeSlots[type][Math.floor(Math.random() * timeSlots[type].length)];
+      const location = locations[Math.floor(Math.random() * locations.length)];
+      const coach = type === "Coaching" ? coaches[Math.floor(Math.random() * coaches.length)] : null;
+
       await prisma.sessionTemplate.create({
         data: {
-          title: `${day} ${level} Coaching`,
-          type: "Coaching",
+          title: `${day} ${level} ${type}`,
+          type,
           level,
           dayOfWeek: day,
-          startTime: "12:00",
-          duration: 90,
-          coach: "Sarah Chen",
-          location: "Court 1",
-          capacity: 15,
-          price: 15,
-        },
-      });
-    }
-  }
-
-  // Match Play templates
-  for (const day of matchPlayDays) {
-    for (const level of skillLevels) {
-      await prisma.sessionTemplate.create({
-        data: {
-          title: `${day} ${level} Match Play`,
-          type: "Match Play",
-          level,
-          dayOfWeek: day,
-          startTime: "18:00",
-          duration: 120,
-          coach: null,
-          location: "Court 2",
-          capacity: 10,
-          price: 10,
+          startTime: slot,
+          duration: type === "Coaching" ? 90 : 120,
+          coach,
+          location: location.name,
+          latitude: location.lat,
+          longitude: location.lng,
+          capacity: type === "Coaching" ? 15 : 10,
+          price: type === "Coaching" ? 15 : 10,
         },
       });
     }
@@ -83,11 +77,13 @@ async function main() {
 
   const templates = await prisma.sessionTemplate.findMany();
 
+  // Create 4 upcoming sessions per template
   for (const template of templates) {
-    // Create 4 sessions per template, one week apart
     for (let i = 0; i < 4; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i * 7);
+      const [hour, minute] = template.startTime.split(":").map(Number);
+      const date = nextDayOfWeek(template.dayOfWeek, hour, minute);
+      date.setDate(date.getDate() + i * 7); // next 4 weeks
+
       await prisma.session.create({
         data: {
           templateId: template.id,
@@ -95,12 +91,15 @@ async function main() {
           description:
             template.type === "Coaching"
               ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
-              : `Casual or competitive match play for ${template.level.toLowerCase()} players.`,
+              : `Casual or competitive ${template.level.toLowerCase()} match play session. Bring your racket!`,
           date,
           location: template.location!,
+          latitude: template.latitude,
+          longitude: template.longitude,
           level: template.level,
           capacity: template.capacity,
-          price: template.price, // required
+          price: template.price,
+          coach: template.coach, // can be null for match play
         },
       });
     }

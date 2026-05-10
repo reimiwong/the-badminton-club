@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -24,13 +24,15 @@ model User {
 model SessionTemplate {
   id        Int       @id @default(autoincrement())
   title     String
-  type      String       // "Coaching" or "Match Play"
-  level     String       // "Beginner", "Intermediate", "Advanced"
+  type      String
+  level     String
   dayOfWeek String
   startTime String
-  duration  Int          // minutes
+  duration  Int
   coach     String?
   location  String?
+  latitude  Float?    // New
+  longitude Float?    // New
   capacity  Int
   price     Int
   sessions  Session[]
@@ -43,9 +45,12 @@ model Session {
   description String
   date        DateTime
   location    String
+  latitude    Float?    // optional for map
+  longitude   Float?    // optional for map
   level       String
   capacity    Int
   price       Int
+  coach       String?   // NEW: nullable coach
   bookings    Booking[]
   template    SessionTemplate? @relation(fields: [templateId], references: [id])
 }

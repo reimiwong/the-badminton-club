@@ -94,6 +94,8 @@ export const SessionTemplateScalarFieldEnum = {
   duration: 'duration',
   coach: 'coach',
   location: 'location',
+  latitude: 'latitude',
+  longitude: 'longitude',
   capacity: 'capacity',
   price: 'price'
 } as const
@@ -108,9 +110,12 @@ export const SessionScalarFieldEnum = {
   description: 'description',
   date: 'date',
   location: 'location',
+  latitude: 'latitude',
+  longitude: 'longitude',
   level: 'level',
   capacity: 'capacity',
-  price: 'price'
+  price: 'price',
+  coach: 'coach'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]

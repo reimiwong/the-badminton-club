@@ -29,6 +29,8 @@ export type AggregateSessionTemplate = {
 export type SessionTemplateAvgAggregateOutputType = {
   id: number | null
   duration: number | null
+  latitude: number | null
+  longitude: number | null
   capacity: number | null
   price: number | null
 }
@@ -36,6 +38,8 @@ export type SessionTemplateAvgAggregateOutputType = {
 export type SessionTemplateSumAggregateOutputType = {
   id: number | null
   duration: number | null
+  latitude: number | null
+  longitude: number | null
   capacity: number | null
   price: number | null
 }
@@ -50,6 +54,8 @@ export type SessionTemplateMinAggregateOutputType = {
   duration: number | null
   coach: string | null
   location: string | null
+  latitude: number | null
+  longitude: number | null
   capacity: number | null
   price: number | null
 }
@@ -64,6 +70,8 @@ export type SessionTemplateMaxAggregateOutputType = {
   duration: number | null
   coach: string | null
   location: string | null
+  latitude: number | null
+  longitude: number | null
   capacity: number | null
   price: number | null
 }
@@ -78,6 +86,8 @@ export type SessionTemplateCountAggregateOutputType = {
   duration: number
   coach: number
   location: number
+  latitude: number
+  longitude: number
   capacity: number
   price: number
   _all: number
@@ -87,6 +97,8 @@ export type SessionTemplateCountAggregateOutputType = {
 export type SessionTemplateAvgAggregateInputType = {
   id?: true
   duration?: true
+  latitude?: true
+  longitude?: true
   capacity?: true
   price?: true
 }
@@ -94,6 +106,8 @@ export type SessionTemplateAvgAggregateInputType = {
 export type SessionTemplateSumAggregateInputType = {
   id?: true
   duration?: true
+  latitude?: true
+  longitude?: true
   capacity?: true
   price?: true
 }
@@ -108,6 +122,8 @@ export type SessionTemplateMinAggregateInputType = {
   duration?: true
   coach?: true
   location?: true
+  latitude?: true
+  longitude?: true
   capacity?: true
   price?: true
 }
@@ -122,6 +138,8 @@ export type SessionTemplateMaxAggregateInputType = {
   duration?: true
   coach?: true
   location?: true
+  latitude?: true
+  longitude?: true
   capacity?: true
   price?: true
 }
@@ -136,6 +154,8 @@ export type SessionTemplateCountAggregateInputType = {
   duration?: true
   coach?: true
   location?: true
+  latitude?: true
+  longitude?: true
   capacity?: true
   price?: true
   _all?: true
@@ -237,6 +257,8 @@ export type SessionTemplateGroupByOutputType = {
   duration: number
   coach: string | null
   location: string | null
+  latitude: number | null
+  longitude: number | null
   capacity: number
   price: number
   _count: SessionTemplateCountAggregateOutputType | null
@@ -274,6 +296,8 @@ export type SessionTemplateWhereInput = {
   duration?: Prisma.IntFilter<"SessionTemplate"> | number
   coach?: Prisma.StringNullableFilter<"SessionTemplate"> | string | null
   location?: Prisma.StringNullableFilter<"SessionTemplate"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"SessionTemplate"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"SessionTemplate"> | number | null
   capacity?: Prisma.IntFilter<"SessionTemplate"> | number
   price?: Prisma.IntFilter<"SessionTemplate"> | number
   sessions?: Prisma.SessionListRelationFilter
@@ -289,6 +313,8 @@ export type SessionTemplateOrderByWithRelationInput = {
   duration?: Prisma.SortOrder
   coach?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -307,6 +333,8 @@ export type SessionTemplateWhereUniqueInput = Prisma.AtLeast<{
   duration?: Prisma.IntFilter<"SessionTemplate"> | number
   coach?: Prisma.StringNullableFilter<"SessionTemplate"> | string | null
   location?: Prisma.StringNullableFilter<"SessionTemplate"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"SessionTemplate"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"SessionTemplate"> | number | null
   capacity?: Prisma.IntFilter<"SessionTemplate"> | number
   price?: Prisma.IntFilter<"SessionTemplate"> | number
   sessions?: Prisma.SessionListRelationFilter
@@ -322,6 +350,8 @@ export type SessionTemplateOrderByWithAggregationInput = {
   duration?: Prisma.SortOrder
   coach?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
   _count?: Prisma.SessionTemplateCountOrderByAggregateInput
@@ -344,6 +374,8 @@ export type SessionTemplateScalarWhereWithAggregatesInput = {
   duration?: Prisma.IntWithAggregatesFilter<"SessionTemplate"> | number
   coach?: Prisma.StringNullableWithAggregatesFilter<"SessionTemplate"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"SessionTemplate"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"SessionTemplate"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"SessionTemplate"> | number | null
   capacity?: Prisma.IntWithAggregatesFilter<"SessionTemplate"> | number
   price?: Prisma.IntWithAggregatesFilter<"SessionTemplate"> | number
 }
@@ -357,6 +389,8 @@ export type SessionTemplateCreateInput = {
   duration: number
   coach?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   capacity: number
   price: number
   sessions?: Prisma.SessionCreateNestedManyWithoutTemplateInput
@@ -372,6 +406,8 @@ export type SessionTemplateUncheckedCreateInput = {
   duration: number
   coach?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   capacity: number
   price: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutTemplateInput
@@ -386,6 +422,8 @@ export type SessionTemplateUpdateInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutTemplateNestedInput
@@ -401,6 +439,8 @@ export type SessionTemplateUncheckedUpdateInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutTemplateNestedInput
@@ -416,6 +456,8 @@ export type SessionTemplateCreateManyInput = {
   duration: number
   coach?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   capacity: number
   price: number
 }
@@ -429,6 +471,8 @@ export type SessionTemplateUpdateManyMutationInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -443,6 +487,8 @@ export type SessionTemplateUncheckedUpdateManyInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -457,6 +503,8 @@ export type SessionTemplateCountOrderByAggregateInput = {
   duration?: Prisma.SortOrder
   coach?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
@@ -464,6 +512,8 @@ export type SessionTemplateCountOrderByAggregateInput = {
 export type SessionTemplateAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
@@ -478,6 +528,8 @@ export type SessionTemplateMaxOrderByAggregateInput = {
   duration?: Prisma.SortOrder
   coach?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
@@ -492,6 +544,8 @@ export type SessionTemplateMinOrderByAggregateInput = {
   duration?: Prisma.SortOrder
   coach?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
@@ -499,6 +553,8 @@ export type SessionTemplateMinOrderByAggregateInput = {
 export type SessionTemplateSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   duration?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
@@ -510,6 +566,14 @@ export type SessionTemplateNullableScalarRelationFilter = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type SessionTemplateCreateNestedOneWithoutSessionsInput = {
@@ -537,6 +601,8 @@ export type SessionTemplateCreateWithoutSessionsInput = {
   duration: number
   coach?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   capacity: number
   price: number
 }
@@ -551,6 +617,8 @@ export type SessionTemplateUncheckedCreateWithoutSessionsInput = {
   duration: number
   coach?: string | null
   location?: string | null
+  latitude?: number | null
+  longitude?: number | null
   capacity: number
   price: number
 }
@@ -580,6 +648,8 @@ export type SessionTemplateUpdateWithoutSessionsInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -594,6 +664,8 @@ export type SessionTemplateUncheckedUpdateWithoutSessionsInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   coach?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -639,6 +711,8 @@ export type SessionTemplateSelect<ExtArgs extends runtime.Types.Extensions.Inter
   duration?: boolean
   coach?: boolean
   location?: boolean
+  latitude?: boolean
+  longitude?: boolean
   capacity?: boolean
   price?: boolean
   sessions?: boolean | Prisma.SessionTemplate$sessionsArgs<ExtArgs>
@@ -655,6 +729,8 @@ export type SessionTemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   duration?: boolean
   coach?: boolean
   location?: boolean
+  latitude?: boolean
+  longitude?: boolean
   capacity?: boolean
   price?: boolean
 }, ExtArgs["result"]["sessionTemplate"]>
@@ -669,6 +745,8 @@ export type SessionTemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   duration?: boolean
   coach?: boolean
   location?: boolean
+  latitude?: boolean
+  longitude?: boolean
   capacity?: boolean
   price?: boolean
 }, ExtArgs["result"]["sessionTemplate"]>
@@ -683,11 +761,13 @@ export type SessionTemplateSelectScalar = {
   duration?: boolean
   coach?: boolean
   location?: boolean
+  latitude?: boolean
+  longitude?: boolean
   capacity?: boolean
   price?: boolean
 }
 
-export type SessionTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "level" | "dayOfWeek" | "startTime" | "duration" | "coach" | "location" | "capacity" | "price", ExtArgs["result"]["sessionTemplate"]>
+export type SessionTemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "type" | "level" | "dayOfWeek" | "startTime" | "duration" | "coach" | "location" | "latitude" | "longitude" | "capacity" | "price", ExtArgs["result"]["sessionTemplate"]>
 export type SessionTemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.SessionTemplate$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.SessionTemplateCountOutputTypeDefaultArgs<ExtArgs>
@@ -710,6 +790,8 @@ export type $SessionTemplatePayload<ExtArgs extends runtime.Types.Extensions.Int
     duration: number
     coach: string | null
     location: string | null
+    latitude: number | null
+    longitude: number | null
     capacity: number
     price: number
   }, ExtArgs["result"]["sessionTemplate"]>
@@ -1145,6 +1227,8 @@ export interface SessionTemplateFieldRefs {
   readonly duration: Prisma.FieldRef<"SessionTemplate", 'Int'>
   readonly coach: Prisma.FieldRef<"SessionTemplate", 'String'>
   readonly location: Prisma.FieldRef<"SessionTemplate", 'String'>
+  readonly latitude: Prisma.FieldRef<"SessionTemplate", 'Float'>
+  readonly longitude: Prisma.FieldRef<"SessionTemplate", 'Float'>
   readonly capacity: Prisma.FieldRef<"SessionTemplate", 'Int'>
   readonly price: Prisma.FieldRef<"SessionTemplate", 'Int'>
 }

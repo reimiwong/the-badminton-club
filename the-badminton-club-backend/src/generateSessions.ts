@@ -37,10 +37,10 @@ export async function generateWeeklySessions() {
   for (const template of templates) {
     // Generate 4 weeks of sessions per template
     for (let i = 0; i < 4; i++) {
-      const sessionDate = nextWeekday(template.dayOfWeek, Number(template.startTime.split(":")[0]), Number(template.startTime.split(":")[1]));
+      const [hour, minute] = template.startTime.split(":").map(Number);
+      const sessionDate = nextWeekday(template.dayOfWeek, hour, minute);
       sessionDate.setDate(sessionDate.getDate() + i * 7);
 
-      // Generate description based on type
       const description =
         template.type === "Coaching"
           ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
@@ -52,18 +52,23 @@ export async function generateWeeklySessions() {
         description,
         date: sessionDate,
         location: template.location ?? "TBD",
+        latitude: template.latitude ?? null,
+        longitude: template.longitude ?? null,
         level: template.level,
         capacity: template.capacity,
         price: template.price,
+        coach: template.coach ?? null,
       });
 
-      console.log(`Prepared session: ${template.title} (${template.type}) on ${sessionDate.toDateString()} -> ${description}`);
+      console.log(
+        `Prepared session: ${template.title} (${template.type}) on ${sessionDate.toDateString()} -> ${description}`
+      );
     }
   }
 
-  // Insert into DB
-  for (const s of sessionsToCreate) {
-    await prisma.session.create({ data: s });
+  console.log("Inserting sessions into database...");
+  for (const session of sessionsToCreate) {
+    await prisma.session.create({ data: session });
   }
 
   console.log(`Created ${sessionsToCreate.length} sessions.`);
