@@ -19,9 +19,11 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
+        working-directory: ./the-badminton-club-backend
         run: npm ci
 
       - name: Run weekly sessions script
+        working-directory: ./the-badminton-club-backend
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: node ./src/admin.ts
+        run: node src/admin.ts
