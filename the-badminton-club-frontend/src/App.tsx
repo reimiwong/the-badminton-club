@@ -9,6 +9,8 @@ import News from "./pages/News";
 import ScrollToTop from "./utils/ScrollToTop";
 import SignIn from "./pages/SignIn"
 import SessionDetail from "./pages/SessionsDetail";
+import Booking from "./pages/Booking"
+import BookingSuccess from "./pages/BookingSuccess";
 
 export default function App() {
   return (
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="/team" element={<Team />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/booking-success" element={<BookingSuccess />} />
           <Route path="/signin" element={<SignIn />} />
         </Route>
       </Routes>

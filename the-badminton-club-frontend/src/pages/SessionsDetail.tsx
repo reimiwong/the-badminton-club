@@ -32,9 +32,6 @@ const SessionDetailPage: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [bookingLoading, setBookingLoading] = useState(false);
-
-  const token = localStorage.getItem("token");
 
 useEffect(() => {
   async function fetchSession() {
@@ -66,33 +63,6 @@ useEffect(() => {
 
   fetchSession();
 }, [id]);
-
-  const handleBook = async () => {
-    if (!token) return setError("You must log in to book a session");
-    if (!session) return;
-
-    setBookingLoading(true);
-    try {
-      const res = await fetch("http://localhost:5000/api/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ sessionId: session.id }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Booking failed");
-      alert("Booking successful!");
-      navigate("/sessions");
-    } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError("Booking failed");
-    } finally {
-      setBookingLoading(false);
-    }
-  };
-
   if (loading) return <p className="p-6">Loading session...</p>;
   if (error) return <p className="p-6 text-red-600">{error}</p>;
   if (!session) return <p className="p-6">Session not found</p>;
@@ -138,25 +108,37 @@ return (
     <hr className="my-4 border-t border-gray-300" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm body">
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
       <img className="w-5 h-5" src="/images/icons/green-calendar-icon.svg" />
-          <div>
+                <div className="flex flex-col">
+          <p className="text-muted">Date & Time</p>
+          <div className="font-semibold">
             {new Date(session.date).toLocaleDateString()}
             <br />
             {new Date(session.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           <img className="w-5 h-5" src="/images/icons/green-location-icon.svg" />
-          <div>{session.location}</div>
+          <div className="flex flex-col">
+          <p className="text-muted">Location</p>
+          <div className="font-semibold">{session.location}</div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           <img className="w-5 h-5" src="/images/icons/green-players-icon.svg" />
-          <div>{session.capacity - session.bookings.length} of {session.capacity} spots left</div>
+                    <div className="flex flex-col">
+          <p className="text-muted">Availability</p>
+          <div className="font-semibold">{session.capacity - session.bookings.length} of {session.capacity} spots left</div>
         </div>
-        <div className="flex items-center gap-2">
+        </div>
+        <div className="flex items-start gap-2">
           <img className="w-5 h-5" src="/images/icons/green-skill-icon.svg" />
-          <div>{session.level}</div>
+             <div className="flex flex-col">
+          <p className="text-muted">Skill Level</p>
+          <div className="font-semibold">{session.level}</div>
+          </div>
         </div>
       </div>
 
@@ -187,13 +169,7 @@ return (
         </div>
       ) : null}
 
-      <button
-        className={`btn-primary mt-6 w-full ${session.capacity - session.bookings.length <= 0 || bookingLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-        disabled={session.capacity - session.bookings.length <= 0 || bookingLoading}
-        onClick={handleBook}
-      >
-        {session.capacity - session.bookings.length > 0 ? (bookingLoading ? "Booking..." : "Book") : "Full"}
-      </button>
+ 
     </div>
 </div>
 
@@ -225,9 +201,12 @@ return (
         <h4 className="font-bold text-lg">Ready to Book?</h4>
         <p className="text-muted">Secure your spot for this session</p>
       </div>
-      <button className="btn-primary px-8 py-3 w-full md:w-auto">
-        Continue to Payment
-      </button>
+    <button
+  className="btn-primary px-8 py-3 w-full md:w-auto"
+  onClick={() => navigate("/booking", { state: { session } })}
+>
+  Continue to Payment
+</button>
     </div>
   </div>
 
