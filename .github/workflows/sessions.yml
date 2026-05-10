@@ -2,8 +2,8 @@ name: Generate Weekly Sessions
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # every Sunday UTC
-  workflow_dispatch:
+    - cron: '0 0 * * 0' # every Sunday at 00:00 UTC
+  workflow_dispatch:   # allows manual run from GitHub UI
 
 jobs:
   generate-sessions:
@@ -26,4 +26,4 @@ jobs:
         working-directory: ./the-badminton-club-backend
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run generate-sessions
+        run: npx tsx src/admin.ts
