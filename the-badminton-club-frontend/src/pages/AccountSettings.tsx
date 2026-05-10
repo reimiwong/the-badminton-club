@@ -75,7 +75,7 @@ export default function AccountSettings() {
             onClick={() => setActiveTab(tab.key)}
             className={`flex items-center gap-2 p-3 rounded-lg font-semibold transition-colors duration-200 w-full text-left ${
               activeTab === tab.key
-                ? "bg-green-600 text-white"
+                ? "bg-primary text-white"
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
@@ -109,7 +109,7 @@ export default function AccountSettings() {
                 </div>
               ))}
             </div>
-            <button className="mt-4 w-40 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
+            <button className="mt-4 w-40 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
               Save Changes
             </button>
           </>
@@ -216,7 +216,7 @@ export default function AccountSettings() {
               ))}
             </div>
 
-            <button className="mt-4 w-40 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
+            <button className="mt-4 w-40 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
               Save Preferences
             </button>
           </div>
@@ -262,7 +262,7 @@ export default function AccountSettings() {
               />
             </div>
 
-            <button className="mt-4 w-40 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
+            <button className="mt-4 w-40 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200">
               Save Privacy
             </button>
           </div>

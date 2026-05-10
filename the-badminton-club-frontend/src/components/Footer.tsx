@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-text text-surface py-14">
-      <div className="max-w-7xl mx-auto px-6">
+    <footer className="bg-text text-surface">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="flex flex-col gap-12 md:flex-row md:justify-between">
           {/* BRAND */}
           <div className="flex flex-col gap-3 md:max-w-sm">
@@ -98,9 +98,9 @@ export default function Footer() {
         </div>
       </div>
 
-      <hr className="my-10 border-border/30 max-w-7xl mx-auto" />
+      <hr className=" border-border/30 max-w-7xl mx-auto" />
 
-      <p className="text-muted text-center text-sm">
+      <p className="py-4 text-muted text-center text-sm">
         © 2026 The Badminton Club
       </p>
     </footer>
