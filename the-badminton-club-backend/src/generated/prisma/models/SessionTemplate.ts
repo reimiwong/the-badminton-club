@@ -503,9 +503,9 @@ export type SessionTemplateSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
 }
 
-export type SessionTemplateScalarRelationFilter = {
-  is?: Prisma.SessionTemplateWhereInput
-  isNot?: Prisma.SessionTemplateWhereInput
+export type SessionTemplateNullableScalarRelationFilter = {
+  is?: Prisma.SessionTemplateWhereInput | null
+  isNot?: Prisma.SessionTemplateWhereInput | null
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -518,10 +518,12 @@ export type SessionTemplateCreateNestedOneWithoutSessionsInput = {
   connect?: Prisma.SessionTemplateWhereUniqueInput
 }
 
-export type SessionTemplateUpdateOneRequiredWithoutSessionsNestedInput = {
+export type SessionTemplateUpdateOneWithoutSessionsNestedInput = {
   create?: Prisma.XOR<Prisma.SessionTemplateCreateWithoutSessionsInput, Prisma.SessionTemplateUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.SessionTemplateCreateOrConnectWithoutSessionsInput
   upsert?: Prisma.SessionTemplateUpsertWithoutSessionsInput
+  disconnect?: Prisma.SessionTemplateWhereInput | boolean
+  delete?: Prisma.SessionTemplateWhereInput | boolean
   connect?: Prisma.SessionTemplateWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionTemplateUpdateToOneWithWhereWithoutSessionsInput, Prisma.SessionTemplateUpdateWithoutSessionsInput>, Prisma.SessionTemplateUncheckedUpdateWithoutSessionsInput>
 }

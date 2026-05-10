@@ -37,7 +37,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
 
                 <NavLink
-                  to="/session"
+                  to="/sessions"
                   className="btn-primary w-full sm:w-auto"
                 >
                   Book a Session
@@ -188,7 +188,7 @@ export default function Home() {
         <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
 
           <NavLink
-            to="/session"
+            to="/sessions"
             className="btn-light w-full sm:w-auto"
           >
             Book Session

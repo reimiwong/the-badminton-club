@@ -10,16 +10,19 @@ interface Booking {
 
 interface Session {
   id: number;
-  title: string;
-  description: string;
   date: string;
   capacity: number;
   bookings: Booking[];
-  coach: string;
+  // Flattened template fields
+  title: string;
+  type: "Coaching" | "Match Play" | "Casual Play";
   level: "Beginner" | "Intermediate" | "Advanced";
-  price: number;
+  coach?: string | null;
   location: string;
-  type: "Coaching" | "Casual Play";
+  price: number;
+  specialties?: string[];
+  agenda?: string[];
+  whatToBring?: string[];
 }
 
 const SessionDetailPage: React.FC = () => {
@@ -30,16 +33,32 @@ const SessionDetailPage: React.FC = () => {
   const [error, setError] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
 
-  const token = localStorage.getItem("token"); // JWT from login
+  const token = localStorage.getItem("token");
 
-  // Fetch session by ID
   useEffect(() => {
     async function fetchSession() {
       try {
         const res = await fetch(`http://localhost:5000/api/sessions/${id}`);
         if (!res.ok) throw new Error("Failed to fetch session");
-        const data: Session = await res.json();
-        setSession(data);
+        const data = await res.json();
+
+        // Flatten template
+        const flatSession: Session = {
+          id: data.id,
+          date: data.date,
+          capacity: data.capacity,
+          bookings: data.bookings,
+          title: data.template.title,
+          type: data.template.type,
+          level: data.template.level,
+          coach: data.template.coach,
+          location: data.template.location,
+          price: data.template.price,
+          specialties: data.template.specialties,
+          agenda: data.template.agenda,
+          whatToBring: data.template.whatToBring,
+        };
+        setSession(flatSession);
       } catch (err: unknown) {
         if (err instanceof Error) setError(err.message);
         else setError("Error fetching session");
@@ -50,7 +69,6 @@ const SessionDetailPage: React.FC = () => {
     fetchSession();
   }, [id]);
 
-  // Book session
   const handleBook = async () => {
     if (!token) return setError("You must log in to book a session");
     if (!session) return;
@@ -68,7 +86,7 @@ const SessionDetailPage: React.FC = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Booking failed");
       alert("Booking successful!");
-      navigate("/sessions"); // redirect back to sessions list
+      navigate("/sessions");
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
       else setError("Booking failed");
@@ -82,6 +100,7 @@ const SessionDetailPage: React.FC = () => {
   if (!session) return <p className="p-6">Session not found</p>;
 
   const spotsLeft = session.capacity - session.bookings.length;
+  const sessionDate = new Date(session.date);
 
   return (
     <div className="container mx-auto p-6">
@@ -95,14 +114,22 @@ const SessionDetailPage: React.FC = () => {
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-start">
           <div>
-            <span className="text-sm text-green-600 font-medium">
-              {session.type} Session
-            </span>
+            <span className="text-sm text-green-600 font-medium">{session.type}</span>
             <h1 className="h2 mt-2">{session.title}</h1>
-            <p className="body mt-2">{session.description}</p>
+            {session.type === "Coaching" && session.coach && (
+              <p className="body mt-2">
+                Coach: {session.coach}
+              </p>
+            )}
+            {session.type === "Match Play" && (
+              <p className="body mt-2">Match Play session – casual or competitive.</p>
+            )}
+            {session.type === "Casual Play" && (
+              <p className="body mt-2">Casual play session – just enjoy the game.</p>
+            )}
           </div>
           <div className="text-right font-semibold text-lg">
-            €{session.price} <span className="text-sm font-normal">per person</span>
+            £{session.price} <span className="text-sm font-normal">per person</span>
           </div>
         </div>
 
@@ -112,12 +139,8 @@ const SessionDetailPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <span>📅</span>
             <div>
-              {new Date(session.date).toLocaleDateString()}
-              <br />
-              {new Date(session.date).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {sessionDate.toLocaleDateString()}<br />
+              {sessionDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -134,21 +157,43 @@ const SessionDetailPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="h3 mb-2">Your Coach</h3>
-          <p className="body font-semibold">{session.coach}</p>
-          <p className="body mt-1">Former national team player with years of experience</p>
-        </div>
+        {/* Optional: specialties */}
+        {session.specialties && session.specialties.length > 0 && (
+          <div className="mt-6">
+            <h3 className="h3 mb-2">Specialties</h3>
+            <ul className="body list-disc list-inside">
+              {session.specialties.map(s => <li key={s}>{s}</li>)}
+            </ul>
+          </div>
+        )}
+
+        {/* Optional: agenda */}
+        {session.agenda && session.agenda.length > 0 && (
+          <div className="mt-6">
+            <h3 className="h3 mb-2">Agenda</h3>
+            <ol className="body list-decimal list-inside">
+              {session.agenda.map((a, i) => <li key={i}>{a}</li>)}
+            </ol>
+          </div>
+        )}
+
+        {/* Optional: what to bring */}
+        {session.whatToBring && session.whatToBring.length > 0 && (
+          <div className="mt-6">
+            <h3 className="h3 mb-2">What to Bring</h3>
+            <ul className="body list-disc list-inside">
+              {session.whatToBring.map((i, idx) => <li key={idx}>{i}</li>)}
+            </ul>
+          </div>
+        )}
 
         <button
-          className="btn-primary mt-6 w-full"
+          className={`btn-primary mt-6 w-full ${spotsLeft <= 0 || bookingLoading ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={spotsLeft <= 0 || bookingLoading}
           onClick={handleBook}
         >
           {spotsLeft > 0 ? (bookingLoading ? "Booking..." : "Book") : "Full"}
         </button>
-
-        {error && <p className="text-red-600 mt-2">{error}</p>}
       </div>
     </div>
   );

@@ -104,8 +104,13 @@ export type SessionTemplateScalarFieldEnum = (typeof SessionTemplateScalarFieldE
 export const SessionScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
+  title: 'title',
+  description: 'description',
   date: 'date',
-  capacity: 'capacity'
+  location: 'location',
+  level: 'level',
+  capacity: 'capacity',
+  price: 'price'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]

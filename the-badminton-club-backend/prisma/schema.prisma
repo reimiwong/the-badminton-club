@@ -32,17 +32,22 @@ model SessionTemplate {
   coach     String?
   location  String?
   capacity  Int
-  price     Int          // <-- add this
+  price     Int
   sessions  Session[]
 }
 
 model Session {
-  id         Int             @id @default(autoincrement())
-  template   SessionTemplate @relation(fields: [templateId], references: [id])
-  templateId Int
-  date       DateTime        // specific date of this session
-  capacity   Int             // copied from template, can adjust per session if needed
-  bookings   Booking[]       // users booked into this session
+  id          Int       @id @default(autoincrement())
+  templateId  Int?
+  title       String
+  description String
+  date        DateTime
+  location    String
+  level       String
+  capacity    Int
+  price       Int
+  bookings    Booking[]
+  template    SessionTemplate? @relation(fields: [templateId], references: [id])
 }
 
 model Booking {

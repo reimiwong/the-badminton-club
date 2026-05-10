@@ -1,17 +1,45 @@
-// src/seedTemplates.ts
+// src/seed.ts
 import { prisma } from "./lib/prisma.js";
 
-async function main() {
-  console.log("Seeding templates...");
+// Helper to get next occurrence of a day (0 = Sunday, 6 = Saturday)
+function nextDayOfWeek(dayName: string, hour = 18, minute = 0) {
+  const dayMap: Record<string, number> = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
+  const targetDay = dayMap[dayName];
+  if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
 
-  // Clear existing templates
+  const now = new Date();
+  const date = new Date(now);
+  date.setHours(hour, minute, 0, 0);
+
+  const diff = (targetDay + 7 - date.getDay()) % 7;
+  if (diff === 0 && date < now) date.setDate(date.getDate() + 7);
+  else date.setDate(date.getDate() + diff);
+
+  return date;
+}
+
+async function main() {
+  console.log("Clearing existing data...");
+  await prisma.booking.deleteMany();
+  await prisma.session.deleteMany();
   await prisma.sessionTemplate.deleteMany();
+  await prisma.user.deleteMany();
+
+  console.log("Seeding templates...");
 
   const skillLevels = ["Beginner", "Intermediate", "Advanced"];
   const coachingDays = ["Tuesday", "Thursday", "Saturday"];
   const matchPlayDays = ["Monday", "Wednesday", "Friday"];
 
-  // Create coaching templates
+  // Coaching templates
   for (const day of coachingDays) {
     for (const level of skillLevels) {
       await prisma.sessionTemplate.create({
@@ -31,7 +59,7 @@ async function main() {
     }
   }
 
-  // Create match play templates
+  // Match Play templates
   for (const day of matchPlayDays) {
     for (const level of skillLevels) {
       await prisma.sessionTemplate.create({
@@ -51,7 +79,34 @@ async function main() {
     }
   }
 
-  console.log("Templates seeded.");
+  console.log("Seeding sessions from templates...");
+
+  const templates = await prisma.sessionTemplate.findMany();
+
+  for (const template of templates) {
+    // Create 4 sessions per template, one week apart
+    for (let i = 0; i < 4; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i * 7);
+      await prisma.session.create({
+        data: {
+          templateId: template.id,
+          title: template.title,
+          description:
+            template.type === "Coaching"
+              ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
+              : `Casual or competitive match play for ${template.level.toLowerCase()} players.`,
+          date,
+          location: template.location!,
+          level: template.level,
+          capacity: template.capacity,
+          price: template.price, // required
+        },
+      });
+    }
+  }
+
+  console.log("Seeding complete.");
 }
 
 main()
