@@ -1,16 +1,9 @@
 // src/seed.ts
 import { prisma } from "./lib/prisma.js";
 
-// Helper: get next occurrence of a weekday
 function nextDayOfWeek(dayName: string, hour = 18, minute = 0) {
   const dayMap: Record<string, number> = {
-    Sunday: 0,
-    Monday: 1,
-    Tuesday: 2,
-    Wednesday: 3,
-    Thursday: 4,
-    Friday: 5,
-    Saturday: 6,
+    Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6
   };
   const targetDay = dayMap[dayName];
   if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
@@ -38,18 +31,21 @@ async function main() {
   const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const timeSlots = {
     Coaching: ["10:00", "12:00", "14:00"],
-    "Match Play": ["16:00", "18:00", "20:00"],
+    "Match Play": ["16:00", "18:00", "20:00"]
   };
   const coaches = ["Lee Chong Wei", "Lin Dan", "Kento Momota", "Peter Gade", "Viktor Axelsen"];
   const locations = [
     { name: "Mary Erskine School", lat: 55.9492, lng: -3.1900 },
-    { name: "Meadowbank Sports Centre", lat: 55.9520, lng: -3.1690 },
+    { name: "Meadowbank Sports Centre", lat: 55.9520, lng: -3.1690 }
   ];
 
-  // Seed templates
   for (const day of weekdays) {
-    for (const level of skillLevels) {
+    // Randomly decide 1 or 2 templates for this day
+    const templatesCount = Math.random() < 0.5 ? 1 : 2;
+
+    for (let i = 0; i < templatesCount; i++) {
       const type = Math.random() > 0.5 ? "Coaching" : "Match Play";
+      const level = skillLevels[Math.floor(Math.random() * skillLevels.length)];
       const slot = timeSlots[type][Math.floor(Math.random() * timeSlots[type].length)];
       const location = locations[Math.floor(Math.random() * locations.length)];
       const coach = type === "Coaching" ? coaches[Math.floor(Math.random() * coaches.length)] : null;
@@ -67,8 +63,8 @@ async function main() {
           latitude: location.lat,
           longitude: location.lng,
           capacity: type === "Coaching" ? 15 : 10,
-          price: type === "Coaching" ? 15 : 10,
-        },
+          price: type === "Coaching" ? 15 : 10
+        }
       });
     }
   }
@@ -77,7 +73,6 @@ async function main() {
 
   const templates = await prisma.sessionTemplate.findMany();
 
-  // Create 4 upcoming sessions per template
   for (const template of templates) {
     for (let i = 0; i < 4; i++) {
       const [hour, minute] = template.startTime.split(":").map(Number);
@@ -99,8 +94,8 @@ async function main() {
           level: template.level,
           capacity: template.capacity,
           price: template.price,
-          coach: template.coach, // can be null for match play
-        },
+          coach: template.coach
+        }
       });
     }
   }

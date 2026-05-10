@@ -30,11 +30,28 @@ export async function generateWeeklySessions() {
   const sessionsToCreate = [];
 
   for (const template of templates) {
-    // Create 4 weekly sessions per template
-    for (let i = 0; i < 4; i++) {
-      const baseDate = nextDayOfWeek(template.dayOfWeek, Number(template.startTime.split(":")[0]), Number(template.startTime.split(":")[1]));
+    if (!template.startTime || !template.dayOfWeek || !template.level) {
+      console.warn(`Skipping template ${template.id} due to missing data`);
+      continue;
+    }
+
+    const [hourStr, minuteStr] = template.startTime.split(":");
+    const hour = Number(hourStr);
+    const minute = Number(minuteStr);
+
+    // Generate 1-2 sessions per template per week
+    const numSessions = Math.random() > 0.5 ? 1 : 2;
+
+    for (let i = 0; i < numSessions; i++) {
+      const baseDate = nextDayOfWeek(template.dayOfWeek, hour, minute);
       const sessionDate = new Date(baseDate);
-      sessionDate.setDate(sessionDate.getDate() + i * 7);
+      sessionDate.setDate(sessionDate.getDate() + i * 7); // next weeks
+
+      // Optional: skip if session already exists
+      const exists = await prisma.session.findFirst({
+        where: { templateId: template.id, date: sessionDate },
+      });
+      if (exists) continue;
 
       sessionsToCreate.push({
         templateId: template.id,
@@ -48,13 +65,14 @@ export async function generateWeeklySessions() {
         level: template.level,
         capacity: template.capacity,
         price: template.price,
+        coach: template.coach || null,
       });
     }
   }
 
-  // Insert sessions into the DB
-  for (const s of sessionsToCreate) {
-    await prisma.session.create({ data: s });
+  // Batch insert into DB
+  if (sessionsToCreate.length) {
+    await prisma.session.createMany({ data: sessionsToCreate });
   }
 
   console.log(`Created ${sessionsToCreate.length} sessions.`);

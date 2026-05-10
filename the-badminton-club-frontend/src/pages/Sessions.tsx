@@ -18,8 +18,12 @@ interface Session {
 const SessionsPage: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [filteredSessions, setFilteredSessions] = useState<Session[]>([]);
-  const [typeFilter, setTypeFilter] = useState<"All" | "Coaching" | "Match Play">("All");
-  const [levelFilter, setLevelFilter] = useState<"All" | "Beginner" | "Intermediate" | "Advanced">("All");
+  const [typeFilter, setTypeFilter] = useState<
+    "All" | "Coaching" | "Match Play"
+  >("All");
+  const [levelFilter, setLevelFilter] = useState<
+    "All" | "Beginner" | "Intermediate" | "Advanced"
+  >("All");
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
   const navigate = useNavigate();
 
@@ -38,10 +42,13 @@ const SessionsPage: React.FC = () => {
     return [weekStart, weekEnd];
   };
 
-  const [weekStart, weekEnd] = React.useMemo(() => getWeekRange(currentWeekStart), [currentWeekStart]);
+  const [weekStart, weekEnd] = React.useMemo(
+    () => getWeekRange(currentWeekStart),
+    [currentWeekStart],
+  );
 
   const prevWeek = () => {
-    setCurrentWeekStart(prev => {
+    setCurrentWeekStart((prev) => {
       const newDate = new Date(prev);
       newDate.setDate(prev.getDate() - 7);
       return newDate < today ? prev : newDate;
@@ -49,7 +56,7 @@ const SessionsPage: React.FC = () => {
   };
 
   const nextWeek = () => {
-    setCurrentWeekStart(prev => {
+    setCurrentWeekStart((prev) => {
       const newDate = new Date(prev);
       newDate.setDate(prev.getDate() + 7);
       return newDate;
@@ -66,7 +73,8 @@ const SessionsPage: React.FC = () => {
         if (data.length > 0) {
           const firstSessionDate = new Date(data[0].date);
           const [start] = getWeekRange(firstSessionDate);
-          if (start.getTime() !== currentWeekStart.getTime()) setCurrentWeekStart(start);
+          if (start.getTime() !== currentWeekStart.getTime())
+            setCurrentWeekStart(start);
         }
       } catch (err) {
         console.error(err);
@@ -77,10 +85,12 @@ const SessionsPage: React.FC = () => {
 
   useEffect(() => {
     let filtered = [...sessions];
-    if (typeFilter !== "All") filtered = filtered.filter(s => s.template.type === typeFilter);
-    if (levelFilter !== "All") filtered = filtered.filter(s => s.template.level === levelFilter);
+    if (typeFilter !== "All")
+      filtered = filtered.filter((s) => s.template.type === typeFilter);
+    if (levelFilter !== "All")
+      filtered = filtered.filter((s) => s.template.level === levelFilter);
 
-    filtered = filtered.filter(s => {
+    filtered = filtered.filter((s) => {
       const date = new Date(s.date);
       return date >= weekStart && date <= weekEnd;
     });
@@ -96,29 +106,55 @@ const SessionsPage: React.FC = () => {
     const duration = session.template.type === "Coaching" ? 90 : 120;
     const end = new Date(start.getTime() + duration * 60 * 1000);
 
-    const startStr = start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const endStr = end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const startStr = start.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const endStr = end.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
     return `${startStr} - ${endStr}`;
   };
   return (
-    <div className="container mx-auto max-w-[1200px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
-      <h1 className="h1 mb-6">Book a  <span className=" text-primary mt-1">Session.</span></h1>
-      <p className="body mb-8 text-muted">Choose from match play or professional coaching sessions</p>
+    <div className="container mx-auto max-w-[1400px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
+      <h1 className="h1 mb-6">
+        Book a <span className=" text-primary mt-1">Session.</span>
+      </h1>
+      <p className="body mb-8 text-muted">
+        Choose from match play or professional coaching sessions
+      </p>
 
       {/* Week Navigator */}
       <div className="flex items-center justify-between mb-8 bg-white rounded-lg shadow-md px-6 py-5">
-        <button onClick={prevWeek} className="p-2 hover:text-gray-500 cursor-pointer">
-          <img src="/images/icons/left-icon.svg" className="transition-transform duration-200 hover:-translate-x-1" alt="Previous week"/>
+        <button
+          onClick={prevWeek}
+          className="p-2 hover:text-gray-500 cursor-pointer"
+        >
+          <img
+            src="/images/icons/left-icon.svg"
+            className="transition-transform duration-200 hover:-translate-x-1"
+            alt="Previous week"
+          />
         </button>
 
         <div className="flex flex-col items-center">
           <span className="text-sm text-black/50">Week of</span>
-          <span className="font-semibold text-black text-lg md:text-xl">{formatDate(weekStart)} - {formatDate(weekEnd)}</span>
+          <span className="font-semibold text-black text-lg md:text-xl">
+            {formatDate(weekStart)} - {formatDate(weekEnd)}
+          </span>
         </div>
 
-        <button onClick={nextWeek} className="p-2 hover:text-gray-500 cursor-pointer">
-          <img src="/images/icons/right-icon.svg" className="transition-transform duration-200 hover:translate-x-1" alt="Next week"/>
+        <button
+          onClick={nextWeek}
+          className="p-2 hover:text-gray-500 cursor-pointer"
+        >
+          <img
+            src="/images/icons/right-icon.svg"
+            className="transition-transform duration-200 hover:translate-x-1"
+            alt="Next week"
+          />
         </button>
       </div>
 
@@ -126,15 +162,19 @@ const SessionsPage: React.FC = () => {
       <div className="bg-white p-6 rounded-2xl shadow-lg mb-8">
         <div className="flex items-center gap-3 mb-6">
           <img className="w-6 h-6" src="/images/icons/filter-icon.svg" />
-          <h4 className="text-lg font-semibold text-gray-800">Filter Sessions</h4>
+          <h4 className="text-lg font-semibold text-gray-800">
+            Filter Sessions
+          </h4>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* Session Type */}
           <div className="flex flex-col gap-2 flex-1">
-            <span className="text-sm font-semibold text-gray-500">Session Type</span>
+            <span className="text-sm font-semibold text-gray-500">
+              Session Type
+            </span>
             <div className="flex flex-wrap gap-3">
-              {["All", "Match Play", "Coaching"].map(type => (
+              {["All", "Match Play", "Coaching"].map((type) => (
                 <button
                   key={type}
                   className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
@@ -142,7 +182,9 @@ const SessionsPage: React.FC = () => {
                       ? "bg-primary text-white shadow-md scale-105"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm"
                   }`}
-                  onClick={() => setTypeFilter(type as "All" | "Coaching" | "Match Play")}
+                  onClick={() =>
+                    setTypeFilter(type as "All" | "Coaching" | "Match Play")
+                  }
                 >
                   {type}
                 </button>
@@ -152,9 +194,11 @@ const SessionsPage: React.FC = () => {
 
           {/* Skill Level */}
           <div className="flex flex-col gap-2 flex-1">
-            <span className="text-sm font-semibold text-gray-500">Skill Level</span>
+            <span className="text-sm font-semibold text-gray-500">
+              Skill Level
+            </span>
             <div className="flex flex-wrap gap-3">
-              {["All", "Beginner", "Intermediate", "Advanced"].map(level => (
+              {["All", "Beginner", "Intermediate", "Advanced"].map((level) => (
                 <button
                   key={level}
                   className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
@@ -162,7 +206,11 @@ const SessionsPage: React.FC = () => {
                       ? "bg-primary text-white shadow-md scale-105"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm"
                   }`}
-                  onClick={() => setLevelFilter(level as "All" | "Beginner" | "Intermediate" | "Advanced")}
+                  onClick={() =>
+                    setLevelFilter(
+                      level as "All" | "Beginner" | "Intermediate" | "Advanced",
+                    )
+                  }
                 >
                   {level}
                 </button>
@@ -174,60 +222,97 @@ const SessionsPage: React.FC = () => {
 
       {/* Session Cards Grouped by Day */}
       {Object.entries(
-        filteredSessions.reduce((acc, s) => {
-          const dayStr = new Date(s.date).toLocaleDateString(undefined, { weekday: "long" });
-          if (!acc[dayStr]) acc[dayStr] = [];
-          acc[dayStr].push(s);
-          return acc;
-        }, {} as Record<string, Session[]>)
+        filteredSessions.reduce(
+          (acc, s) => {
+            const dayStr = new Date(s.date).toLocaleDateString(undefined, {
+              weekday: "long",
+            });
+            if (!acc[dayStr]) acc[dayStr] = [];
+            acc[dayStr].push(s);
+            return acc;
+          },
+          {} as Record<string, Session[]>,
+        ),
       ).map(([day, daySessions]) => (
         <div key={day} className="mb-10">
-          <h3 className="text-2xl font-semibold mb-6 border-b-2 border-gray-200 pb-2">{day}</h3>
+          <h3 className="text-2xl font-semibold mb-6 border-b-2 border-gray-200 pb-2">
+            {day}
+          </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {daySessions.map(session => {
+            {daySessions.map((session) => {
               const spotsLeft = session.capacity - session.bookings.length;
 
               return (
                 <div
                   key={session.id}
-                  className="flex flex-col rounded-lg shadow-lg bg-white overflow-hidden transform transition-all duration-200 hover:-translate-y-2 hover:shadow-2xl"
+                  className="flex flex-col rounded-2xl shadow-lg bg-white overflow-hidden transform transition-all duration-200 hover:-translate-y-2 hover:shadow-2xl"
                 >
                   <div className="bg-primary h-2 w-full"></div>
                   <div className="p-5 flex flex-col gap-3 text-muted flex-1">
                     {/* Title + Type */}
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-bold text-lg md:text-xl text-black">{session.template.title}</h4>
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-base md:text-lg text-black">
+                        {`${session.template.level} ${session.template.type}`}
+                      </h4>
                       <span className="bg-primary/20 text-primary font-medium text-sm px-3 py-1 rounded-md whitespace-nowrap">
                         {session.template.type}
                       </span>
                     </div>
-
+<div className="flex flex-col gap-5">
                     {/* Date & Time */}
                     <div className="flex items-center gap-2">
-                      <img className="w-5 h-5" src="/images/icons/clock-icon.svg" alt="Time"/>
-                      <p>{new Date(session.date).toLocaleDateString()} | {formatTimeRange(session)}</p>
+                      <img
+                        className="w-5 h-5"
+                        src="/images/icons/clock-icon.svg"
+                        alt="Time"
+                      />
+                      <p className="text-sm">
+                        {new Date(session.date).toLocaleDateString()} |{" "}
+                        {formatTimeRange(session)}
+                      </p>
                     </div>
 
                     {/* Coach */}
                     <div className="flex items-center gap-2">
-                      <img className="w-5 h-5" src="/images/icons/coach-icon.svg" alt="Coach"/>
-                      <p>Coach: {session.template.coach || "N/A"}</p>
+                      <img
+                        className="w-5 h-5"
+                        src="/images/icons/coach-icon.svg"
+                        alt="Coach"
+                      />
+                      <p className="text-sm">
+                        Coach: {session.template.coach || "N/A"}
+                      </p>
                     </div>
 
                     {/* Spots */}
                     <div className="flex items-center gap-2">
-                      <img className="w-5 h-5" src="/images/icons/players-icon.svg" alt="Players"/>
-                      <p>{spotsLeft} of {session.capacity} spots available</p>
+                      <img
+                        className="w-5 h-5"
+                        src="/images/icons/players-icon.svg"
+                        alt="Players"
+                      />
+                      <p className="text-sm">
+                        {spotsLeft} of {session.capacity} spots available
+                      </p>
                     </div>
 
-                    <p>Level: <span className="font-bold text-black">{session.template.level}</span></p>
-
-                    <div className="mt-5 pt-3 border-t border-gray-300/50 w-full flex justify-between items-center">
-                      <h3 className="font-bold text-black text-lg">£{session.template.price}</h3>
+                    <p className="text-sm">
+                      Level:{" "}
+                      <span className="font-bold text-black">
+                        {session.template.level}
+                      </span>
+                    </p>
+</div>
+                    <div className="mt-3 pt-3 border-t border-gray-300/50 w-full flex justify-between items-center bg-black">
+                      <h3 className="font-bold text-black text-xl">
+                        £{session.template.price}
+                      </h3>
                       <button
                         className={`px-4 py-2 rounded-md font-medium text-white transition-all duration-150 cursor-pointer ${
-                          spotsLeft > 0 ? "bg-primary/90 hover:bg-primary" : "bg-gray-300 cursor-not-allowed"
+                          spotsLeft > 0
+                            ? "bg-primary/90 hover:bg-primary"
+                            : "bg-gray-300 cursor-not-allowed"
                         }`}
                         onClick={() => navigate(`/sessions/${session.id}`)}
                         disabled={spotsLeft <= 0}
