@@ -3,18 +3,25 @@ import { prisma } from "./lib/prisma.js";
 
 // Map weekdays to numbers
 const weekdays: Record<string, number> = {
-  Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3,
-  Thursday: 4, Friday: 5, Saturday: 6,
+  Sunday: 0,
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
 };
 
-// Get the date for a specific weekday relative to a base Monday
+// Get date for a specific weekday of a base Monday
 function getDateForWeek(baseMonday: Date, dayName: string, hour = 18, minute = 0) {
-  const targetDay = weekdays[dayName];
-  if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
+  const dayOffset = weekdays[dayName];
+  if (dayOffset === undefined) throw new Error(`Invalid day: ${dayName}`);
 
   const date = new Date(baseMonday);
-  date.setDate(baseMonday.getDate() + targetDay); // Monday + day offset
+  date.setDate(baseMonday.getDate() + dayOffset);
   date.setHours(hour, minute, 0, 0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
   return date;
 }
 
@@ -27,15 +34,16 @@ export async function generateWeeklySessions() {
   }
 
   const today = new Date();
+  // Monday of this week
   const thisWeekMonday = new Date(today);
   thisWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
   thisWeekMonday.setHours(0, 0, 0, 0);
 
+  // Monday of next week
   const nextWeekMonday = new Date(thisWeekMonday);
   nextWeekMonday.setDate(thisWeekMonday.getDate() + 7);
 
   const weeks = [thisWeekMonday, nextWeekMonday];
-  const sessionsToCreate: any[] = [];
 
   for (const weekStart of weeks) {
     for (const template of templates) {
@@ -47,30 +55,35 @@ export async function generateWeeklySessions() {
           ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
           : `Casual or competitive ${template.level.toLowerCase()} match play session. Bring your racket!`;
 
-      sessionsToCreate.push({
-        templateId: template.id,
-        title: template.title,
-        description,
-        date,
-        location: template.location ?? "TBD",
-        latitude: template.latitude ?? null,
-        longitude: template.longitude ?? null,
-        level: template.level,
-        capacity: template.capacity,
-        price: template.price,
-        coach: template.coach ?? null,
+      // Upsert ensures no duplicates
+      await prisma.session.upsert({
+        where: {
+          templateId_date: {
+            templateId: template.id,
+            date,
+          },
+        },
+        update: {}, // do nothing if exists
+        create: {
+          templateId: template.id,
+          title: template.title,
+          description,
+          date,
+          location: template.location ?? "TBD",
+          latitude: template.latitude ?? null,
+          longitude: template.longitude ?? null,
+          level: template.level,
+          capacity: template.capacity,
+          price: template.price,
+          coach: template.coach ?? null,
+        },
       });
 
-      console.log(`Prepared session: ${template.title} (${template.type}) on ${date.toDateString()}`);
+      console.log(`Upserted session: ${template.title} (${template.type}) on ${date.toDateString()}`);
     }
   }
 
-  console.log("Inserting sessions into database...");
-  for (const session of sessionsToCreate) {
-    await prisma.session.create({ data: session });
-  }
-
-  console.log(`Created ${sessionsToCreate.length} sessions.`);
+  console.log("Weekly sessions generated successfully.");
 }
 
 // ESM-safe CLI runner
