@@ -1,7 +1,7 @@
 // src/generateWeeklySessions.ts
 import { prisma } from "./lib/prisma.js";
 
-// Map weekdays to numbers for Date calculations
+// Map weekdays to numbers
 const weekdays: Record<string, number> = {
   Sunday: 0,
   Monday: 1,
@@ -12,18 +12,17 @@ const weekdays: Record<string, number> = {
   Saturday: 6,
 };
 
-// Get the next occurrence of a weekday
-function nextWeekday(dayName: string, hour = 18, minute = 0) {
-  const dayNum = weekdays[dayName];
-  if (dayNum === undefined) throw new Error(`Invalid day: ${dayName}`);
+// Get the date for a specific weekday relative to a base date
+function getDateForWeekday(baseDate: Date, dayName: string, hour = 18, minute = 0) {
+  const targetDay = weekdays[dayName];
+  if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
 
-  const now = new Date();
-  const date = new Date(now);
-  date.setHours(hour, minute, 0, 0);
-
-  let diff = (dayNum + 7 - date.getDay()) % 7;
-  if (diff === 0 && date < now) diff = 7; // move to next week if today already passed
+  const date = new Date(baseDate);
+  const diff = (targetDay + 7 - date.getDay()) % 7;
   date.setDate(date.getDate() + diff);
+  date.setHours(hour, minute, 0, 0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
   return date;
 }
 
@@ -36,31 +35,28 @@ export async function generateWeeklySessions() {
     return;
   }
 
-  const sessionsToCreate: {
-    templateId: number;
-    title: string;
-    description: string;
-    date: Date;
-    location: string;
-    latitude: number | null;
-    longitude: number | null;
-    level: string;
-    capacity: number;
-    price: number;
-    coach: string | null;
-  }[] = [];
+  const today = new Date();
+  // Get Monday of this week
+  const thisWeekMonday = new Date(today);
+  thisWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+  thisWeekMonday.setHours(0, 0, 0, 0);
+
+  // Get Monday of next week
+  const nextWeekMonday = new Date(thisWeekMonday);
+  nextWeekMonday.setDate(thisWeekMonday.getDate() + 7);
+
+  const sessionsToCreate: any[] = [];
 
   for (const template of templates) {
     const [hour, minute] = template.startTime.split(":").map(Number);
 
     // Generate session for this week
-    const thisWeekDate = nextWeekday(template.dayOfWeek, hour, minute);
+    const thisWeekDate = getDateForWeekday(thisWeekMonday, template.dayOfWeek, hour, minute);
 
     // Generate session for next week
-    const nextWeekDate = new Date(thisWeekDate);
-    nextWeekDate.setDate(thisWeekDate.getDate() + 7);
+    const nextWeekDate = getDateForWeekday(nextWeekMonday, template.dayOfWeek, hour, minute);
 
-    [thisWeekDate, nextWeekDate].forEach((sessionDate) => {
+    [thisWeekDate, nextWeekDate].forEach((date) => {
       const description =
         template.type === "Coaching"
           ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
@@ -70,7 +66,7 @@ export async function generateWeeklySessions() {
         templateId: template.id,
         title: template.title,
         description,
-        date: sessionDate,
+        date,
         location: template.location ?? "TBD",
         latitude: template.latitude ?? null,
         longitude: template.longitude ?? null,
@@ -80,9 +76,7 @@ export async function generateWeeklySessions() {
         coach: template.coach ?? null,
       });
 
-      console.log(
-        `Prepared session: ${template.title} (${template.type}) on ${sessionDate.toDateString()}`
-      );
+      console.log(`Prepared session: ${template.title} (${template.type}) on ${date.toDateString()}`);
     });
   }
 
