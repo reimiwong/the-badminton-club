@@ -10,24 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout your repo
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         working-directory: ./the-badminton-club-backend
         run: npm ci
 
-      - name: Install ts-node and TypeScript
+      # 4️⃣ Install ts-node for ESM
+      - name: Install ts-node-esm and TypeScript
         working-directory: ./the-badminton-club-backend
         run: npm install -D ts-node typescript @types/node
 
+      # 5️⃣ Run your admin.ts script
       - name: Run weekly sessions script
         working-directory: ./the-badminton-club-backend
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npx ts-node src/admin.ts
+        run: npx ts-node-esm src/admin.ts
