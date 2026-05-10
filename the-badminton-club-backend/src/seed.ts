@@ -1,29 +1,12 @@
 // src/seed.ts
 import { prisma } from "./lib/prisma.js";
 
-function nextDayOfWeek(dayName: string, hour = 18, minute = 0) {
-  const dayMap: Record<string, number> = {
-    Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4, Friday: 5, Saturday: 6
-  };
-  const targetDay = dayMap[dayName];
-  if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
-
-  const now = new Date();
-  const date = new Date(now);
-  date.setHours(hour, minute, 0, 0);
-
-  let diff = (targetDay + 7 - date.getDay()) % 7;
-  if (diff === 0 && date < now) diff = 7;
-  date.setDate(date.getDate() + diff);
-  return date;
-}
-
 async function main() {
   console.log("Clearing existing data...");
-  await prisma.booking.deleteMany();
-  await prisma.session.deleteMany();
   await prisma.sessionTemplate.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.session.deleteMany(); // optional if you have sessions already
+  await prisma.booking.deleteMany(); // optional
+  await prisma.user.deleteMany();    // optional
 
   console.log("Seeding session templates...");
 
@@ -40,7 +23,6 @@ async function main() {
   ];
 
   for (const day of weekdays) {
-    // Randomly decide 1 or 2 templates for this day
     const templatesCount = Math.random() < 0.5 ? 1 : 2;
 
     for (let i = 0; i < templatesCount; i++) {
@@ -64,37 +46,6 @@ async function main() {
           longitude: location.lng,
           capacity: type === "Coaching" ? 15 : 10,
           price: type === "Coaching" ? 15 : 10
-        }
-      });
-    }
-  }
-
-  console.log("Seeding sessions from templates...");
-
-  const templates = await prisma.sessionTemplate.findMany();
-
-  for (const template of templates) {
-    for (let i = 0; i < 4; i++) {
-      const [hour, minute] = template.startTime.split(":").map(Number);
-      const date = nextDayOfWeek(template.dayOfWeek, hour, minute);
-      date.setDate(date.getDate() + i * 7); // next 4 weeks
-
-      await prisma.session.create({
-        data: {
-          templateId: template.id,
-          title: template.title,
-          description:
-            template.type === "Coaching"
-              ? `Improve your ${template.level.toLowerCase()} skills with hands-on coaching.`
-              : `Casual or competitive ${template.level.toLowerCase()} match play session. Bring your racket!`,
-          date,
-          location: template.location!,
-          latitude: template.latitude,
-          longitude: template.longitude,
-          level: template.level,
-          capacity: template.capacity,
-          price: template.price,
-          coach: template.coach
         }
       });
     }
