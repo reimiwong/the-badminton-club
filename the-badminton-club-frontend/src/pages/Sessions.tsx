@@ -304,7 +304,7 @@ const SessionsPage: React.FC = () => {
                       </span>
                     </p>
 </div>
-                    <div className="mt-3 pt-3 border-t border-gray-300/50 w-full flex justify-between items-center bg-black">
+                    <div className="mt-3 pt-3 border-t border-gray-300/50 w-full flex justify-between items-center bg">
                       <h3 className="font-bold text-black text-xl">
                         £{session.template.price}
                       </h3>
