@@ -12,17 +12,17 @@ const weekdays: Record<string, number> = {
   Saturday: 6,
 };
 
-// Get the date for a specific weekday relative to a base date
+// Get the date for a specific weekday in the same week as baseDate
 function getDateForWeekday(baseDate: Date, dayName: string, hour = 18, minute = 0) {
   const targetDay = weekdays[dayName];
   if (targetDay === undefined) throw new Error(`Invalid day: ${dayName}`);
 
   const date = new Date(baseDate);
-  const diff = (targetDay + 7 - date.getDay()) % 7;
+  const baseDay = date.getDay();
+  let diff = targetDay - baseDay;
+  if (diff < 0) diff += 7; // move forward within the week
   date.setDate(date.getDate() + diff);
   date.setHours(hour, minute, 0, 0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
   return date;
 }
 
@@ -36,6 +36,7 @@ export async function generateWeeklySessions() {
   }
 
   const today = new Date();
+
   // Get Monday of this week
   const thisWeekMonday = new Date(today);
   thisWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
