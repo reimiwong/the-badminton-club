@@ -18,6 +18,7 @@ interface Session {
   type: "Coaching" | "Match Play" | "Casual Play";
   level: "Beginner" | "Intermediate" | "Advanced";
   coach?: string | null;
+  description?: string;
   location: string;
   price: number;
   specialties?: string[];
@@ -35,39 +36,36 @@ const SessionDetailPage: React.FC = () => {
 
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    async function fetchSession() {
-      try {
-        const res = await fetch(`http://localhost:5000/api/sessions/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch session");
-        const data = await res.json();
+useEffect(() => {
+  async function fetchSession() {
+    try {
+      const res = await fetch(`http://localhost:5000/api/sessions/${id}`);
+      if (!res.ok) throw new Error("Failed to fetch session");
+      const data = await res.json();
 
-        // Flatten template
-        const flatSession: Session = {
-          id: data.id,
-          date: data.date,
-          capacity: data.capacity,
-          bookings: data.bookings,
-          title: data.template.title,
-          type: data.template.type,
-          level: data.template.level,
-          coach: data.template.coach,
-          location: data.template.location,
-          price: data.template.price,
-          specialties: data.template.specialties,
-          agenda: data.template.agenda,
-          whatToBring: data.template.whatToBring,
-        };
-        setSession(flatSession);
-      } catch (err: unknown) {
-        if (err instanceof Error) setError(err.message);
-        else setError("Error fetching session");
-      } finally {
-        setLoading(false);
-      }
+      // Flatten template fields into top-level session object
+      const flatSession = {
+        ...data,
+        type: data.template.type,
+        level: data.template.level,
+        title: data.template.title,
+        coach: data.template.coach,
+        specialties: data.template.specialties,
+        agenda: data.template.agenda,
+        whatToBring: data.template.whatToBring,
+      };
+
+      setSession(flatSession);
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Error fetching session");
+    } finally {
+      setLoading(false);
     }
-    fetchSession();
-  }, [id]);
+  }
+
+  fetchSession();
+}, [id]);
 
   const handleBook = async () => {
     if (!token) return setError("You must log in to book a session");
@@ -99,104 +97,141 @@ const SessionDetailPage: React.FC = () => {
   if (error) return <p className="p-6 text-red-600">{error}</p>;
   if (!session) return <p className="p-6">Session not found</p>;
 
-  const spotsLeft = session.capacity - session.bookings.length;
-  const sessionDate = new Date(session.date);
 
-  return (
-    <div className="container mx-auto p-6">
-      <button
-        className="link mb-4 inline-block"
-        onClick={() => navigate("/sessions")}
-      >
-        &larr; Back to sessions
-      </button>
+return (
+  <div className="container mx-auto p-6">
+    
+ <div className="container mx-auto p-6">
+  <div className="flex">
+    <button
+      className="link mb-4 flex items-center gap-2 transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer"
+      onClick={() => navigate("/sessions")}
+    >
+      <img
+        className="transform scale-x-[-1] w-4 h-4 transition-transform duration-200 ease-in-out group-hover:translate-x-1"
+        src="/images/icons/green-arrow-icon.svg"
+      />
+      Back to sessions
+    </button>
+  </div>
+</div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <span className="text-sm text-green-600 font-medium">{session.type}</span>
-            <h1 className="h2 mt-2">{session.title}</h1>
-            {session.type === "Coaching" && session.coach && (
-              <p className="body mt-2">
-                Coach: {session.coach}
-              </p>
-            )}
-            {session.type === "Match Play" && (
-              <p className="body mt-2">Match Play session – casual or competitive.</p>
-            )}
-            {session.type === "Casual Play" && (
-              <p className="body mt-2">Casual play session – just enjoy the game.</p>
-            )}
-          </div>
-          <div className="text-right font-semibold text-lg">
-            £{session.price} <span className="text-sm font-normal">per person</span>
-          </div>
-        </div>
+    {/* Main Session Card */}
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+  {/* Green top strip */}
+  <div className="bg-primary h-4 w-full"></div>
 
-        <hr className="my-4" />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm body">
-          <div className="flex items-center gap-2">
-            <span>📅</span>
-            <div>
-              {sessionDate.toLocaleDateString()}<br />
-              {sessionDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span>📍</span>
-            <div>{session.location}</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span>👥</span>
-            <div>{spotsLeft} of {session.capacity} spots left</div>
-          </div>
-          <div className="flex items-center gap-2">
-            <span>🎯</span>
-            <div>{session.level}</div>
-          </div>
-        </div>
-
-        {/* Optional: specialties */}
-        {session.specialties && session.specialties.length > 0 && (
-          <div className="mt-6">
-            <h3 className="h3 mb-2">Specialties</h3>
-            <ul className="body list-disc list-inside">
-              {session.specialties.map(s => <li key={s}>{s}</li>)}
-            </ul>
-          </div>
+  <div className="p-6">
+    <div className="flex justify-between items-start">
+      <div>
+        <span className="text-sm text-primary font-medium bg-primary/10 px-2 py-1 rounded-3xl ">{session.type}</span>
+        <h1 className="h2 mt-2">{session.title}</h1>
+        {session.description && (
+          <p className="mt-2 text-gray-600">{session.description}</p>
         )}
-
-        {/* Optional: agenda */}
-        {session.agenda && session.agenda.length > 0 && (
-          <div className="mt-6">
-            <h3 className="h3 mb-2">Agenda</h3>
-            <ol className="body list-decimal list-inside">
-              {session.agenda.map((a, i) => <li key={i}>{a}</li>)}
-            </ol>
-          </div>
-        )}
-
-        {/* Optional: what to bring */}
-        {session.whatToBring && session.whatToBring.length > 0 && (
-          <div className="mt-6">
-            <h3 className="h3 mb-2">What to Bring</h3>
-            <ul className="body list-disc list-inside">
-              {session.whatToBring.map((i, idx) => <li key={idx}>{i}</li>)}
-            </ul>
-          </div>
-        )}
-
-        <button
-          className={`btn-primary mt-6 w-full ${spotsLeft <= 0 || bookingLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-          disabled={spotsLeft <= 0 || bookingLoading}
-          onClick={handleBook}
-        >
-          {spotsLeft > 0 ? (bookingLoading ? "Booking..." : "Book") : "Full"}
-        </button>
+      </div>
+      <div className="text-right font-semibold text-4xl flex flex-col" >
+        £{session.price} <span className="text-sm font-normal text-muted">per person</span>
       </div>
     </div>
-  );
+
+    <hr className="my-4 border-t border-gray-300" />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm body">
+        <div className="flex items-center gap-2">
+      <img className="w-5 h-5" src="/images/icons/green-calendar-icon.svg" />
+          <div>
+            {new Date(session.date).toLocaleDateString()}
+            <br />
+            {new Date(session.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <img className="w-5 h-5" src="/images/icons/green-location-icon.svg" />
+          <div>{session.location}</div>
+        </div>
+        <div className="flex items-center gap-2">
+          <img className="w-5 h-5" src="/images/icons/green-players-icon.svg" />
+          <div>{session.capacity - session.bookings.length} of {session.capacity} spots left</div>
+        </div>
+        <div className="flex items-center gap-2">
+          <img className="w-5 h-5" src="/images/icons/green-skill-icon.svg" />
+          <div>{session.level}</div>
+        </div>
+      </div>
+
+      {session.specialties?.length ? (
+        <div className="mt-6">
+          <h3 className="h3 mb-2">Specialties</h3>
+          <ul className="body list-disc list-inside marker:text-green-500 marker:text-xl">
+            {session.specialties.map((s) => (<li key={s}>{s}</li>))}
+          </ul>
+        </div>
+      ) : null}
+
+      {session.agenda?.length ? (
+        <div className="mt-6">
+          <h3 className="h3 mb-2">Agenda</h3>
+          <ol className="body list-decimal list-inside marker:text-green-500 marker:text-xl">
+            {session.agenda.map((a, i) => (<li key={i}>{a}</li>))}
+          </ol>
+        </div>
+      ) : null}
+
+      {session.whatToBring?.length ? (
+        <div className="mt-6">
+          <h3 className="h3 mb-2">What to Bring</h3>
+          <ul className="body list-disc list-inside marker:text-green-500 marker:text-xl">
+            {session.whatToBring.map((i, idx) => (<li key={idx}>{i}</li>))}
+          </ul>
+        </div>
+      ) : null}
+
+      <button
+        className={`btn-primary mt-6 w-full ${session.capacity - session.bookings.length <= 0 || bookingLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+        disabled={session.capacity - session.bookings.length <= 0 || bookingLoading}
+        onClick={handleBook}
+      >
+        {session.capacity - session.bookings.length > 0 ? (bookingLoading ? "Booking..." : "Book") : "Full"}
+      </button>
+    </div>
+</div>
+
+    {/* Equal height/width "What to Expect" & "What to Bring" */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div className="bg-white p-6 rounded-2xl flex flex-col gap-4 h-full shadow-lg flex-1">
+        <h4 className="font-bold text-lg">What to Expect</h4>
+        <ul className="list-disc list-inside marker:text-green-500 marker:text-xl flex flex-col gap-2 body">
+          <li>15 min warm-up and footwork drills</li>
+          <li>45 min skill practice</li>
+          <li>30 min match play / drills</li>
+        </ul>
+      </div>
+
+      <div className="bg-white p-6 rounded-2xl flex flex-col gap-4 h-full shadow-lg flex-1">
+        <h4 className="font-bold text-lg">What to Bring</h4>
+        <ul className="list-disc list-inside marker:text-green-500 marker:text-xl flex flex-col gap-2 body">
+          <li>Indoor court shoes</li>
+          <li>Racket</li>
+          <li>Water bottle</li>
+          <li>Towel</li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Ready to Book / Continue to Payment */}
+    <div className="flex flex-col md:flex-row justify-between items-center bg-white mt-6 rounded-2xl p-6 gap-4 shadow-lg">
+      <div className="flex flex-col">
+        <h4 className="font-bold text-lg">Ready to Book?</h4>
+        <p className="text-muted">Secure your spot for this session</p>
+      </div>
+      <button className="btn-primary px-8 py-3 w-full md:w-auto">
+        Continue to Payment
+      </button>
+    </div>
+  </div>
+
+);
 };
 
 export default SessionDetailPage;
