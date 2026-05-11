@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # REQUIRED for Azure login
 
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +28,13 @@ jobs:
       - name: Build backend
         working-directory: the-badminton-club-backend
         run: npm run build
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FDED9A95E93943AF8CDB278D4C64DD1C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_104243C63C194386B2865B54103E59D8 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DEFF5BE4082D44FE9CDD4569FC5F5077 }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
