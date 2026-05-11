@@ -28,7 +28,7 @@ const SessionsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const today = new Date();
-
+  const API_URL = import.meta.env.VITE_API_URL;
   // Calculate week start (Monday) and end (Sunday)
   const getWeekRange = (date: Date) => {
     const day = date.getDay();
@@ -66,7 +66,7 @@ const SessionsPage: React.FC = () => {
   useEffect(() => {
     async function fetchSessions() {
       try {
-        const res = await fetch("http://localhost:5000/api/sessions");
+        const res = await fetch(`${API_URL}/api/sessions`);
         const data: Session[] = await res.json();
         setSessions(data);
 

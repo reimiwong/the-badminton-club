@@ -36,14 +36,22 @@ export default function MySessions() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState<ReactNode | null>(null);
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  throw new Error("VITE_API_URL is not defined");
+}
+
   useEffect(() => {
     async function loadBookings() {
       try {
-        const res = await fetch("http://localhost:5000/api/bookings", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+       
+const res = await fetch(`${API_URL}/api/bookings`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
 
         const data: BookingResponse[] = await res.json();
         if (!res.ok) throw new Error("Failed to load bookings");
@@ -100,15 +108,17 @@ export default function MySessions() {
     setDeletingId(bookingId);
 
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/bookings/${bookingId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      
+const res = await fetch(
+  `${API_URL}/api/bookings/${bookingId}`,
+  {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
 
       if (!res.ok) throw new Error("Cancel failed");
 

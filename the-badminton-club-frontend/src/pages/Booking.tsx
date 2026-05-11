@@ -27,6 +27,12 @@ const { isAuthenticated, token } = useAuth();
   const [showSignInModal, setShowSignInModal] = useState(false);
 
  
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  throw new Error("VITE_API_URL is not defined");
+}
+
 
   if (!session) return <p className="p-6">No session selected.</p>;
 
@@ -39,14 +45,16 @@ const handleConfirmPayment = async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ sessionId: session.id })
-    });
+ 
+const res = await fetch(`${API_URL}/api/bookings`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  },
+  body: JSON.stringify({ sessionId: session.id }),
+});
+
 
     const data = await res.json();
 
