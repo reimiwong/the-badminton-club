@@ -152,7 +152,7 @@ export default function News() {
           <img
             src="/images/icons/green-email-icon.svg"
             alt=""
-            className="p-3 bg-primary/10 rounded-xl"
+            className="p-3 bg-primary/10 rounded-xl h-14"
           />
 
           <h2 className="h2 text-2xl md:text-4xl">

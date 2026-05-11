@@ -100,7 +100,7 @@ export default function Footer() {
 
       <hr className=" border-border/30 max-w-7xl mx-auto" />
 
-      <p className="py-4 text-muted text-center text-sm">
+      <p className="py-6 text-muted text-center text-sm">
         © 2026 The Badminton Club
       </p>
     </footer>
