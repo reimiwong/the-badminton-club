@@ -5,9 +5,10 @@ interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSignIn: (user: { username: string; email: string; token: string }) => void;
+  onSignInSuccess?: () => void; // <-- optional callback for parent after login
 }
 
-const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn }) => {
+const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn, onSignInSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,6 +61,9 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn }) => {
 
       setLoading(false);
       onClose();
+
+      // Trigger optional success callback
+      onSignInSuccess?.();
     } catch {
       setError("Login failed. Please try again.");
       setLoading(false);

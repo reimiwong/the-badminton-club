@@ -25,20 +25,19 @@ const SessionsPage: React.FC = () => {
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [redirectSessionId, setRedirectSessionId] = useState<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ username: string; email: string } | null>(null);
 
   const navigate = useNavigate();
   const today = new Date();
-const [user, setUser] = useState<{
-  username: string;
-  email: string;
-} | null>(null);
+
   // ------------------------
-  // AUTH CHECK
+  // AUTH CHECK ON PAGE LOAD
   // ------------------------
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       setIsAuthenticated(false);
+      setUser(null);
       return;
     }
 
@@ -49,10 +48,17 @@ const [user, setUser] = useState<{
         if (!res.ok) throw new Error("Invalid token");
         return res.json();
       })
-      .then(() => setIsAuthenticated(true))
+      .then((data) => {
+        setIsAuthenticated(true);
+        setUser({
+          username: data.name,
+          email: data.email,
+        });
+      })
       .catch(() => {
         localStorage.removeItem("token");
         setIsAuthenticated(false);
+        setUser(null);
       });
   }, []);
 
@@ -134,6 +140,22 @@ const [user, setUser] = useState<{
     const end = new Date(start.getTime() + duration * 60 * 1000);
     return `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   };
+
+  // ------------------------
+  // Handle session button click
+  // ------------------------
+const handleViewDetails = (sessionId: number, spotsLeft: number) => {
+  if (spotsLeft <= 0) return;
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setRedirectSessionId(sessionId);
+    setShowSignInModal(true);
+  } else {
+    navigate(`/sessions/${sessionId}`);
+  }
+};
+
 return (
   <div className="container mx-auto max-w-[1400px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
     <h1 className="h1 mb-6">
@@ -238,9 +260,6 @@ return (
                       <img className="w-5 h-5" src="/images/icons/players-icon.svg" alt="Players" />
                       <p className="text-sm">{spotsLeft} of {session.capacity} spots available</p>
                     </div>
-                    <p className="text-sm">
-                      Level: <span className="font-bold text-black">{session.template.level}</span>
-                    </p>
                   </div>
 
                   <div className="mt-3 pt-3 border-t border-gray-300/50 w-full flex justify-between items-center">
@@ -249,15 +268,7 @@ return (
                       className={`px-4 py-2 rounded-md font-medium text-white transition-all duration-150 cursor-pointer ${
                         spotsLeft > 0 ? "bg-primary/90 hover:bg-primary" : "bg-gray-300 cursor-not-allowed"
                       }`}
-                      onClick={() => {
-                        if (!spotsLeft) return;
-                        if (!isAuthenticated) {
-                          setRedirectSessionId(session.id);
-                          setShowSignInModal(true);
-                        } else {
-                          navigate(`/sessions/${session.id}`);
-                        }
-                      }}
+                      onClick={() => handleViewDetails(session.id, spotsLeft)}
                       disabled={spotsLeft <= 0}
                     >
                       {spotsLeft > 0 ? "View Details" : "Full"}
@@ -272,33 +283,33 @@ return (
     ))}
 
     {/* Sign In Modal */}
-    {showSignInModal && (
-     <SignInModal
-  isOpen={showSignInModal}
-  onClose={() => {
-    setShowSignInModal(false);
-    // If user tried to access a specific session, redirect after login
-    if (redirectSessionId && isAuthenticated) {
-      navigate(`/sessions/${redirectSessionId}`);
-      setRedirectSessionId(null);
-    }
-  }}
-  onSignIn={(userData) => {
-    console.log(user) // delete this later. added to avoid not using user warning
-    setUser(userData);
-    setShowSignInModal(false);
-    localStorage.setItem("token", userData.token);
-    localStorage.setItem("username", userData.username);
-    localStorage.setItem("email", userData.email);
+   {showSignInModal && (
+  <SignInModal
+    isOpen={showSignInModal}
+    onClose={() => setShowSignInModal(false)}
+    onSignIn={(userData) => {
+      if (!userData.token) {
+        console.error("Login failed: no token returned");
+        return;
+      }
 
-    // redirect to the session if they were coming from one
-    if (redirectSessionId) {
-      navigate(`/sessions/${redirectSessionId}`);
-      setRedirectSessionId(null);
-    }
-  }}
-/>
-    )}
+      // Save token & user info
+      localStorage.setItem("token", userData.token);
+      localStorage.setItem("username", userData.username);
+      localStorage.setItem("email", userData.email);
+
+      setUser({ username: userData.username, email: userData.email });
+      setIsAuthenticated(true);
+      setShowSignInModal(false);
+
+      // Redirect to session if applicable
+      if (redirectSessionId) {
+        navigate(`/sessions/${redirectSessionId}`);
+        setRedirectSessionId(null);
+      }
+    }}
+  />
+)}
   </div>
 );
 };
