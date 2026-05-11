@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import SignInModal from "../components/SignInModal";
 
 interface Session {
   id: number;
@@ -13,8 +14,8 @@ interface Session {
 // Dummy hook for authentication status
 // Replace with your real auth hook or context
 function useAuth() {
-  const isAuthenticated = Boolean(localStorage.getItem("authToken"));
-  return { isAuthenticated };
+  const token = localStorage.getItem("authToken");
+  return { isAuthenticated: Boolean(token), token };
 }
 
 export default function Booking() {
@@ -24,12 +25,13 @@ export default function Booking() {
 
   const session: Session | undefined = (location.state as { session?: Session })?.session;
 
-  // Redirect if not authenticated
+  const [showSignInModal, setShowSignInModal] = useState(false);
+
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/login", { state: { redirectTo: location.pathname, session } });
+      setShowSignInModal(true);
     }
-  }, [isAuthenticated, navigate, location.pathname, session]);
+  }, [isAuthenticated]);
 
   if (!session) return <p className="p-6">No session selected.</p>;
 
@@ -48,11 +50,24 @@ export default function Booking() {
     });
   };
 
-
 return (
   <div className="container mx-auto max-w-[900px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
-    <div className="max-w-7xl mx-auto p-6 md:p-12">
+    {/* SignIn Modal */}
+    {showSignInModal && (
+      <SignInModal
+        isOpen={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+        onSignIn={(userData) => {
+          if (!userData.token) return;
+          localStorage.setItem("authToken", userData.token);
+          localStorage.setItem("username", userData.username);
+          localStorage.setItem("email", userData.email);
+          setShowSignInModal(false);
+        }}
+      />
+    )}
 
+    <div className="max-w-7xl mx-auto p-6 md:p-12">
       {/* Back Button + Heading */}
       <div className="flex flex-col mb-6 gap-8">
         <button
@@ -67,10 +82,8 @@ return (
 
       {/* Form + Order Summary */}
       <div className="grid md:grid-cols-[1fr_auto] gap-8">
-
         {/* PAYMENT FORM */}
         <form className="w-full rounded-3xl bg-surface border border-border p-6 sm:p-8 flex flex-col h-full shadow-[0_20px_60px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-[0_28px_80px_rgba(0,0,0,0.12)]">
-          
           {/* Payment Header */}
           <div className="flex gap-4 items-center mb-2">
             <img className="p-3 bg-primary/10 rounded-xl" src="/images/icons/green-card-icon.svg" alt="" />
@@ -110,8 +123,13 @@ return (
             </div>
 
             <div className="mt-auto">
-              <button type="button" onClick={handleConfirmPayment} className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white shadow-[0_10px_25px_rgba(0,158,96,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(0,158,96,0.35)] active:scale-[0.985]">
-                Confirm Payment
+              <button
+                type="button"
+                onClick={handleConfirmPayment}
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white shadow-[0_10px_25px_rgba(0,158,96,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(0,158,96,0.35)] active:scale-[0.985]"
+                disabled={!isAuthenticated}
+              >
+                {isAuthenticated ? "Confirm Payment" : "Sign in to continue"}
                 <img src="/images/icons/right-arrow-icon.svg" alt="" className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
               </button>
             </div>
@@ -121,7 +139,6 @@ return (
         {/* ORDER SUMMARY */}
         <div className="w-full max-w-[400px] rounded-3xl bg-surface border border-border p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.08)] flex flex-col">
           <h3 className="text-lg font-semibold mb-6">Order Summary</h3>
-
           <div className="flex flex-col">
             <div className="flex flex-col py-3">
               <span className="text-muted text-sm">Session</span>
@@ -161,7 +178,6 @@ return (
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>

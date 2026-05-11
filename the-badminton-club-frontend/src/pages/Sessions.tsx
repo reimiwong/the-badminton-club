@@ -147,13 +147,15 @@ const SessionsPage: React.FC = () => {
 const handleViewDetails = (sessionId: number, spotsLeft: number) => {
   if (spotsLeft <= 0) return;
 
-  const token = localStorage.getItem("token");
-  if (!token) {
+  if (!isAuthenticated) {
+    // User not logged in → show modal and remember session for redirect
     setRedirectSessionId(sessionId);
     setShowSignInModal(true);
-  } else {
-    navigate(`/sessions/${sessionId}`);
+    return;
   }
+
+  // User is logged in → navigate
+  navigate(`/sessions/${sessionId}`);
 };
 
 return (
@@ -283,7 +285,7 @@ return (
     ))}
 
     {/* Sign In Modal */}
-   {showSignInModal && (
+{showSignInModal && (
   <SignInModal
     isOpen={showSignInModal}
     onClose={() => setShowSignInModal(false)}
@@ -302,7 +304,7 @@ return (
       setIsAuthenticated(true);
       setShowSignInModal(false);
 
-      // Redirect to session if applicable
+      // Redirect to session if user clicked a session before signing in
       if (redirectSessionId) {
         navigate(`/sessions/${redirectSessionId}`);
         setRedirectSessionId(null);
