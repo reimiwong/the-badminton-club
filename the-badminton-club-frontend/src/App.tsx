@@ -17,7 +17,6 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
-
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
@@ -30,7 +29,6 @@ export default function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
           <Route path="/my-sessions" element={<MySessions />} />
-
         </Route>
       </Routes>
     </>
