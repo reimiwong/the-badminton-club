@@ -14,9 +14,6 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - uses: actions/checkout@v3
@@ -24,23 +21,10 @@ jobs:
           submodules: true
           lfs: false
 
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
-      - name: Get Id Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-          script: |
-            const core = require('@actions/core');
-            return await core.getIDToken();
-          result-encoding: string
-
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@v1
 
-        # ✅ GUARANTEED FIX:
-        # Inject VITE_API_URL directly into the build environment
+        # ✅ GUARANTEED env injection for Vite
         env:
           VITE_API_URL: https://my-badminton-backend-dxgmh2emhzcmfmej.uksouth-01.azurewebsites.net
 
@@ -50,7 +34,6 @@ jobs:
           app_location: "./the-badminton-club-frontend"
           api_location: ""
           output_location: "dist"
-          github_id_token: ${{ steps.idtoken.outputs.result }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
