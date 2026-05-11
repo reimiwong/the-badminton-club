@@ -24,10 +24,41 @@ const SessionsPage: React.FC = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [redirectSessionId, setRedirectSessionId] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const navigate = useNavigate();
   const today = new Date();
+const [user, setUser] = useState<{
+  username: string;
+  email: string;
+} | null>(null);
+  // ------------------------
+  // AUTH CHECK
+  // ------------------------
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsAuthenticated(false);
+      return;
+    }
 
+    fetch("http://localhost:5000/api/users/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Invalid token");
+        return res.json();
+      })
+      .then(() => setIsAuthenticated(true))
+      .catch(() => {
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+      });
+  }, []);
+
+  // ------------------------
+  // Week calculation
+  // ------------------------
   const getWeekRange = (date: Date) => {
     const day = date.getDay();
     const diffToMonday = date.getDate() - day + (day === 0 ? -6 : 1);
@@ -40,10 +71,7 @@ const SessionsPage: React.FC = () => {
     return [weekStart, weekEnd];
   };
 
-  const [weekStart, weekEnd] = React.useMemo(
-    () => getWeekRange(currentWeekStart),
-    [currentWeekStart],
-  );
+  const [weekStart, weekEnd] = React.useMemo(() => getWeekRange(currentWeekStart), [currentWeekStart]);
 
   const prevWeek = () => {
     setCurrentWeekStart((prev) => {
@@ -61,6 +89,9 @@ const SessionsPage: React.FC = () => {
     });
   };
 
+  // ------------------------
+  // Fetch sessions
+  // ------------------------
   useEffect(() => {
     async function fetchSessions() {
       try {
@@ -71,8 +102,7 @@ const SessionsPage: React.FC = () => {
         if (data.length > 0) {
           const firstSessionDate = new Date(data[0].date);
           const [start] = getWeekRange(firstSessionDate);
-          if (start.getTime() !== currentWeekStart.getTime())
-            setCurrentWeekStart(start);
+          if (start.getTime() !== currentWeekStart.getTime()) setCurrentWeekStart(start);
         }
       } catch (err) {
         console.error(err);
@@ -81,6 +111,9 @@ const SessionsPage: React.FC = () => {
     fetchSessions();
   }, []);
 
+  // ------------------------
+  // Filter sessions
+  // ------------------------
   useEffect(() => {
     let filtered = [...sessions];
     if (typeFilter !== "All") filtered = filtered.filter((s) => s.template.type === typeFilter);
@@ -99,11 +132,8 @@ const SessionsPage: React.FC = () => {
     const start = new Date(session.date);
     const duration = session.template.type === "Coaching" ? 90 : 120;
     const end = new Date(start.getTime() + duration * 60 * 1000);
-    const startStr = start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    const endStr = end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    return `${startStr} - ${endStr}`;
+    return `${start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} - ${end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   };
-
 return (
   <div className="container mx-auto max-w-[1400px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
     <h1 className="h1 mb-6">
@@ -118,9 +148,7 @@ return (
       </button>
       <div className="flex flex-col items-center">
         <span className="text-sm text-black/50">Week of</span>
-        <span className="font-semibold text-black text-lg md:text-xl">
-          {formatDate(weekStart)} - {formatDate(weekEnd)}
-        </span>
+        <span className="font-semibold text-black text-lg md:text-xl">{formatDate(weekStart)} - {formatDate(weekEnd)}</span>
       </div>
       <button onClick={nextWeek} className="p-2 hover:text-gray-500 cursor-pointer">
         <img src="/images/icons/right-icon.svg" className="transition-transform duration-200 hover:translate-x-1" alt="Next week" />
@@ -162,9 +190,7 @@ return (
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
                   levelFilter === level ? "bg-primary text-white shadow-md scale-105" : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm"
                 }`}
-                onClick={() =>
-                  setLevelFilter(level as "All" | "Beginner" | "Intermediate" | "Advanced")
-                }
+                onClick={() => setLevelFilter(level as "All" | "Beginner" | "Intermediate" | "Advanced")}
               >
                 {level}
               </button>
@@ -185,7 +211,6 @@ return (
     ).map(([day, daySessions]) => (
       <div key={day} className="mb-10">
         <h3 className="text-2xl font-semibold mb-6 border-b-2 border-gray-200 pb-2">{day}</h3>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {daySessions.map((session) => {
             const spotsLeft = session.capacity - session.bookings.length;
@@ -203,21 +228,16 @@ return (
                   <div className="flex flex-col gap-5">
                     <div className="flex items-center gap-2">
                       <img className="w-5 h-5" src="/images/icons/clock-icon.svg" alt="Time" />
-                      <p className="text-sm">
-                        {new Date(session.date).toLocaleDateString()} | {formatTimeRange(session)}
-                      </p>
+                      <p className="text-sm">{new Date(session.date).toLocaleDateString()} | {formatTimeRange(session)}</p>
                     </div>
-
                     <div className="flex items-center gap-2">
                       <img className="w-5 h-5" src="/images/icons/coach-icon.svg" alt="Coach" />
                       <p className="text-sm">Coach: {session.template.coach || "N/A"}</p>
                     </div>
-
                     <div className="flex items-center gap-2">
                       <img className="w-5 h-5" src="/images/icons/players-icon.svg" alt="Players" />
                       <p className="text-sm">{spotsLeft} of {session.capacity} spots available</p>
                     </div>
-
                     <p className="text-sm">
                       Level: <span className="font-bold text-black">{session.template.level}</span>
                     </p>
@@ -231,9 +251,7 @@ return (
                       }`}
                       onClick={() => {
                         if (!spotsLeft) return;
-
-                        const isLoggedIn = !!localStorage.getItem("token");
-                        if (!isLoggedIn) {
+                        if (!isAuthenticated) {
                           setRedirectSessionId(session.id);
                           setShowSignInModal(true);
                         } else {
@@ -255,13 +273,28 @@ return (
 
     {/* Sign In Modal */}
     {showSignInModal && (
-    <SignInModal
+     <SignInModal
   isOpen={showSignInModal}
   onClose={() => {
     setShowSignInModal(false);
+    // If user tried to access a specific session, redirect after login
+    if (redirectSessionId && isAuthenticated) {
+      navigate(`/sessions/${redirectSessionId}`);
+      setRedirectSessionId(null);
+    }
+  }}
+  onSignIn={(userData) => {
+    console.log(user) // delete this later. added to avoid not using user warning
+    setUser(userData);
+    setShowSignInModal(false);
+    localStorage.setItem("token", userData.token);
+    localStorage.setItem("username", userData.username);
+    localStorage.setItem("email", userData.email);
+
+    // redirect to the session if they were coming from one
     if (redirectSessionId) {
       navigate(`/sessions/${redirectSessionId}`);
-      setRedirectSessionId(null); // reset
+      setRedirectSessionId(null);
     }
   }}
 />

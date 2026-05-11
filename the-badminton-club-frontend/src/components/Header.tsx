@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import { NavLink, useNavigate, type NavLinkRenderProps } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import SignInModal from "./SignInModal"; // your modal
+import SignInModal from "./SignInModal";
 
 const buttonClass =
   "px-5 py-2.5 bg-primary text-surface rounded-xl font-medium transition-all duration-200 ease-out hover:opacity-90 hover:-translate-y-0.5 active:scale-95";
@@ -29,6 +29,7 @@ const navItems = [
 interface User {
   username: string;
   email: string;
+  token?: string;
 }
 
 export default function Header() {
@@ -36,13 +37,19 @@ export default function Header() {
   const [userOpen, setUserOpen] = useState(false); // dropdown
   const [signInOpen, setSignInOpen] = useState(false); // modal
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
   const navigate = useNavigate();
   const userRef = useRef<HTMLDivElement>(null);
 
-  const [user, setUser] = useState<User | null>({
-    username: "raymondwong1998",
-    email: "raymondwong1998@outlook.com",
-  });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+    const email = localStorage.getItem("email");
+    if (token && username && email) {
+      setUser({ username, email, token });
+    }
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -62,7 +69,9 @@ export default function Header() {
 
   const handleSignOut = () => {
     setUser(null);
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
     setUserOpen(false);
     navigate("/");
   };
@@ -113,9 +122,9 @@ export default function Header() {
                   onClick={() => setUserOpen(!userOpen)}
                 >
                   <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm">
-                    {user.username[0].toUpperCase()}
+                    {user.username ? user.username[0].toUpperCase() : "U"}
                   </div>
-                  <span className="font-medium text-gray-800">{user.username}</span>
+                  <span className="font-medium text-gray-800">{user.username || "User"}</span>
                 </button>
 
                 <div
@@ -124,8 +133,8 @@ export default function Header() {
                     ${userOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}
                 >
                   <div className="px-4 py-2 border-b border-gray-200">
-                    <p className="font-semibold text-sm">{user.username}</p>
-                    <p className="text-gray-500 text-sm">{user.email}</p>
+                    <p className="font-semibold text-sm">{user.username || "User"}</p>
+                    <p className="text-gray-500 text-sm">{user.email || "email@example.com"}</p>
                   </div>
 
                   <NavLink
@@ -193,7 +202,22 @@ export default function Header() {
       </header>
 
       {/* SIGN-IN MODAL */}
-      <SignInModal isOpen={signInOpen} onClose={() => setSignInOpen(false)} />
+      <SignInModal
+        isOpen={signInOpen}
+        onClose={() => setSignInOpen(false)}
+        onSignIn={() => {
+          // fake test user for development
+          const testUser: User = {
+            username: "raymondwong1998",
+            email: "raymondwong1998@outlook.com",
+            token: "test-token",
+          };
+          setUser(testUser);
+          localStorage.setItem("token", testUser.token || "");
+          localStorage.setItem("username", testUser.username);
+          localStorage.setItem("email", testUser.email);
+        }}
+      />
     </>
   );
 }
