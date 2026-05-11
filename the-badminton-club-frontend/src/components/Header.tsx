@@ -202,22 +202,14 @@ export default function Header() {
       </header>
 
       {/* SIGN-IN MODAL */}
-      <SignInModal
-        isOpen={signInOpen}
-        onClose={() => setSignInOpen(false)}
-        onSignIn={() => {
-          // fake test user for development
-          const testUser: User = {
-            username: "raymondwong1998",
-            email: "raymondwong1998@outlook.com",
-            token: "test-token",
-          };
-          setUser(testUser);
-          localStorage.setItem("token", testUser.token || "");
-          localStorage.setItem("username", testUser.username);
-          localStorage.setItem("email", testUser.email);
-        }}
-      />
+    <SignInModal
+  isOpen={signInOpen}
+  onClose={() => setSignInOpen(false)}
+  onSignIn={(realUser) => {
+    setUser(realUser);
+    // localStorage already set in modal
+  }}
+/>
     </>
   );
 }

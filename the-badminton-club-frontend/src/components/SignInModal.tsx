@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSignIn?: (userData: { username: string; email: string; token: string }) => void;
+  onSignIn: (user: { username: string; email: string; token: string }) => void;
 }
 
 const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn }) => {
@@ -38,6 +38,7 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
 
       if (!res.ok) {
@@ -46,13 +47,16 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose, onSignIn }) => {
         return;
       }
 
-      // notify parent
-      if (onSignIn) onSignIn({ username: data.username, email: data.email, token: data.token });
+      // Call parent with real user
+      onSignIn({
+        username: data.user.name,
+        email: data.user.email,
+        token: data.token,
+      });
 
-      // store token locally
       localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("email", data.email);
+      localStorage.setItem("username", data.user.name);
+      localStorage.setItem("email", data.user.email);
 
       setLoading(false);
       onClose();
