@@ -30,26 +30,10 @@ userRouter.post("/signup", async (req, res) => {
   }
 });
 
-
-userRouter.get("/me", authenticate, async (req: AuthRequest, res) => {
-  const userId = req.user!.id;
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { name: true, email: true }
-  });
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  res.json(user);
-});
-
-
 // Login
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
     return res.status(400).json({ error: "Missing email or password" });
   }
@@ -67,18 +51,50 @@ userRouter.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // Send token + user info
     res.json({
       token,
       user: {
         name: user.name,
-        email: user.email
-      }
+        email: user.email,
+      },
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Login failed" });
   }
+});
+
+// Get logged-in user
+userRouter.get("/me", authenticate, async (req: AuthRequest, res) => {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user!.id },
+    select: { name: true, email: true },
+  });
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.json(user);
+});
+
+// Get logged-in user's bookings
+userRouter.get("/me/bookings", authenticate, async (req: AuthRequest, res) => {
+  const userWithSessions = await prisma.user.findUnique({
+  where: { id: req.user!.id },
+  select: {
+    id: true,
+    name: true,
+    email: true,
+    bookings: {
+      include: {
+        session: true
+      }
+    }
+  }
+});
+
+  res.json(userWithSessions);
 });
 
 export default userRouter;

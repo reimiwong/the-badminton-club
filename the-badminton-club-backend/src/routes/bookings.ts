@@ -45,9 +45,21 @@ router.post("/", authenticate, async (req: AuthRequest, res) => {
     });
     if (existing) return res.status(409).json({ error: "Already booked" });
 
-    const booking = await prisma.booking.create({
-      data: { userId: req.user!.id, sessionId },
-    });
+ const booking = await prisma.$transaction(async (tx) => {
+  const session = await tx.session.update({
+    where: { id: sessionId },
+    data: { capacity: { decrement: 1 } }
+  });
+
+  return tx.booking.create({
+    data: {
+      userId: req.user!.id,
+      sessionId
+    }
+  });
+});
+
+
 
     res.status(201).json(booking);
   } catch (err) {
