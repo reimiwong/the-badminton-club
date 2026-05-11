@@ -18,6 +18,48 @@ router.get("/", authenticate, async (req: AuthRequest, res) => {
     res.status(500).json({ error: "Failed to fetch bookings" });
   }
 });
+// Delete a booking for a user
+// Delete a booking for the logged-in user
+router.delete("/:bookingId", authenticate, async (req: AuthRequest, res) => {
+  const bookingId = Number(req.params.bookingId);
+
+  if (Number.isNaN(bookingId)) {
+    return res.status(400).json({ error: "Invalid bookingId" });
+  }
+
+  try {
+    // Find booking and ensure ownership
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: { session: true },
+    });
+
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    if (booking.userId !== req.user!.id) {
+      return res.status(403).json({ error: "Not authorized to delete this booking" });
+    }
+
+    // Delete booking + restore capacity atomically
+    await prisma.$transaction(async (tx) => {
+      await tx.booking.delete({
+        where: { id: bookingId },
+      });
+
+      await tx.session.update({
+        where: { id: booking.sessionId },
+        data: { capacity: { increment: 1 } },
+      });
+    });
+
+    res.status(204).send(); // ✅ successful delete, no body
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete booking" });
+  }
+});
 
 // Create a booking for a session
 router.post("/", authenticate, async (req: AuthRequest, res) => {
@@ -50,7 +92,8 @@ router.post("/", authenticate, async (req: AuthRequest, res) => {
     where: { id: sessionId },
     data: { capacity: { decrement: 1 } }
   });
-
+  
+  
   return tx.booking.create({
     data: {
       userId: req.user!.id,

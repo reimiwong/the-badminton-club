@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import { userRouter } from "./routes/users.js";
 import sessionsRouter from "./routes/sessions.js"; // import your sessions router
+import bookingsRouter from "./routes/bookings.js"
 
 console.log("server.js script started");
 
@@ -16,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/sessions", sessionsRouter); // mount sessions router
+app.use("/api/bookings", bookingsRouter); // mount bookings router
 
 // Test route
 app.get("/api/health", (req, res) => {

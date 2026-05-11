@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SignInModal from "../components/SignInModal";
 import { useAuth } from "../context/AuthContext";
@@ -19,23 +19,43 @@ interface Session {
 export default function Booking() {
   const location = useLocation();
   const navigate = useNavigate();
- const { isAuthenticated } = useAuth();
+const { isAuthenticated, token } = useAuth();
+
 
   const session: Session | undefined = (location.state as { session?: Session })?.session;
 
   const [showSignInModal, setShowSignInModal] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setShowSignInModal(true);
-    }
-  }, [isAuthenticated]);
+ 
 
   if (!session) return <p className="p-6">No session selected.</p>;
 
   const total = session.price;
 
-  const handleConfirmPayment = () => {
+const handleConfirmPayment = async () => {
+  if (!isAuthenticated) {
+    setShowSignInModal(true);
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ sessionId: session.id })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Booking failed");
+      return;
+    }
+
+    // Booking succeeded → go to success page
     navigate("/booking-success", {
       state: {
         sessionTitle: session.title,
@@ -46,7 +66,12 @@ export default function Booking() {
         totalPaid: session.price,
       },
     });
-  };
+
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+  }
+};
+
 
 return (
   <div className="container mx-auto max-w-[900px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
@@ -140,8 +165,15 @@ return (
     <div className="mt-8">
       <button
         type="button"
-        onClick={handleConfirmPayment}
-        disabled={!isAuthenticated}
+        onClick={() => {
+  if (!isAuthenticated) {
+    setShowSignInModal(true);
+  } else {
+    handleConfirmPayment();
+  }
+}}
+
+  
         className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white shadow-[0_10px_25px_rgba(0,158,96,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(0,158,96,0.35)] active:scale-[0.985] disabled:opacity-60"
       >
         {isAuthenticated ? "Confirm Payment" : "Sign in to continue"}

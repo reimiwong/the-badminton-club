@@ -8,13 +8,14 @@ interface User {
 interface AuthContextValue {
   user: User | null;
   isAuthenticated: boolean;
+  token: string | null;                     // ✅ ADDED
   login: (user: User, token: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// ✅ Compute synchronously BEFORE React renders
+// Load initial auth state BEFORE React renders
 const getInitialAuthState = () => {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");
@@ -23,28 +24,26 @@ const getInitialAuthState = () => {
   if (token && username && email) {
     return {
       user: { username, email },
+      token,
       isAuthenticated: true,
     };
   }
 
   return {
     user: null,
+    token: null,
     isAuthenticated: false,
   };
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const initial = getInitialAuthState();
 
-  // ✅ FIX: initialise BOTH from storage
   const [user, setUser] = useState<User | null>(initial.user);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    initial.isAuthenticated
-  );
+  const [token, setToken] = useState<string | null>(initial.token);   // ✅ ADDED
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(initial.isAuthenticated);
 
-  // ✅ Optional: keep this if you plan server validation later
+  // Optional: sync state on mount (useful if you add server validation later)
   useEffect(() => {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
@@ -52,30 +51,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (token && username && email) {
       setUser({ username, email });
+      setToken(token);                                                // ✅ ADDED
       setIsAuthenticated(true);
     }
   }, []);
 
+  // LOGIN
   const login = (user: User, token: string) => {
     localStorage.setItem("token", token);
     localStorage.setItem("username", user.username);
     localStorage.setItem("email", user.email);
 
     setUser(user);
+    setToken(token);                                                  // ✅ ADDED
     setIsAuthenticated(true);
   };
 
+  // LOGOUT
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
 
     setUser(null);
+    setToken(null);                                                   // ✅ ADDED
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

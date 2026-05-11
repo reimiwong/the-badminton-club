@@ -1,9 +1,24 @@
-// src/pages/MySessions.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useAuth } from "../context/AuthContext";
 
-interface Session {
+interface BookingResponse {
   id: number;
-  day: string;
+  session: {
+    id: number;
+    date: string;
+    title: string;
+    type: string;
+    coach?: string | null;
+    location: string;
+    price: number;
+  };
+}
+
+interface SessionCard {
+  bookingId: number;
+  id: number;
+  title: string;
   type: string;
   date: string;
   startTime: string;
@@ -11,125 +26,173 @@ interface Session {
   coach?: string;
   location: string;
   price: number;
-  status: "upcoming" | "past" | "cancelled";
 }
 
-const mockSessions: Session[] = [
-  {
-    id: 1,
-    day: "Monday",
-    type: "Coaching",
-    date: "2026-05-12",
-    startTime: "18:00",
-    endTime: "19:30",
-    coach: "Sarah Chen",
-    location: "Shamrock Sports Center",
-    price: 25,
-    status: "upcoming",
-  },
-  {
-    id: 2,
-    day: "Thursday",
-    type: "Casual Play",
-    date: "2026-05-15",
-    startTime: "18:30",
-    endTime: "20:00",
-    location: "Shamrock Sports Center",
-    price: 15,
-    status: "upcoming",
-  },
-  {
-    id: 3,
-    day: "Saturday",
-    type: "Coaching",
-    date: "2026-05-03",
-    startTime: "10:00",
-    endTime: "11:30",
-    coach: "Sarah Chen",
-    location: "Shamrock Sports Center",
-    price: 25,
-    status: "cancelled",
-  },
-];
-
 export default function MySessions() {
-  const [filter, setFilter] = useState<"all" | "upcoming" | "past" | "cancelled">("all");
+  const { token } = useAuth();
 
-  const filteredSessions =
-    filter === "all" ? mockSessions : mockSessions.filter(s => s.status === filter);
+  const [sessions, setSessions] = useState<SessionCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [successMessage, setSuccessMessage] = useState<ReactNode | null>(null);
+
+  useEffect(() => {
+    async function loadBookings() {
+      try {
+        const res = await fetch("http://localhost:5000/api/bookings", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data: BookingResponse[] = await res.json();
+        if (!res.ok) throw new Error("Failed to load bookings");
+
+        // ✅ Only keep upcoming sessions
+        const upcoming = data
+          .map((b) => {
+            const dateObj = new Date(b.session.date);
+            if (dateObj < new Date()) return null;
+
+            return {
+              bookingId: b.id,
+              id: b.session.id,
+              title: b.session.title,
+              type: b.session.type,
+              date: b.session.date,
+              startTime: dateObj.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              endTime: new Date(
+                dateObj.getTime() + 90 * 60000
+              ).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              coach: b.session.coach || undefined,
+              location: b.session.location,
+              price: b.session.price,
+            };
+          })
+          .filter(Boolean) as SessionCard[];
+
+        setSessions(upcoming);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadBookings();
+  }, [token]);
+
+  useEffect(() => {
+    if (!successMessage) return;
+    const t = setTimeout(() => setSuccessMessage(null), 3000);
+    return () => clearTimeout(t);
+  }, [successMessage]);
+
+  async function handleCancelBooking(bookingId: number) {
+    if (!confirm("Are you sure you want to cancel this session?")) return;
+
+    setDeletingId(bookingId);
+
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/bookings/${bookingId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Cancel failed");
+
+      // ✅ Remove from UI immediately
+      setSessions((prev) =>
+        prev.filter((s) => s.bookingId !== bookingId)
+      );
+
+      const successMessage=<div className="flex gap-2"><img src="/images/icons/green-check-icon.svg" /><span>Session cancelled successfully</span></div>
+      setSuccessMessage(successMessage);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  if (loading) {
+    return <p className="p-6">Loading your sessions…</p>;
+  }
 
   return (
     <div className="container mx-auto px-6 py-12 max-w-[1000px]">
-      <h1 className="text-2xl font-bold mb-2 h2">My Sessions</h1>
+      <h1 className="h2 mb-2">My Sessions</h1>
       <p className="text-gray-500 mb-6">
-        Manage your bookings, cancel or reschedule sessions
+        Manage your upcoming bookings
       </p>
 
-      {/* Filter Panel */}
-      <div className="flex gap-2 bg-white rounded-xl px-5 p-3 mb-8 shadow-md">
-        {(["all", "upcoming", "past", "cancelled"] as const).map((option) => (
-          <button
-            key={option}
-            onClick={() => setFilter(option)}
-            className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-              filter === option
-                ? "bg-primary text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            {option === "all"
-              ? "All Sessions"
-              : option.charAt(0).toUpperCase() + option.slice(1)}
-          </button>
-        ))}
-      </div>
+      {successMessage && (
+        <div className="mb-6 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-green-700 font-medium">
+          {successMessage}
+        </div>
+      )}
 
-      {/* Session Cards */}
+      {sessions.length === 0 && (
+        <p className="text-gray-500">
+          You have no upcoming sessions.
+        </p>
+      )}
+
       <div className="flex flex-col gap-4">
-        {filteredSessions.map((session) => (
-          <div key={session.id} className="flex flex-col bg-white rounded-xl shadow-md">
-            {/* Top strip inside card */}
-            <div
-              className={`h-4 w-full rounded-t-xl ${
-                session.status === "upcoming"
-                  ? "bg-primary"
-                  : session.status === "past"
-                  ? "bg-gray-400"
-                  : "bg-[#D32F2F]"
-              }`}
-            ></div>
+        {sessions.map((session) => (
+          <div
+            key={session.bookingId}
+            className="flex flex-col bg-white rounded-xl shadow-md"
+          >
+            <div className="h-4 w-full rounded-t-xl bg-primary" />
 
-            {/* Card content with padding */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-start p-6 gap-4">
-              {/* Left section */}
-              <div className="flex flex-col gap-1 md:w-auto w-full">
-                {/* Day & Type */}
+            <div className="flex flex-col md:flex-row justify-between items-start p-6 gap-4">
+              <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold">{session.day}</h2>
+                  <h2 className="text-lg font-bold">
+                    {session.title}
+                  </h2>
                   <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
                     {session.type}
                   </span>
-                  {session.status === "cancelled" && (
-                    <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-700">
-                      Cancelled
-                    </span>
-                  )}
                 </div>
 
-                {/* Grid 2x2 */}
                 <div className="grid grid-cols-2 gap-y-4 gap-x-16 text-gray-500 text-sm mt-1">
                   <div className="flex items-center gap-2">
-                    <img className="w-4 h-4" src="/images/icons/gray-calendar-icon.svg" />
+                    <img
+                      className="w-4 h-4"
+                      src="/images/icons/gray-calendar-icon.svg"
+                    />
                     {new Date(session.date).toLocaleDateString()}
                   </div>
+
                   <div className="flex items-center gap-2">
-                    <img className="w-4 h-4" src="/images/icons/gray-clock-icon.svg" />
-                    {session.startTime} - {session.endTime}
+                    <img
+                      className="w-4 h-4"
+                      src="/images/icons/gray-clock-icon.svg"
+                    />
+                    {session.startTime} – {session.endTime}
                   </div>
+
                   <div className="flex items-center gap-2">
-                    <img className="w-4 h-4" src="/images/icons/gray-map-pin-icon.svg" />
+                    <img
+                      className="w-4 h-4"
+                      src="/images/icons/gray-map-pin-icon.svg"
+                    />
                     {session.location}
                   </div>
+
                   {session.coach && (
                     <div className="flex items-center gap-2">
                       <img
@@ -142,29 +205,21 @@ export default function MySessions() {
                 </div>
               </div>
 
-              {/* Right section: price & actions */}
-              <div className="flex flex-col md:items-start gap-2 mt-4 md:mt-0 w-full md:w-auto">
-                <span className="font-semibold text-xl">£{session.price}</span>
+              <div className="flex flex-col gap-2 mt-4 md:mt-0">
+                <span className="font-semibold text-xl">
+                  £{session.price}
+                </span>
 
-                {session.status === "upcoming" && (
-                  <div className="flex flex-col gap-2 w-full md:w-auto">
-                    <button className="w-full md:w-auto px-4 py-2 bg-primary text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex gap-2 justify-center">
-                        <img src="/images/icons/reschedule-icon.svg" />
-                      Reschedule
-                    </button>
-
-                    <button className="w-full md:w-auto px-4 py-2 border border-red-[#D32F2F] text-[#D32F2F] rounded-lg hover:bg-red-50 transition-colors duration-200 flex gap-1 justify-center">
-                        <img src="/images/icons/x-icon.svg" />
-                      Cancel Session
-                    </button>
-                  </div>
-                )}
-
-                {session.status === "past" && (
-                  <button className="w-full md:w-auto px-4 py-2 bg-gray-200 text-gray-700 rounded-lg cursor-not-allowed">
-                    Book Again
-                  </button>
-                )}
+                <button
+                  onClick={() =>
+                    handleCancelBooking(session.bookingId)
+                  }
+                  disabled={deletingId === session.bookingId}
+                  className="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200 flex gap-1 justify-center disabled:opacity-50"
+                >
+                  <img src="/images/icons/x-icon.svg" />
+                  Cancel Session
+                </button>
               </div>
             </div>
           </div>
@@ -173,3 +228,4 @@ export default function MySessions() {
     </div>
   );
 }
+``
