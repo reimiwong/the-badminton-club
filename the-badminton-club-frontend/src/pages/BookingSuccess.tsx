@@ -68,9 +68,9 @@ export default function BookingSuccess() {
       {/* Back Button */}
       <button
         className="mt-6 w-full max-w-md bg-primary text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors duration-200"
-        onClick={() => navigate("/dashboard")}
+        onClick={() => navigate("/sessions")}
       >
-        Back to Dashboard
+        Back to Sessions
       </button>
     </div>
   );

@@ -173,42 +173,89 @@ export default function Header() {
         </div>
 
         {/* MOBILE NAV */}
-        <nav
-          className={`md:hidden flex flex-col transition-all duration-300 ease-out overflow-hidden ${
-            open ? "max-h-[1000px] py-4 opacity-100" : "max-h-0 opacity-0 py-0"
-          }`}
-        >
-          <div className="flex flex-col gap-1 px-6">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                onClick={() => setOpen(false)}
-                className="px-4 py-2 hover:bg-gray-100 text-sm flex items-center gap-2 text-muted"
-              >
-                {item.label}
-              </NavLink>
-            ))}
+       
+<nav
+  className={`md:hidden flex flex-col transition-all duration-300 ease-out overflow-hidden ${
+    open ? "max-h-[1000px] py-4 opacity-100" : "max-h-0 opacity-0 py-0"
+  }`}
+>
+  <div className="flex flex-col gap-1 px-6">
+    {navItems.map((item) => (
+      <NavLink
+        key={item.to}
+        to={item.to}
+        end={item.end}
+        onClick={() => setOpen(false)}
+        className="px-4 py-2 hover:bg-gray-100 text-sm flex items-center gap-2 text-muted"
+      >
+        {item.label}
+      </NavLink>
+    ))}
 
-            {!isAuthenticated && (
-              <div className="flex flex-col gap-2 mt-2">
-                <button
-                  className="text-muted font-bold text-sm hover:underline"
-                  onClick={() => setSignInOpen(true)}
-                >
-                  Sign in
-                </button>
-                <button
-                  className={buttonClass}
-                  onClick={() => setSignInOpen(true)}
-                >
-                  Book Now
-                </button>
-              </div>
-            )}
+    {/* LOGGED OUT */}
+    {!isAuthenticated && (
+      <div className="flex flex-col gap-2 mt-3">
+        <button
+          className="text-muted font-bold text-sm hover:underline text-left px-4"
+          onClick={() => setSignInOpen(true)}
+        >
+          Sign in
+        </button>
+        <button
+          className={`${buttonClass} mx-4`}
+          onClick={() => setSignInOpen(true)}
+        >
+          Book Now
+        </button>
+      </div>
+    )}
+
+    {/* ✅ LOGGED IN */}
+    {isAuthenticated && user && (
+      <div className="mt-4 border-t border-gray-200 pt-4 flex flex-col gap-2">
+        {/* User summary */}
+        <div className="flex items-center gap-3 px-4 pb-2">
+          <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+            {user.username[0].toUpperCase()}
           </div>
-        </nav>
+          <div className="flex flex-col text-sm">
+            <span className="font-medium">{user.username}</span>
+            <span className="text-muted text-xs">{user.email}</span>
+          </div>
+        </div>
+
+        {/* My Sessions */}
+        <NavLink
+          to="/my-sessions"
+          onClick={() => setOpen(false)}
+          className="px-4 py-2 flex items-center gap-3 text-sm hover:bg-gray-100 text-muted"
+        >
+          <img
+            className="h-4 w-4"
+            src="/images/icons/gray-calendar-icon.svg"
+          />
+          My Sessions
+        </NavLink>
+
+        {/* Sign Out */}
+        <button
+          onClick={() => {
+            handleSignOut();
+            setOpen(false);
+          }}
+          className="px-4 py-2 flex items-center gap-3 text-sm text-red-600 hover:bg-red-50 text-left"
+        >
+          <img
+            className="h-4 w-4"
+            src="/images/icons/log-out-icon.svg"
+          />
+          Sign Out
+        </button>
+      </div>
+    )}
+  </div>
+</nav>
+
       </header>
 
       {/* SIGN-IN MODAL */}
