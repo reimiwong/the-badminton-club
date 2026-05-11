@@ -28,6 +28,12 @@ if (!isOpen || isAuthenticated) return null;
   }, [onClose]);
 
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+if (!API_URL) {
+  throw new Error("VITE_API_URL is not defined");
+}
+
 
   const handleClickOutside = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -41,11 +47,13 @@ if (!isOpen || isAuthenticated) return null;
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      
+const res = await fetch(`${API_URL}/api/users/login`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password }),
+});
+
 
       const data = await res.json();
 

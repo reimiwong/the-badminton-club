@@ -16,6 +16,7 @@ interface Session {
 }
 
 const SessionsPage: React.FC = () => {
+  console.log("VITE_API_URL =", import.meta.env.VITE_API_URL);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [filteredSessions, setFilteredSessions] = useState<Session[]>([]);
   const [typeFilter, setTypeFilter] = useState<
@@ -118,6 +119,7 @@ const SessionsPage: React.FC = () => {
     return `${startStr} - ${endStr}`;
   };
   return (
+    
     <div className="container mx-auto max-w-[1400px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
       <h1 className="h1 mb-6">
         Book a <span className=" text-primary mt-1">Session.</span>

@@ -14,6 +14,7 @@ import "@fontsource/sora/700.css";
 import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
+  
   <React.StrictMode>
         <AuthProvider>
           
@@ -23,3 +24,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </AuthProvider>
   </React.StrictMode>
 );
+

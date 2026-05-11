@@ -39,7 +39,7 @@ const SessionDetailPage: React.FC = () => {
   
   const { isAuthenticated } = useAuth();
 
-
+const API_URL = import.meta.env.VITE_API_URL;
 useEffect(() => {
   if (isAuthenticated && showSignInModal && session) {
     setShowSignInModal(false);
@@ -51,7 +51,7 @@ useEffect(() => {
 useEffect(() => {
   async function fetchSession() {
     try {
-      const res = await fetch(`http://localhost:5000/api/sessions/${id}`);
+      const res = await fetch(`${API_URL}/api/sessions/${id}`);
       if (!res.ok) throw new Error("Failed to fetch session");
       const data = await res.json();
 
