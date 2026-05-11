@@ -5,6 +5,7 @@ import { authenticate, AuthRequest } from "../middleware/auth.js";
 
 const router = Router();
 
+
 // Get all bookings for logged-in user
 router.get("/", authenticate, async (req: AuthRequest, res) => {
   try {

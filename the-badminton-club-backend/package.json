@@ -1,16 +1,19 @@
 {
   "name": "the-badminton-club-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
+
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "build": "prisma generate && tsc",
     "start": "node dist/server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
+
+  "engines": {
+    "node": ">=20"
+  },
+
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
@@ -21,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0"
   },
+
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
