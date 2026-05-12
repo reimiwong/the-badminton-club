@@ -224,54 +224,117 @@ return (
         </div>
       </div>
 
-      {/* TWO INFO BOXES */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+     {/* TWO INFO BOXES */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-3">
-          <h4 className="font-bold text-lg md:text-xl">What to Expect</h4>
-          <ul className="body list-disc list-inside marker:text-primary space-y-1">
-            <li>15 min warm-up and footwork drills</li>
-            <li>45 min skill practice</li>
-            <li>30 min match play / drills</li>
-          </ul>
-        </div>
+  {/* EXPECT */}
+  <div className="relative bg-white p-6 rounded-2xl border border-border hover:border-primary/30 transition">
 
-        <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-3">
-          <h4 className="font-bold text-lg md:text-xl">What to Bring</h4>
-          <ul className="body list-disc list-inside marker:text-primary space-y-1">
-            <li>Indoor court shoes</li>
-            <li>Racket</li>
-            <li>Water bottle</li>
-            <li>Towel</li>
-          </ul>
-        </div>
+    {/* accent strip */}
+    <div className="absolute left-0 top-6 bottom-6 w-1 bg-primary rounded-r-full" />
 
-      </div>
+    <div className="pl-4">
+
+      <h4 className="font-semibold text-lg md:text-xl mb-3">
+        What to Expect
+      </h4>
+
+      <ul className="space-y-2 text-muted">
+        <li className="flex gap-2">
+          <span className="text-primary">▸</span>
+          15 min warm-up and footwork drills
+        </li>
+        <li className="flex gap-2">
+          <span className="text-primary">▸</span>
+          45 min skill practice
+        </li>
+        <li className="flex gap-2">
+          <span className="text-primary">▸</span>
+          30 min match play / drills
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  {/* BRING */}
+  <div className="relative bg-white p-6 rounded-2xl border border-border hover:border-primary/30 transition">
+
+    {/* accent strip (different tone) */}
+    <div className="absolute left-0 top-6 bottom-6 w-1 bg-accent rounded-r-full" />
+
+    <div className="pl-4">
+
+      <h4 className="font-semibold text-lg md:text-xl mb-3">
+        What to Bring
+      </h4>
+
+      <ul className="space-y-2 text-muted">
+        <li className="flex gap-2">
+          <span className="text-accent">▸</span>
+          Indoor court shoes
+        </li>
+        <li className="flex gap-2">
+          <span className="text-accent">▸</span>
+          Racket
+        </li>
+        <li className="flex gap-2">
+          <span className="text-accent">▸</span>
+          Water bottle
+        </li>
+        <li className="flex gap-2">
+          <span className="text-accent">▸</span>
+          Towel
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
 
       {/* CTA */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white mt-8 rounded-2xl p-6 gap-4 shadow-lg">
+    {/* CTA */}
+<div className="relative mt-10">
 
-        <div>
-          <h4 className="font-bold text-lg">Ready to Book?</h4>
-          <p className="text-muted">Secure your spot for this session</p>
-        </div>
+  {/* subtle glow background */}
+  <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-3xl" />
 
-        <button
-          className="btn-primary px-8 py-3 w-full md:w-auto"
-          onClick={() => {
-            if (!isAuthenticated) {
-              setShowSignInModal(true);
-              return;
-            }
-            navigate("/booking", { state: { session } });
-          }}
-        >
-          Continue to Payment
-        </button>
+  <div className="relative bg-surface border border-border rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
 
+    <div className="text-center md:text-left">
+
+      <h4 className="font-semibold text-xl md:text-2xl text-text">
+        Ready to book?
+      </h4>
+
+      <p className="text-muted mt-1">
+        Secure your spot for this session
+      </p>
+
+      {/* subtle urgency cue */}
+      <div className="mt-3 inline-flex items-center gap-2 text-xs text-primary font-medium">
+        <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+        Limited availability
       </div>
 
     </div>
+
+    <button
+      className="btn-primary px-10 py-3 w-full md:w-auto text-base"
+      onClick={() => {
+        if (!isAuthenticated) {
+          setShowSignInModal(true);
+          return;
+        }
+        navigate("/booking", { state: { session } });
+      }}
+    >
+      Continue to Payment
+    </button>
+</div>
+  </div>
+</div>
 
     {showSignInModal && (
       <SignInModal

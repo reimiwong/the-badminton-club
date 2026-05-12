@@ -7,6 +7,14 @@ import { authenticate, AuthRequest } from "../middleware/auth.js";
 export const userRouter = Router();
 
 /* =========================
+   ENV SAFETY CHECK
+========================= */
+
+if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+  throw new Error("Missing JWT environment variables");
+}
+
+/* =========================
    TOKEN HELPERS
 ========================= */
 
@@ -14,13 +22,13 @@ const ACCESS_TOKEN_EXPIRES = "15m";
 const REFRESH_TOKEN_EXPIRES = "7d";
 
 function createAccessToken(payload: { id: number; email: string }) {
-  return jwt.sign(payload, process.env.JWT_SECRET as string, {
+  return jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: ACCESS_TOKEN_EXPIRES,
   });
 }
 
 function createRefreshToken(payload: { id: number; email: string }) {
-  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, {
+  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
     expiresIn: REFRESH_TOKEN_EXPIRES,
   });
 }
@@ -52,13 +60,14 @@ userRouter.post("/signup", async (req, res) => {
     if (err.code === "P2002") {
       return res.status(409).json({ error: "Email already exists" });
     }
-    console.error(err);
+
+    console.error("SIGNUP ERROR:", err);
     res.status(500).json({ error: "Failed to create user" });
   }
 });
 
 /* =========================
-   LOGIN (ACCESS + REFRESH)
+   LOGIN
 ========================= */
 
 userRouter.post("/login", async (req, res) => {
@@ -70,10 +79,21 @@ userRouter.post("/login", async (req, res) => {
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    if (!user.password) {
+      console.error("User missing password hash:", user.id);
+      return res.status(500).json({ error: "Corrupt user record" });
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
+
+    if (!isValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const accessToken = createAccessToken({
       id: user.id,
@@ -85,7 +105,6 @@ userRouter.post("/login", async (req, res) => {
       email: user.email,
     });
 
-    // ✅ HttpOnly refresh token cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -93,7 +112,7 @@ userRouter.post("/login", async (req, res) => {
       path: "/api/users/refresh",
     });
 
-    res.json({
+    return res.json({
       accessToken,
       user: {
         name: user.name,
@@ -101,13 +120,13 @@ userRouter.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Login failed" });
+    console.error("LOGIN ERROR:", err);
+    return res.status(500).json({ error: "Login failed" });
   }
 });
 
 /* =========================
-   REFRESH ACCESS TOKEN
+   REFRESH TOKEN
 ========================= */
 
 userRouter.post("/refresh", (req, res) => {
@@ -120,7 +139,7 @@ userRouter.post("/refresh", (req, res) => {
   try {
     const payload = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET as string
+      process.env.JWT_REFRESH_SECRET!
     ) as { id: number; email: string };
 
     const newAccessToken = createAccessToken({
@@ -129,7 +148,8 @@ userRouter.post("/refresh", (req, res) => {
     });
 
     res.json({ accessToken: newAccessToken });
-  } catch {
+  } catch (err) {
+    console.error("REFRESH ERROR:", err);
     return res.status(401).json({ error: "Invalid refresh token" });
   }
 });
@@ -142,6 +162,7 @@ userRouter.post("/logout", (_req, res) => {
   res.clearCookie("refreshToken", {
     path: "/api/users/refresh",
   });
+
   res.sendStatus(204);
 });
 

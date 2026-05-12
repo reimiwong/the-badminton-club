@@ -10,8 +10,13 @@ interface SignInModalProps {
 const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose }) => {
   const { login, isAuthenticated } = useAuth();
 
-  if (!isOpen || isAuthenticated) return null;
+  const API_URL = import.meta.env.VITE_API_URL;
 
+  if (!API_URL) {
+    throw new Error("VITE_API_URL is not defined");
+  }
+
+  // ✅ ALL HOOKS MUST BE BEFORE ANY RETURN
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,15 +26,10 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose }) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
-
-  const API_URL = import.meta.env.VITE_API_URL;
-
-  if (!API_URL) {
-    throw new Error("VITE_API_URL is not defined");
-  }
 
   const handleClickOutside = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -38,39 +38,41 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await fetch(`${API_URL}/api/users/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-      credentials: "include", // ✅ important for refresh cookie
-    });
+    try {
+      const res = await fetch(`${API_URL}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      setError(data.error || "Login failed");
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        setLoading(false);
+        return;
+      }
+
+      login(
+        { username: data.user.name, email: data.user.email },
+        data.accessToken,
+      );
+
       setLoading(false);
-      return;
+      onClose();
+    } catch {
+      setError("Login failed. Please try again.");
+      setLoading(false);
     }
+  };
 
-    // ✅ CORRECT: use accessToken
-    login(
-      { username: data.user.name, email: data.user.email },
-      data.accessToken
-    );
-
-    setLoading(false);
-    onClose();
-  } catch {
-    setError("Login failed. Please try again.");
-    setLoading(false);
-  }
-};
+  // ✅ SAFE RETURN AFTER HOOKS
+  if (!isOpen || isAuthenticated) return null;
 
   return (
     <div
@@ -115,8 +117,7 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose }) => {
         <div className="text-center space-y-4">
           <h1 className="h1">Sign in to book</h1>
           <p className="text-body-lg text-muted max-w-sm mx-auto">
-            Access your booking dashboard, manage reservations, and reserve
-            court time.
+            Access your booking dashboard, manage reservations, and reserve court time.
           </p>
         </div>
 
@@ -187,7 +188,7 @@ const SignInModal: FC<SignInModalProps> = ({ isOpen, onClose }) => {
 
         {/* FOOTER */}
         <div className="flex flex-col items-center gap-2 text-center text-sm">
-          <span className="text-muted">Don&apos;t have an account?</span>
+          <span className="text-muted">Don't have an account?</span>
           <a
             href="#"
             className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-primary font-medium transition-all duration-200 hover:bg-primary/15 hover:-translate-y-0.5"
