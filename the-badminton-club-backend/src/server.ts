@@ -16,11 +16,15 @@ const PORT = process.env.PORT || 5000;
    CORS CONFIG
 ========================= */
 
+
 const allowedOrigins = [
-  "http://localhost:5173",          // Vite dev
-  "http://localhost:3000",          // optional
-  process.env.FRONTEND_URL,         // production frontend
-].filter(Boolean);
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://shamrockbadminton.co.uk",
+  "https://www.shamrockbadminton.co.uk",
+  "https://icy-pond-0b7ff0910.7.azurestaticapps.net",
+];
+
 
 app.use(
   cors({
