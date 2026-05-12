@@ -1,4 +1,3 @@
-// src/App.tsx
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
@@ -12,6 +11,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 import Booking from "./pages/Booking";
 import BookingSuccess from "./pages/BookingSuccess";
 import MySessions from "./pages/MySessions";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -29,6 +29,7 @@ export default function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
           <Route path="/my-sessions" element={<MySessions />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>
