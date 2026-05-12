@@ -6,7 +6,29 @@ import { authenticate, AuthRequest } from "../middleware/auth.js";
 
 export const userRouter = Router();
 
-// Signup
+/* =========================
+   TOKEN HELPERS
+========================= */
+
+const ACCESS_TOKEN_EXPIRES = "15m";
+const REFRESH_TOKEN_EXPIRES = "7d";
+
+function createAccessToken(payload: { id: number; email: string }) {
+  return jwt.sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: ACCESS_TOKEN_EXPIRES,
+  });
+}
+
+function createRefreshToken(payload: { id: number; email: string }) {
+  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, {
+    expiresIn: REFRESH_TOKEN_EXPIRES,
+  });
+}
+
+/* =========================
+   SIGNUP
+========================= */
+
 userRouter.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -16,11 +38,16 @@ userRouter.post("/signup", async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
       data: { name, email, password: hashedPassword },
     });
 
-    res.status(201).json({ id: user.id, name: user.name, email: user.email });
+    res.status(201).json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   } catch (err: any) {
     if (err.code === "P2002") {
       return res.status(409).json({ error: "Email already exists" });
@@ -30,7 +57,10 @@ userRouter.post("/signup", async (req, res) => {
   }
 });
 
-// Login
+/* =========================
+   LOGIN (ACCESS + REFRESH)
+========================= */
+
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -45,14 +75,26 @@ userRouter.post("/login", async (req, res) => {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET as string,
-      { expiresIn: "1h" }
-    );
+    const accessToken = createAccessToken({
+      id: user.id,
+      email: user.email,
+    });
+
+    const refreshToken = createRefreshToken({
+      id: user.id,
+      email: user.email,
+    });
+
+    // ✅ HttpOnly refresh token cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/api/users/refresh",
+    });
 
     res.json({
-      token,
+      accessToken,
       user: {
         name: user.name,
         email: user.email,
@@ -64,7 +106,49 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-// Get logged-in user
+/* =========================
+   REFRESH ACCESS TOKEN
+========================= */
+
+userRouter.post("/refresh", (req, res) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: "No refresh token" });
+  }
+
+  try {
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET as string
+    ) as { id: number; email: string };
+
+    const newAccessToken = createAccessToken({
+      id: payload.id,
+      email: payload.email,
+    });
+
+    res.json({ accessToken: newAccessToken });
+  } catch {
+    return res.status(401).json({ error: "Invalid refresh token" });
+  }
+});
+
+/* =========================
+   LOGOUT
+========================= */
+
+userRouter.post("/logout", (_req, res) => {
+  res.clearCookie("refreshToken", {
+    path: "/api/users/refresh",
+  });
+  res.sendStatus(204);
+});
+
+/* =========================
+   CURRENT USER
+========================= */
+
 userRouter.get("/me", authenticate, async (req: AuthRequest, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user!.id },
@@ -78,21 +162,24 @@ userRouter.get("/me", authenticate, async (req: AuthRequest, res) => {
   res.json(user);
 });
 
-// Get logged-in user's bookings
+/* =========================
+   USER BOOKINGS
+========================= */
+
 userRouter.get("/me/bookings", authenticate, async (req: AuthRequest, res) => {
   const userWithSessions = await prisma.user.findUnique({
-  where: { id: req.user!.id },
-  select: {
-    id: true,
-    name: true,
-    email: true,
-    bookings: {
-      include: {
-        session: true
-      }
-    }
-  }
-});
+    where: { id: req.user!.id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      bookings: {
+        include: {
+          session: true,
+        },
+      },
+    },
+  });
 
   res.json(userWithSessions);
 });

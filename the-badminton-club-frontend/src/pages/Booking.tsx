@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SignInModal from "../components/SignInModal";
 import { useAuth } from "../context/AuthContext";
+import { apiFetch } from "../lib/apiFetch";
 
 interface Session {
   id: number;
@@ -12,73 +14,74 @@ interface Session {
   price: number;
 }
 
-// Dummy hook for authentication status
-// Replace with your real auth hook or context
-
-
 export default function Booking() {
   const location = useLocation();
   const navigate = useNavigate();
-const { isAuthenticated, token } = useAuth();
+  const auth = useAuth();
 
-
-  const session: Session | undefined = (location.state as { session?: Session })?.session;
+  const session: Session | undefined = (
+    location.state as { session?: Session }
+  )?.session;
 
   const [showSignInModal, setShowSignInModal] = useState(false);
 
- 
-const API_URL = import.meta.env.VITE_API_URL;
-
-if (!API_URL) {
-  throw new Error("VITE_API_URL is not defined");
-}
-
+  const API_URL = import.meta.env.VITE_API_URL;
+  if (!API_URL) throw new Error("VITE_API_URL is not defined");
 
   if (!session) return <p className="p-6">No session selected.</p>;
 
   const total = session.price;
 
-const handleConfirmPayment = async () => {
-  if (!isAuthenticated) {
-    setShowSignInModal(true);
-    return;
-  }
+  /* =========================
+     CONFIRM BOOKING
+  ========================= */
 
-  try {
- 
-const res = await fetch(`${API_URL}/api/bookings`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,
-  },
-  body: JSON.stringify({ sessionId: session.id }),
-});
-
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Booking failed");
+  const handleConfirmPayment = async () => {
+    if (!auth.isAuthenticated) {
+      setShowSignInModal(true);
       return;
     }
 
-    // Booking succeeded → go to success page
-    navigate("/booking-success", {
-      state: {
-        sessionTitle: session.title,
-        date: new Date(session.date).toLocaleDateString(),
-        startTime: new Date(session.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        endTime: new Date(new Date(session.date).getTime() + 90 * 60000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        location: "Court 1-2",
-        totalPaid: session.price,
-      },
-    });
+    try {
+      const res = await apiFetch(
+        `${API_URL}/api/bookings`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId: session.id }),
+        },
+        auth
+      );
 
-  } catch (err) {
-    alert("Something went wrong. Please try again.");
-  }
-};
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Booking failed");
+        return;
+      }
+
+      navigate("/booking-success", {
+        state: {
+          sessionTitle: session.title,
+          date: new Date(session.date).toLocaleDateString(),
+          startTime: new Date(session.date).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          endTime: new Date(
+            new Date(session.date).getTime() + 90 * 60000
+          ).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          location: "Court 1-2",
+          totalPaid: session.price,
+        },
+      });
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
+  };
 
 
 return (
@@ -86,10 +89,12 @@ return (
     {/* SignIn Modal */}
  
 
+
 <SignInModal
-  isOpen={showSignInModal && !isAuthenticated}
+  isOpen={showSignInModal && !auth.isAuthenticated}
   onClose={() => setShowSignInModal(false)}
 />
+
 
 
     <div className="max-w-7xl mx-auto p-6 md:p-12">
@@ -173,18 +178,20 @@ return (
     <div className="mt-8">
       <button
         type="button"
-        onClick={() => {
-  if (!isAuthenticated) {
+  
+onClick={() => {
+  if (!auth.isAuthenticated) {
     setShowSignInModal(true);
   } else {
     handleConfirmPayment();
   }
 }}
 
+
   
         className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white shadow-[0_10px_25px_rgba(0,158,96,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(0,158,96,0.35)] active:scale-[0.985] disabled:opacity-60"
       >
-        {isAuthenticated ? "Confirm Payment" : "Sign in to continue"}
+        {auth.isAuthenticated ? "Confirm Payment" : "Sign in to continue"}
         <img
           src="/images/icons/right-arrow-icon.svg"
           alt=""

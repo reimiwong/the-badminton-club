@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useAuth } from "../context/AuthContext";
+import { apiFetch } from "../lib/apiFetch";
 
 interface BookingResponse {
   id: number;
@@ -29,34 +30,34 @@ interface SessionCard {
 }
 
 export default function MySessions() {
-  const { token } = useAuth();
+  // ✅ Hook MUST be at top level
+  const auth = useAuth();
 
   const [sessions, setSessions] = useState<SessionCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState<ReactNode | null>(null);
 
-const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
+  if (!API_URL) throw new Error("VITE_API_URL is not defined");
 
-if (!API_URL) {
-  throw new Error("VITE_API_URL is not defined");
-}
+  /* =========================
+     LOAD BOOKINGS
+  ========================= */
 
   useEffect(() => {
     async function loadBookings() {
       try {
-       
-const res = await fetch(`${API_URL}/api/bookings`, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
+        const res = await apiFetch(
+          `${API_URL}/api/bookings`,
+          {},
+          auth
+        );
 
-
-        const data: BookingResponse[] = await res.json();
         if (!res.ok) throw new Error("Failed to load bookings");
 
-        // ✅ Only keep upcoming sessions
+        const data: BookingResponse[] = await res.json();
+
         const upcoming = data
           .map((b) => {
             const dateObj = new Date(b.session.date);
@@ -93,8 +94,16 @@ const res = await fetch(`${API_URL}/api/bookings`, {
       }
     }
 
-    loadBookings();
-  }, [token]);
+    if (auth.isAuthenticated) {
+      loadBookings();
+    } else {
+      setLoading(false);
+    }
+  }, [auth, API_URL]);
+
+  /* =========================
+     AUTO‑HIDE SUCCESS MESSAGE
+  ========================= */
 
   useEffect(() => {
     if (!successMessage) return;
@@ -102,39 +111,44 @@ const res = await fetch(`${API_URL}/api/bookings`, {
     return () => clearTimeout(t);
   }, [successMessage]);
 
+  /* =========================
+     CANCEL BOOKING
+  ========================= */
+
   async function handleCancelBooking(bookingId: number) {
     if (!confirm("Are you sure you want to cancel this session?")) return;
 
     setDeletingId(bookingId);
 
     try {
-      
-const res = await fetch(
-  `${API_URL}/api/bookings/${bookingId}`,
-  {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-);
-
+      const res = await apiFetch(
+        `${API_URL}/api/bookings/${bookingId}`,
+        { method: "DELETE" },
+        auth
+      );
 
       if (!res.ok) throw new Error("Cancel failed");
 
-      // ✅ Remove from UI immediately
       setSessions((prev) =>
         prev.filter((s) => s.bookingId !== bookingId)
       );
 
-      const successMessage=<div className="flex gap-2"><img src="/images/icons/green-check-icon.svg" /><span>Session cancelled successfully</span></div>
-      setSuccessMessage(successMessage);
+      setSuccessMessage(
+        <div className="flex gap-2">
+          <img src="/images/icons/green-check-icon.svg" />
+          <span>Session cancelled successfully</span>
+        </div>
+      );
     } catch (err) {
       console.error(err);
     } finally {
       setDeletingId(null);
     }
   }
+
+  /* =========================
+     RENDER
+  ========================= */
 
   if (loading) {
     return <p className="p-6">Loading your sessions…</p>;
@@ -238,4 +252,3 @@ const res = await fetch(
     </div>
   );
 }
-``
