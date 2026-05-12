@@ -4,8 +4,6 @@ import SignInModal from "../components/SignInModal";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch } from "../lib/apiFetch";
 
-
-
 interface Session {
   id: number;
   title: string;
@@ -20,22 +18,32 @@ export default function Booking() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-const [cardName, setCardName] = useState("");
-const [cardNumber, setCardNumber] = useState("");
-const [expiry, setExpiry] = useState("");
-const [cvv, setCvv] = useState("");
-const [touched, setTouched] = useState(false);
-const markTouched = () => setTouched(true);
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [touched, setTouched] = useState({
+  name: false,
+  number: false,
+  expiry: false,
+  cvv: false,
+});
+  const touchField = (field: keyof typeof touched) => {
+  setTouched((prev) => ({ ...prev, [field]: true }));
+};
 
-const cleanedCardNumber = cardNumber.replace(/\s/g, "");
+  const cleanedCardNumber = cardNumber.replace(/\s/g, "");
 
-const isCardNameValid = cardName.trim().length >= 2;
-const isCardNumberValid = /^\d{16}$/.test(cleanedCardNumber);
-const isExpiryValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry);
-const isCvvValid = /^\d{3,4}$/.test(cvv);
+  const isCardNameValid = cardName.trim().length >= 2;
+  const isCardNumberValid = /^\d{16}$/.test(cleanedCardNumber);
+const isExpiryValid = (() => {
+  const match = expiry.match(/^(0[1-9]|1[0-2])\/\d{2}$/);
+  return !!match;
+})();
+  const isCvvValid = /^\d{3,4}$/.test(cvv);
 
-const isFormValid =
-  isCardNameValid && isCardNumberValid && isExpiryValid && isCvvValid;
+  const isFormValid =
+    isCardNameValid && isCardNumberValid && isExpiryValid && isCvvValid;
 
   const session: Session | undefined = (location.state as { session?: Session })
     ?.session;
@@ -53,56 +61,65 @@ const isFormValid =
      CONFIRM BOOKING
   ========================= */
 
-  const handleConfirmPayment = async () => {
-    if (!auth.isAuthenticated) {
-      setShowSignInModal(true);
-      return;
-    }
- if (!isFormValid) {
-    setTouched(true);
+ const handleConfirmPayment = async () => {
+  // 1. auth first (fast fail)
+  if (!auth.isAuthenticated) {
+    setShowSignInModal(true);
     return;
   }
 
-    try {
-      const res = await apiFetch(
-        `${API_URL}/api/bookings`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId: session.id }),
-        },
-        auth,
-      );
+  // 2. reveal validation errors
+  setTouched({
+    name: true,
+    number: true,
+    expiry: true,
+    cvv: true,
+  });
 
-      const data = await res.json();
+  // 3. block invalid form
+  if (!isFormValid) return;
 
-      if (!res.ok) {
-        alert(data.error || "Booking failed");
-        return;
-      }
+  // 4. API call
+  try {
+    const res = await apiFetch(
+      `${API_URL}/api/bookings`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: session.id }),
+      },
+      auth
+    );
 
-      navigate("/booking-success", {
-        state: {
-          sessionTitle: session.title,
-          date: new Date(session.date).toLocaleDateString(),
-          startTime: new Date(session.date).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          endTime: new Date(
-            new Date(session.date).getTime() + 90 * 60000,
-          ).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          location: "Court 1-2",
-          totalPaid: session.price,
-        },
-      });
-    } catch {
-      alert("Something went wrong. Please try again.");
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Booking failed");
+      return;
     }
-  };
+
+    navigate("/booking-success", {
+      state: {
+        sessionTitle: session.title,
+        date: new Date(session.date).toLocaleDateString(),
+        startTime: new Date(session.date).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        endTime: new Date(
+          new Date(session.date).getTime() + 90 * 60000
+        ).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        location: "Court 1-2",
+        totalPaid: session.price,
+      },
+    });
+  } catch {
+    alert("Something went wrong. Please try again.");
+  }
+};
 
   return (
     <div className="container mx-auto max-w-[900px] bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20">
@@ -160,12 +177,14 @@ const isFormValid =
                     placeholder="John Doe"
                     className="w-full rounded-xl border border-border px-4 py-3 text-body outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200"
                     value={cardName}
-                      onBlur={markTouched}
-onChange={(e) => setCardName(e.target.value)}
+                    onBlur={() => touchField("name")}
+                    onChange={(e) => setCardName(e.target.value)}
                   />
-                  {touched && !isCardNameValid && (
-  <p className="text-red-500 text-sm">Name must be at least 2 characters</p>
-)}
+                  {touched.name && !isCardNameValid && (
+                    <p className="text-red-500 text-sm">
+                      Name must be at least 2 characters
+                    </p>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -174,13 +193,18 @@ onChange={(e) => setCardName(e.target.value)}
                     type="text"
                     placeholder="1234 5678 9012 3456"
                     className="w-full rounded-xl border border-border px-4 py-3 text-body outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200"
-                  value={cardNumber}
-                    onBlur={markTouched}
-onChange={(e) => setCardNumber(e.target.value)}
+                    value={cardNumber}
+                    onBlur={() => touchField("number")}
+                    onChange={(e) => {
+  const value = e.target.value.replace(/\D/g, "").slice(0, 16);
+  setCardNumber(value);
+}}
                   />
-                  {touched && !isCardNumberValid && (
-  <p className="text-red-500 text-sm">Card number must be 16 digits</p>
-)}
+                  {touched.number && !isCardNumberValid && (
+                    <p className="text-red-500 text-sm">
+                      Card number must be 16 digits
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -190,35 +214,49 @@ onChange={(e) => setCardNumber(e.target.value)}
                       type="text"
                       placeholder="MM/YY"
                       className="w-full rounded-xl border border-border px-4 py-3 text-body outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200"
-                   value={expiry}
-                     onBlur={markTouched}
-onChange={(e) => setExpiry(e.target.value)}
-                   />
-                   {touched && !isExpiryValid && (
-  <p className="text-red-500 text-sm">Invalid expiry (MM/YY)</p>
-)}
+                      value={expiry}
+                      onBlur={() => touchField("expiry")}
+                      onChange={(e) => {
+  let value = e.target.value.replace(/\D/g, "").slice(0, 4);
+
+  if (value.length >= 3) {
+    value = value.slice(0, 2) + "/" + value.slice(2);
+  }
+
+  setExpiry(value);
+}}
+                    />
+                    {touched.expiry && !isExpiryValid && (
+                      <p className="text-red-500 text-sm">
+                        Invalid expiry (MM/YY)
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-medium">CVV</label>
                     <input
-                    
                       type="text"
                       placeholder="123"
                       className="w-full rounded-xl border border-border px-4 py-3 text-body outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200"
-                     onBlur={markTouched}
-                   value={cvv}
-onChange={(e) => setCvv(e.target.value)}/>
-{touched && !isCvvValid && (
-  <p className="text-red-500 text-sm">CVV must be 3–4 digits</p>
-)}
+                      onBlur={() => touchField("cvv")}
+                      value={cvv}
+                      onChange={(e) =>
+  setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))
+}
+                    />
+                    {touched.cvv && !isCvvValid && (
+                      <p className="text-red-500 text-sm">
+                        CVV must be 3–4 digits
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* CONFIRM BUTTON */}
               <div className="mt-8">
-                <button
+               <button
   type="button"
   disabled={!isFormValid}
   onClick={() => {
@@ -228,7 +266,7 @@ onChange={(e) => setCvv(e.target.value)}/>
       handleConfirmPayment();
     }
   }}
-  className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white shadow-[0_10px_25px_rgba(0,158,96,0.28)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(0,158,96,0.35)] active:scale-[0.985] disabled:opacity-60"
+  className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-semibold text-white ..."
 >
                   {auth.isAuthenticated
                     ? "Confirm Payment"
