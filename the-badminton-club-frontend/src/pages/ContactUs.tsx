@@ -209,6 +209,7 @@ export default function ContactUs() {
                 bg-background
                 px-4 py-3
                 text-body
+                text-muted
                 outline-none
                 focus:border-primary
                 focus:ring-4

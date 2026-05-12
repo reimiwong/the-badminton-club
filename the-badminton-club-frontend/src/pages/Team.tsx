@@ -12,79 +12,64 @@ function TeamCard({ person }: { person: TeamMember }) {
   const { name, role, image, funIntro } = person;
   const [flipped, setFlipped] = useState(false);
 
-  const handleFlip = () => setFlipped((prev) => !prev);
-
   return (
     <div
       className="group [perspective:1200px] w-full h-[420px] sm:h-[460px] cursor-pointer"
-      onClick={handleFlip}
+      onClick={() => setFlipped((p) => !p)}
     >
       <div
-        className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${
-          flipped
-            ? "[transform:rotateY(180deg)]"
-            : "group-hover:[transform:rotateY(180deg)]"
+        className={`relative w-full h-full transition-transform duration-700 ease-out [transform-style:preserve-3d]
+        ${flipped
+          ? "[transform:rotateY(180deg)] scale-[1.02]"
+          : "group-hover:[transform:rotateY(180deg)] group-hover:scale-[1.01]"
         }`}
       >
 
         {/* FRONT */}
-        <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-md [backface-visibility:hidden] bg-surface">
+        <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-lg [backface-visibility:hidden] bg-surface">
 
-          <img src={image} alt={name} className="w-full h-full object-cover" />
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+          />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-surface">
-
-            <h3 className="h3 text-surface">{name}</h3>
-
-            <p className="text-body text-surface/80">
-              {role}
-            </p>
-
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+            <h3 className="h3 text-white">{name}</h3>
+            <p className="text-sm text-white/80">{role}</p>
           </div>
 
         </div>
 
         {/* BACK */}
-        <div className="absolute inset-0 rounded-3xl bg-surface shadow-md p-5 sm:p-6 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden]">
+        <div className="absolute inset-0 rounded-3xl bg-surface shadow-lg p-6 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden]">
 
           {/* TOP */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5">
 
-            <div className="flex items-center justify-between">
-
-              <p className="label text-primary bg-primary/10 px-3 py-1 rounded-full w-fit">
-                Player Profile
-              </p>
-
-              <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-
-            </div>
+            <span className="text-xs font-semibold uppercase tracking-wide text-primary bg-primary/10 px-3 py-1 rounded-full w-fit">
+              Player Profile
+            </span>
 
             <p className="text-body text-muted leading-relaxed">
               {funIntro}
             </p>
 
-            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex flex-col gap-1">
-
-              <p className="text-xs uppercase tracking-wide text-primary font-semibold">
+            <div className="rounded-2xl bg-primary/5 border border-primary/10 p-4">
+              <p className="text-xs text-primary font-semibold uppercase tracking-wide mb-1">
                 Role
               </p>
-
-              <p className="text-body font-medium text-text">
-                {role}
-              </p>
-
+              <p className="font-medium text-text">{role}</p>
             </div>
 
           </div>
 
           {/* BOTTOM */}
-          <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4 border-t border-border">
 
             <div className="flex items-center gap-3">
-
               <img
                 src={image}
                 alt={name}
@@ -92,19 +77,16 @@ function TeamCard({ person }: { person: TeamMember }) {
               />
 
               <div>
-                <p className="text-body font-semibold text-text leading-tight">
+                <p className="font-semibold text-text leading-tight">
                   {name}
                 </p>
-                <p className="text-xs text-muted">
-                  Badminton Coach
-                </p>
+                <p className="text-xs text-muted">Coach</p>
               </div>
-
             </div>
 
-            <div className="text-primary text-xs font-medium bg-primary/10 px-3 py-1 rounded-full">
+            <span className="text-xs font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
               Active
-            </div>
+            </span>
 
           </div>
 
@@ -135,10 +117,13 @@ export default function Team() {
         </div>
 
         {/* MOBILE CAROUSEL */}
-        <div className="lg:hidden flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 px-2 sm:px-0">
+        <div className="lg:hidden flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 px-2 scroll-smooth">
 
           {team.map((person) => (
-            <div key={person.name} className="min-w-[280px] snap-center">
+            <div
+              key={person.name}
+              className="min-w-[280px] snap-center shrink-0 hover:scale-[1.02] transition-transform"
+            >
               <TeamCard person={person} />
             </div>
           ))}

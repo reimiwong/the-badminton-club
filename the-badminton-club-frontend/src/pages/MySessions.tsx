@@ -58,30 +58,28 @@ export default function MySessions() {
 
         const data: BookingResponse[] = await res.json();
 
-        const upcoming = data
-          .map((b) => {
-            const dateObj = new Date(b.session.date);
-            if (dateObj < new Date()) return null;
+      const upcoming = data
+  .filter((b) => b.session && b.session.date)
+  .map((b) => {
+    const dateObj = new Date(b.session.date);
 
-            return {
-              bookingId: b.id,
-              id: b.session.id,
-              title: b.session.title,
-              type: b.session.type,
-              date: b.session.date,
-              startTime: dateObj.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-              endTime: new Date(
-                dateObj.getTime() + 90 * 60000
-              ).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-              coach: b.session.coach || undefined,
-              location: b.session.location,
-              price: b.session.price,
+    return {
+      bookingId: b.id,
+      id: b.session.id,
+      title: b.session.title,
+      type: b.session.type,
+      date: b.session.date,
+      startTime: dateObj.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      endTime: new Date(dateObj.getTime() + 90 * 60000).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      coach: b.session.coach || undefined,
+      location: b.session.location,
+      price: b.session.price,
             };
           })
           .filter(Boolean) as SessionCard[];
@@ -212,9 +210,7 @@ return (
                     {session.title}
                   </h2>
 
-                  <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
-                    {session.type}
-                  </span>
+               
 
                 </div>
 
