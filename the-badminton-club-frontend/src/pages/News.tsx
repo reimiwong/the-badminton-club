@@ -4,7 +4,7 @@ import NewsCard from "../components/NewsCard";
 export default function News() {
   if (!news || news.length === 0) {
     return (
-      <div className="py-20 text-center text-muted">
+      <div className="py-16 sm:py-24 text-center text-muted">
         No news available
       </div>
     );
@@ -13,12 +13,14 @@ export default function News() {
   const [featured, ...rest] = news;
 
   return (
-    <section>
+    <section className="w-full">
 
-      {/* HERO */}
-      <div className="bg-background px-6 pt-20 md:pt-24 pb-14 md:pb-20 text-center">
+      {/* =========================
+          HERO
+      ========================= */}
+      <div className="bg-background px-5 sm:px-6 pt-16 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20 text-center">
 
-        <h1 className="h1 text-4xl md:text-6xl">
+        <h1 className="h1 text-4xl sm:text-5xl lg:text-6xl">
           News & <span className="text-primary">Updates</span>
         </h1>
 
@@ -28,8 +30,10 @@ export default function News() {
 
       </div>
 
-      {/* FEATURED */}
-      <section className="py-14 md:py-20 px-6 bg-surface">
+      {/* =========================
+          FEATURED
+      ========================= */}
+      <section className="py-14 sm:py-20 px-5 sm:px-6 bg-surface">
 
         <div className="max-w-7xl mx-auto">
 
@@ -66,9 +70,9 @@ export default function News() {
             </div>
 
             {/* CONTENT */}
-            <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center gap-4">
+            <div className="md:w-1/2 p-5 sm:p-6 md:p-8 flex flex-col justify-center gap-4">
 
-              <div className="flex items-center gap-3 text-sm flex-wrap">
+              <div className="flex items-center gap-3 text-xs sm:text-sm flex-wrap">
 
                 <span className="bg-primary/10 text-primary px-3 py-1 rounded-full">
                   {featured?.category}
@@ -80,7 +84,7 @@ export default function News() {
 
               </div>
 
-              <h2 className="h2 group-hover:text-primary transition-colors text-2xl md:text-4xl">
+              <h2 className="h2 text-2xl sm:text-3xl lg:text-4xl group-hover:text-primary transition-colors">
                 {featured?.title}
               </h2>
 
@@ -89,34 +93,34 @@ export default function News() {
               </p>
 
               <div className="flex items-center gap-2 text-primary font-medium mt-2 group w-fit">
+
                 <span>Read full article</span>
 
                 <img
                   src="/images/icons/green-arrow-icon.svg"
                   alt=""
                   aria-hidden="true"
-                  className="
-                    w-4 h-4
-                    transition-transform duration-200 ease-out
-                    group-hover:translate-x-1
-                  "
+                  className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
                 />
+
               </div>
 
             </div>
-            
+
           </a>
 
         </div>
 
       </section>
 
-      {/* LATEST */}
-      <section className="py-14 md:py-20 px-6 bg-background">
+      {/* =========================
+          LATEST
+      ========================= */}
+      <section className="py-14 sm:py-20 px-5 sm:px-6 bg-background">
 
         <div className="max-w-7xl mx-auto">
 
-          <h2 className="h2 text-2xl md:text-4xl">
+          <h2 className="h2 text-2xl sm:text-3xl lg:text-4xl">
             Latest Articles
           </h2>
 
@@ -124,30 +128,36 @@ export default function News() {
             Updates from the club
           </p>
 
-          {/* MOBILE: horizontal scroll */}
+          {/* MOBILE */}
           <div className="sm:hidden mt-6 flex gap-4 overflow-x-auto scrollbar-hide pb-2">
+
             {rest.map((item) => (
               <div key={item.id} className="min-w-[85%]">
-                <NewsCard {...item} showReadMore={true} />
+                <NewsCard {...item} showReadMore />
               </div>
             ))}
+
           </div>
 
-          {/* DESKTOP GRID */}
-          <div className="hidden sm:grid mt-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* DESKTOP */}
+          <div className="hidden sm:grid mt-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+
             {rest.map((item) => (
-              <NewsCard key={item.id} {...item} showReadMore={true} />
+              <NewsCard key={item.id} {...item} showReadMore />
             ))}
+
           </div>
 
         </div>
 
       </section>
 
-      {/* SUBSCRIBE */}
-      <section className="bg-surface py-16 md:py-24">
+      {/* =========================
+          SUBSCRIBE
+      ========================= */}
+      <section className="bg-surface py-16 sm:py-20 lg:py-24">
 
-        <div className="max-w-3xl mx-auto px-6 flex flex-col items-center text-center gap-6">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 flex flex-col items-center text-center gap-6">
 
           <img
             src="/images/icons/green-email-icon.svg"
@@ -155,7 +165,7 @@ export default function News() {
             className="p-3 bg-primary/10 rounded-xl h-14"
           />
 
-          <h2 className="h2 text-2xl md:text-4xl">
+          <h2 className="h2 text-2xl sm:text-3xl lg:text-4xl">
             Never Miss an Update
           </h2>
 

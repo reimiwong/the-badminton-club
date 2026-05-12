@@ -84,169 +84,203 @@ useEffect(() => {
 
 
 return (
-  <div className="container mx-auto p-6">
-    
- <div className="container mx-auto p-6">
-  <div className="flex">
-    <button
-      className="link mb-4 flex items-center gap-2 transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer"
-      onClick={() => navigate("/sessions")}
-    >
-      <img
-        className="transform scale-x-[-1] w-4 h-4 transition-transform duration-200 ease-in-out group-hover:translate-x-1"
-        src="/images/icons/green-arrow-icon.svg"
-      />
-      Back to sessions
-    </button>
-  </div>
-</div>
+  <div className="bg-background">
 
-    {/* Main Session Card */}
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-  {/* Green top strip */}
-  <div className="bg-primary h-4 w-full"></div>
+    {/* PAGE WRAPPER */}
+    <div className="max-w-7xl mx-auto px-5 sm:px-6 py-16 md:py-24">
 
-  <div className="p-6">
-    <div className="flex justify-between items-start">
-      <div>
-        <span className="text-sm text-primary font-medium bg-primary/10 px-2 py-1 rounded-3xl ">{session.type}</span>
-        <h1 className="h2 mt-2">{session.title}</h1>
-        {session.description && (
-          <p className="mt-2 text-gray-600">{session.description}</p>
-        )}
-      </div>
-      <div className="text-right font-semibold text-4xl flex flex-col" >
-        £{session.price} <span className="text-sm font-normal text-muted">per person</span>
-      </div>
-    </div>
-
-    <hr className="my-4 border-t border-gray-300" />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm body">
-        <div className="flex items-start gap-2">
-      <img className="w-5 h-5" src="/images/icons/green-calendar-icon.svg" />
-                <div className="flex flex-col">
-          <p className="text-muted">Date & Time</p>
-          <div className="font-semibold">
-            {new Date(session.date).toLocaleDateString()}
-            <br />
-            {new Date(session.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-          </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <img className="w-5 h-5" src="/images/icons/green-location-icon.svg" />
-          <div className="flex flex-col">
-          <p className="text-muted">Location</p>
-          <div className="font-semibold">{session.location}</div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <img className="w-5 h-5" src="/images/icons/green-players-icon.svg" />
-                    <div className="flex flex-col">
-          <p className="text-muted">Availability</p>
-          <div className="font-semibold">{session.capacity - session.bookings.length} of {session.capacity} spots left</div>
-        </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <img className="w-5 h-5" src="/images/icons/green-skill-icon.svg" />
-             <div className="flex flex-col">
-          <p className="text-muted">Skill Level</p>
-          <div className="font-semibold">{session.level}</div>
-          </div>
-        </div>
+      {/* BACK BUTTON */}
+      <div className="mb-6">
+        <button
+          className="link flex items-center gap-2 transition-transform duration-200 hover:scale-105"
+          onClick={() => navigate("/sessions")}
+        >
+          <img
+            className="w-4 h-4 scale-x-[-1]"
+            src="/images/icons/green-arrow-icon.svg"
+          />
+          Back to sessions
+        </button>
       </div>
 
-      {session.specialties?.length ? (
-        <div className="mt-6">
-          <h3 className="h3 mb-2">Specialties</h3>
-          <ul className="body list-disc list-inside marker:text-green-500 marker:text-xl">
-            {session.specialties.map((s) => (<li key={s}>{s}</li>))}
+      {/* MAIN SESSION CARD */}
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+        {/* TOP BAR */}
+        <div className="bg-primary h-3 w-full" />
+
+        <div className="p-5 md:p-8">
+
+          {/* HEADER */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+
+            <div>
+              <span className="text-xs md:text-sm text-primary font-medium bg-primary/10 px-3 py-1 rounded-full">
+                {session.type}
+              </span>
+
+              <h1 className="h2 mt-3 text-2xl md:text-4xl">
+                {session.title}
+              </h1>
+
+              {session.description && (
+                <p className="mt-2 text-muted text-body">
+                  {session.description}
+                </p>
+              )}
+            </div>
+
+            <div className="text-left md:text-right font-semibold text-3xl md:text-4xl">
+              £{session.price}
+              <span className="block text-sm font-normal text-muted">
+                per person
+              </span>
+            </div>
+
+          </div>
+
+          <hr className="my-6 border-border" />
+
+          {/* DETAILS GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+
+            <div className="flex items-start gap-3">
+              <img className="w-5 h-5" src="/images/icons/green-calendar-icon.svg" />
+              <div>
+                <p className="text-muted">Date & Time</p>
+                <p className="font-semibold">
+                  {new Date(session.date).toLocaleDateString()}
+                  <br />
+                  {new Date(session.date).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <img className="w-5 h-5" src="/images/icons/green-location-icon.svg" />
+              <div>
+                <p className="text-muted">Location</p>
+                <p className="font-semibold">{session.location}</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <img className="w-5 h-5" src="/images/icons/green-players-icon.svg" />
+              <div>
+                <p className="text-muted">Availability</p>
+                <p className="font-semibold">
+                  {session.capacity - session.bookings.length} of {session.capacity} spots
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <img className="w-5 h-5" src="/images/icons/green-skill-icon.svg" />
+              <div>
+                <p className="text-muted">Skill Level</p>
+                <p className="font-semibold">{session.level}</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* OPTIONAL SECTIONS */}
+          {session.specialties?.length ? (
+            <div className="mt-8">
+              <h3 className="h3 mb-3">Specialties</h3>
+              <ul className="body list-disc list-inside marker:text-primary space-y-1">
+                {session.specialties.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {session.agenda?.length ? (
+            <div className="mt-8">
+              <h3 className="h3 mb-3">Agenda</h3>
+              <ol className="body list-decimal list-inside marker:text-primary space-y-1">
+                {session.agenda.map((a, i) => (
+                  <li key={i}>{a}</li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
+
+          {session.whatToBring?.length ? (
+            <div className="mt-8">
+              <h3 className="h3 mb-3">What to Bring</h3>
+              <ul className="body list-disc list-inside marker:text-primary space-y-1">
+                {session.whatToBring.map((i, idx) => (
+                  <li key={idx}>{i}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+        </div>
+      </div>
+
+      {/* TWO INFO BOXES */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+
+        <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-3">
+          <h4 className="font-bold text-lg md:text-xl">What to Expect</h4>
+          <ul className="body list-disc list-inside marker:text-primary space-y-1">
+            <li>15 min warm-up and footwork drills</li>
+            <li>45 min skill practice</li>
+            <li>30 min match play / drills</li>
           </ul>
         </div>
-      ) : null}
 
-      {session.agenda?.length ? (
-        <div className="mt-6">
-          <h3 className="h3 mb-2">Agenda</h3>
-          <ol className="body list-decimal list-inside marker:text-green-500 marker:text-xl">
-            {session.agenda.map((a, i) => (<li key={i}>{a}</li>))}
-          </ol>
-        </div>
-      ) : null}
-
-      {session.whatToBring?.length ? (
-        <div className="mt-6">
-          <h3 className="h3 mb-2">What to Bring</h3>
-          <ul className="body list-disc list-inside marker:text-green-500 marker:text-xl">
-            {session.whatToBring.map((i, idx) => (<li key={idx}>{i}</li>))}
+        <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-3">
+          <h4 className="font-bold text-lg md:text-xl">What to Bring</h4>
+          <ul className="body list-disc list-inside marker:text-primary space-y-1">
+            <li>Indoor court shoes</li>
+            <li>Racket</li>
+            <li>Water bottle</li>
+            <li>Towel</li>
           </ul>
         </div>
-      ) : null}
 
- 
-    </div>
-</div>
-
-    {/* Equal height/width "What to Expect" & "What to Bring" */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-      <div className="bg-white p-6 rounded-2xl flex flex-col gap-4 h-full shadow-lg flex-1">
-        <h4 className="font-bold text-lg">What to Expect</h4>
-        <ul className="list-disc list-inside marker:text-green-500 marker:text-xl flex flex-col gap-2 body">
-          <li>15 min warm-up and footwork drills</li>
-          <li>45 min skill practice</li>
-          <li>30 min match play / drills</li>
-        </ul>
       </div>
 
-      <div className="bg-white p-6 rounded-2xl flex flex-col gap-4 h-full shadow-lg flex-1">
-        <h4 className="font-bold text-lg">What to Bring</h4>
-        <ul className="list-disc list-inside marker:text-green-500 marker:text-xl flex flex-col gap-2 body">
-          <li>Indoor court shoes</li>
-          <li>Racket</li>
-          <li>Water bottle</li>
-          <li>Towel</li>
-        </ul>
+      {/* CTA */}
+      <div className="flex flex-col md:flex-row justify-between items-center bg-white mt-8 rounded-2xl p-6 gap-4 shadow-lg">
+
+        <div>
+          <h4 className="font-bold text-lg">Ready to Book?</h4>
+          <p className="text-muted">Secure your spot for this session</p>
+        </div>
+
+        <button
+          className="btn-primary px-8 py-3 w-full md:w-auto"
+          onClick={() => {
+            if (!isAuthenticated) {
+              setShowSignInModal(true);
+              return;
+            }
+            navigate("/booking", { state: { session } });
+          }}
+        >
+          Continue to Payment
+        </button>
+
       </div>
+
     </div>
 
-    {/* Ready to Book / Continue to Payment */}
-    <div className="flex flex-col md:flex-row justify-between items-center bg-white mt-6 rounded-2xl p-6 gap-4 shadow-lg">
-      <div className="flex flex-col">
-        <h4 className="font-bold text-lg">Ready to Book?</h4>
-        <p className="text-muted">Secure your spot for this session</p>
-      </div>
- 
-<button
-  className="btn-primary px-8 py-3 w-full md:w-auto"
-  onClick={() => {
-    if (!isAuthenticated) {
-      setShowSignInModal(true);
-      return;
-    }
-
-    navigate("/booking", { state: { session } });
-  }}
->
-  Continue to Payment
-</button>
-
-    </div>
     {showSignInModal && (
- 
+      <SignInModal
+        isOpen={showSignInModal && !isAuthenticated}
+        onClose={() => setShowSignInModal(false)}
+      />
+    )}
 
-
-
-<SignInModal
-  isOpen={showSignInModal && !isAuthenticated}
-  onClose={() => setShowSignInModal(false)}
-/>
-
-
-
-)}
   </div>
-
 );
 };
 

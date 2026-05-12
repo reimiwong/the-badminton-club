@@ -201,21 +201,7 @@ export default function Header() {
                     My Sessions
                   </NavLink>
 
-                  {/* FIXED SIGN IN (MATCHES BOOK NOW FEEL) */}
-                  <button
-                    className={dropdownPrimaryButton}
-                    onClick={() => {
-                      setUserOpen(false);
-                      setSignInOpen(true);
-                    }}
-                  >
-                    <img
-                      className="h-4 w-4"
-                      src="/images/icons/login-icon.svg"
-                      alt=""
-                    />
-                    Switch account
-                  </button>
+            
 
                   <button
                     className="cursor-pointer flex gap-2 px-4 py-2 text-[#D32F2F] hover:bg-red-50 text-left text-sm"

@@ -154,101 +154,125 @@ export default function MySessions() {
     return <p className="p-6">Loading your sessions…</p>;
   }
 
-  return (
-    <div className="container mx-auto px-6 py-12 max-w-[1000px]">
-      <h1 className="h2 mb-2">My Sessions</h1>
-      <p className="text-gray-500 mb-6">
-        Manage your upcoming bookings
-      </p>
+return (
+  <div className="bg-background">
 
+    {/* PAGE WRAPPER */}
+    <div className="max-w-5xl mx-auto px-5 sm:px-6 py-16 md:py-24">
+
+      {/* HEADER */}
+      <div className="mb-8">
+
+        <h1 className="h2 text-2xl md:text-4xl">
+          My Sessions
+        </h1>
+
+        <p className="text-muted mt-2">
+          Manage your upcoming bookings
+        </p>
+
+      </div>
+
+      {/* SUCCESS MESSAGE */}
       {successMessage && (
-        <div className="mb-6 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-green-700 font-medium">
+        <div className="mb-6 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-green-700 font-medium text-sm md:text-base">
           {successMessage}
         </div>
       )}
 
+      {/* EMPTY STATE */}
       {sessions.length === 0 && (
-        <p className="text-gray-500">
+        <p className="text-muted">
           You have no upcoming sessions.
         </p>
       )}
 
-      <div className="flex flex-col gap-4">
+      {/* LIST */}
+      <div className="flex flex-col gap-5">
+
         {sessions.map((session) => (
           <div
             key={session.bookingId}
-            className="flex flex-col bg-white rounded-xl shadow-md"
+            className="bg-white rounded-2xl shadow-md overflow-hidden"
           >
-            <div className="h-4 w-full rounded-t-xl bg-primary" />
 
-            <div className="flex flex-col md:flex-row justify-between items-start p-6 gap-4">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold">
+            {/* TOP BAR */}
+            <div className="h-3 w-full bg-primary" />
+
+            {/* CONTENT */}
+            <div className="p-5 md:p-6 flex flex-col md:flex-row justify-between gap-6">
+
+              {/* LEFT */}
+              <div className="flex flex-col gap-3">
+
+                {/* TITLE */}
+                <div className="flex items-center gap-2 flex-wrap">
+
+                  <h2 className="text-lg md:text-xl font-bold">
                     {session.title}
                   </h2>
-                  <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-700">
+
+                  <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
                     {session.type}
                   </span>
+
                 </div>
 
-                <div className="grid grid-cols-2 gap-y-4 gap-x-16 text-gray-500 text-sm mt-1">
+                {/* DETAILS */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3 text-sm text-muted">
+
                   <div className="flex items-center gap-2">
-                    <img
-                      className="w-4 h-4"
-                      src="/images/icons/gray-calendar-icon.svg"
-                    />
+                    <img className="w-4 h-4" src="/images/icons/gray-calendar-icon.svg" />
                     {new Date(session.date).toLocaleDateString()}
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <img
-                      className="w-4 h-4"
-                      src="/images/icons/gray-clock-icon.svg"
-                    />
+                    <img className="w-4 h-4" src="/images/icons/gray-clock-icon.svg" />
                     {session.startTime} – {session.endTime}
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <img
-                      className="w-4 h-4"
-                      src="/images/icons/gray-map-pin-icon.svg"
-                    />
+                    <img className="w-4 h-4" src="/images/icons/gray-map-pin-icon.svg" />
                     {session.location}
                   </div>
 
                   {session.coach && (
                     <div className="flex items-center gap-2">
-                      <img
-                        className="w-4 h-4"
-                        src="/images/icons/gray-graduation-cap-icon.svg"
-                      />
+                      <img className="w-4 h-4" src="/images/icons/gray-graduation-cap-icon.svg" />
                       Coach: {session.coach}
                     </div>
                   )}
+
                 </div>
+
               </div>
 
-              <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                <span className="font-semibold text-xl">
+              {/* RIGHT */}
+              <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-start gap-4">
+
+                <span className="text-xl font-semibold">
                   £{session.price}
                 </span>
 
                 <button
-                  onClick={() =>
-                    handleCancelBooking(session.bookingId)
-                  }
+                  onClick={() => handleCancelBooking(session.bookingId)}
                   disabled={deletingId === session.bookingId}
-                  className="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200 flex gap-1 justify-center disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 text-sm border border-red-500 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
                 >
                   <img src="/images/icons/x-icon.svg" />
-                  Cancel Session
+                  Cancel
                 </button>
+
               </div>
+
             </div>
+
           </div>
         ))}
+
       </div>
+
     </div>
-  );
+  </div>
+);
 }

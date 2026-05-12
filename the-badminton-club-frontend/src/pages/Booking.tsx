@@ -99,15 +99,17 @@ return (
 
     <div className="max-w-7xl mx-auto p-6 md:p-12">
       {/* Back Button + Heading */}
-      <div className="flex flex-col mb-6 gap-8">
+    <div className="mb-6">
         <button
-          className="flex items-center gap-2 text-sm text-gray-600 font-semibold hover:text-primary hover:underline transition-colors duration-200 mb-2 cursor-pointer"
-          onClick={() => navigate(`/sessions/${session.id}`)}
+          className="link flex items-center gap-2 transition-transform duration-200 hover:scale-105"
+          onClick={() => navigate("/sessions")}
         >
-          <img className="w-4 h-4 rotate-180" src="/images/icons/green-arrow-icon.svg" alt="" />
+          <img
+            className="w-4 h-4 scale-x-[-1]"
+            src="/images/icons/green-arrow-icon.svg"
+          />
           Back to sessions
         </button>
-        <h3 className="h3">Complete Your Booking</h3>
       </div>
 
       {/* Form + Order Summary */}

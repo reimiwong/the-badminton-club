@@ -31,7 +31,7 @@ export const homeFeatures: HomeFeature[] = [
     description: "Book your session in seconds",
     link: {
         title: "Join a Session",
-        page: "/booking",
+        page: "/sessions",
     },
     img: {
       src: "./badminton-court.webp",
