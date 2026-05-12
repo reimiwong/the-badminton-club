@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Skeleton } from "../components/skeleton";
+import Skeleton from "../components/Skeleton";
 
 /* =========================
    SKELETON
@@ -93,20 +93,6 @@ const SessionsPage: React.FC = () => {
 
   const formatDate = (date: Date) =>
     date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-
-  const formatTimeRange = (session: Session) => {
-    const start = new Date(session.date);
-    const duration = session.template.type === "Coaching" ? 90 : 120;
-    const end = new Date(start.getTime() + duration * 60 * 1000);
-
-    return `${start.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })} - ${end.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}`;
-  };
 
   /* =========================
      FETCH (runs once)
