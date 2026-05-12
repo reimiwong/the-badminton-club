@@ -31,7 +31,7 @@ export default function Home() {
               <span className="block text-primary">Improve.</span>
             </h1>
 
-            <p className="text-body text-muted leading-relaxed max-w-prose">
+            <p className="text-lg text-base text-muted leading-relaxed max-w-prose">
               Join a vibrant community of players at all levels. From casual games to competitive training, we help you improve properly.
             </p>
 

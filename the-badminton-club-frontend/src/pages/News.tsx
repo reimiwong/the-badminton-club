@@ -24,7 +24,7 @@ export default function News() {
           News & <span className="text-primary">Updates</span>
         </h1>
 
-        <p className="mt-5 text-body-lg text-muted max-w-3xl mx-auto">
+        <p className="mt-5 text-lg text-muted max-w-3xl mx-auto">
           Stay informed about tournaments, training programs, and club announcements
         </p>
 

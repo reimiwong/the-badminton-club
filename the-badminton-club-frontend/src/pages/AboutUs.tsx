@@ -48,7 +48,7 @@ export default function AboutUs() {
               Our <span className="text-primary">Story</span>
             </h1>
 
-            <p className="body-lg muted mt-4 max-w-3xl">
+            <p className="text-lg text-muted mt-4 max-w-3xl">
               Building Edinburgh's most vibrant badminton community, one rally at a time
             </p>
 

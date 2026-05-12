@@ -64,6 +64,8 @@ const SessionsPage: React.FC = () => {
     "All" | "Beginner" | "Intermediate" | "Advanced"
   >("All");
 
+
+
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
 
   /* =========================
@@ -74,6 +76,8 @@ const SessionsPage: React.FC = () => {
     new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
   const getWeekRange = (date: Date) => {
+
+    
     const day = date.getDay();
     const diffToMonday = date.getDate() - day + (day === 0 ? -6 : 1);
 
@@ -85,7 +89,10 @@ const SessionsPage: React.FC = () => {
 
     return [weekStart, weekEnd] as const;
   };
-
+const todayWeekStart = useMemo(() => {
+  const today = new Date();
+  return getWeekRange(today)[0];
+}, []);
   const [weekStart, weekEnd] = useMemo(
     () => getWeekRange(currentWeekStart),
     [currentWeekStart],
@@ -149,19 +156,19 @@ const SessionsPage: React.FC = () => {
      WEEK NAV
   ========================= */
 
-  const prevWeek = () => {
-    setCurrentWeekStart((prev) => {
-      const next = new Date(prev);
-      next.setDate(prev.getDate() - 7);
+const prevWeek = () => {
+  setCurrentWeekStart((prev) => {
+    const next = new Date(prev);
+    next.setDate(prev.getDate() - 7);
 
-      if (startOfDay(next) < startOfDay(new Date())) {
-        return prev;
-      }
+    // BLOCK going before current week
+    if (startOfDay(next) < startOfDay(todayWeekStart)) {
+      return prev;
+    }
 
-      return next;
-    });
-  };
-
+    return next;
+  });
+};
   const nextWeek = () => {
     setCurrentWeekStart((prev) => {
       const next = new Date(prev);
@@ -204,7 +211,7 @@ const SessionsPage: React.FC = () => {
             Book your <span className="text-primary">next session</span>
           </h1>
 
-          <p className="body text-muted max-w-xl">
+          <p className="text-xl text-muted max-w-xl">
             Coaching and match play sessions updated weekly. Secure your spot
             before they fill.
           </p>
@@ -220,7 +227,7 @@ const SessionsPage: React.FC = () => {
             <div className="flex items-center justify-between mb-5">
               <button
                 onClick={prevWeek}
-                disabled={startOfDay(weekStart) <= startOfDay(new Date())}
+             disabled={startOfDay(weekStart) <= startOfDay(todayWeekStart)}
                 className="p-2 rounded-xl hover:bg-background transition disabled:opacity-30"
               >
                 <img src="/images/icons/left-icon.svg" alt="" />

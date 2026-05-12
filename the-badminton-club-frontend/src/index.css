@@ -30,6 +30,17 @@ html, body {
   height: 100%;
 }
 
+.text-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .text-body {
+    font-size: 1rem;
+  }
+}
+
 body {
   margin: 0;
   background: var(--color-background);

@@ -11,7 +11,7 @@ export default function ContactUs() {
           Get in <span className="text-primary">Touch</span>
         </h1>
 
-        <p className="mt-5 mx-auto max-w-2xl text-body text-muted sm:text-body-lg">
+        <p className="mt-5 mx-auto max-w-2xl text-lg text-muted sm:text-body-lg">
           Have questions? Send us a message and we’ll respond as soon as possible.
         </p>
 

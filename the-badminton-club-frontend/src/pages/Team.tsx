@@ -110,7 +110,7 @@ export default function Team() {
             Meet the <span className="text-primary">Team</span>
           </h2>
 
-          <p className="text-body-lg text-muted max-w-2xl mx-auto">
+          <p className="text-lg text-muted max-w-2xl mx-auto">
             Coaches and staff behind the club’s training and day-to-day running.
           </p>
 
