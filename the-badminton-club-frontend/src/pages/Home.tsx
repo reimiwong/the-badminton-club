@@ -73,7 +73,7 @@ export default function Home() {
     {/* =========================
         STATS
     ========================= */}
-    <section className="bg-surface py-16 sm:py-20 lg:py-24 border-t border-border">
+    <section className="bg-surface py-16 sm:py-20 lg:py-24 ">
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6">
 
@@ -140,7 +140,7 @@ export default function Home() {
     {/* =========================
         NEWS
     ========================= */}
-    <section className="bg-surface py-16 sm:py-24 lg:py-32 border-t border-border">
+    <section className="bg-surface py-16 sm:py-24 lg:py-32 ">
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6">
 
