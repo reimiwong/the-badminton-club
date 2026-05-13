@@ -8,10 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import SignInModal from "./SignInModal";
 import { useAuth } from "../context/AuthContext";
 
-/* =========================
-   CONSTANTS
-========================= */
-
 const buttonClass =
   "cursor-pointer px-5 py-2.5 bg-primary text-surface rounded-xl font-medium transition-all duration-200 ease-out hover:opacity-90 hover:-translate-y-0.5 active:scale-95";
 
@@ -39,10 +35,6 @@ const navItems = [
   { to: "/contact", label: "Contact" },
 ];
 
-/* =========================
-   SMALL HELPERS
-========================= */
-
 function PrimaryNavLinks({
   onClick,
   className,
@@ -67,31 +59,23 @@ function PrimaryNavLinks({
   );
 }
 
-/* =========================
-   HEADER
-========================= */
-
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const userRef = useRef<HTMLDivElement>(null);
 
-  /* =========================
-     EFFECTS
-  ========================= */
-
+  // track scroll position to toggle header styles (e.g. shadow) when scrolled
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
-
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // close drop down when clicked off it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userRef.current && !userRef.current.contains(event.target as Node)) {
@@ -101,13 +85,8 @@ export default function Header() {
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  /* =========================
-     ACTIONS
-  ========================= */
 
   const handleSignOut = () => {
     logout();
@@ -115,10 +94,6 @@ export default function Header() {
     setMobileOpen(false);
     navigate("/");
   };
-
-  /* =========================
-     RENDER
-  ========================= */
 
   return (
     <>
@@ -128,13 +103,10 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between relative">
-          {/* LOGO */}
           <NavLink
             to="/"
             className="inline-flex items-center shrink-0 h3 text-text transition-all duration-200 hover:text-primary hover:-translate-y-0.5"
-            onClick={() =>
-              window.scrollTo({ top: 0, behavior: "smooth" })
-            }
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <div className="flex gap-3 items-center min-w-0">
               <img
@@ -142,9 +114,7 @@ export default function Header() {
                 className="h-10 w-10 shrink-0"
                 alt=""
               />
-              <span className="truncate">
-                Shamrock Badminton
-              </span>
+              <span className="truncate">Shamrock Badminton</span>
             </div>
           </NavLink>
 
@@ -172,7 +142,7 @@ export default function Header() {
 
             {isAuthenticated && user && (
               <div className="relative" ref={userRef}>
-                  <button
+                <button
                   className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/10 hover:bg-primary/20"
                   onClick={() => setUserOpen((v) => !v)}
                 >
@@ -193,12 +163,8 @@ export default function Header() {
                   }`}
                 >
                   <div className="px-4 py-2 border-b border-gray-200">
-                    <p className="font-semibold text-sm">
-                      {user.username}
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      {user.email}
-                    </p>
+                    <p className="font-semibold text-sm">{user.username}</p>
+                    <p className="text-gray-500 text-sm">{user.email}</p>
                   </div>
 
                   <NavLink
@@ -236,7 +202,7 @@ export default function Header() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle menu"
           >
-            ☰
+            <img src="/images/icons/menu-icon.svg" />
           </button>
         </div>
 
@@ -249,7 +215,7 @@ export default function Header() {
           }`}
         >
           <div className="flex flex-col gap-1 px-6">
-               <PrimaryNavLinks
+            <PrimaryNavLinks
               onClick={() => setMobileOpen(false)}
               className="group relative px-4 py-2 rounded-lg text-sm text-muted
            hover:text-primary hover:bg-primary/5
@@ -289,19 +255,15 @@ export default function Header() {
                   </div>
 
                   <div className="flex flex-col text-sm">
-                    <span className="font-medium">
-                      {user.username}
-                    </span>
-                    <span className="text-muted text-xs">
-                      {user.email}
-                    </span>
+                    <span className="font-medium">{user.username}</span>
+                    <span className="text-muted text-xs">{user.email}</span>
                   </div>
                 </div>
 
                 <NavLink
                   to="/my-sessions"
                   onClick={() => setMobileOpen(false)}
-                   className="px-4 py-2 hover:bg-primary/10 flex items-center gap-3 text-muted text-sm"
+                  className="px-4 py-2 hover:bg-primary/10 flex items-center gap-3 text-muted text-sm"
                 >
                   <img
                     className="h-4 w-4"
@@ -328,7 +290,6 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* SIGN-IN MODAL */}
       <SignInModal
         isOpen={signInOpen && !isAuthenticated}
         onClose={() => setSignInOpen(false)}
