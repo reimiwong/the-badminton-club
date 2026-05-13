@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
 interface User {
   username: string;
@@ -46,12 +51,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const initial = getInitialAuthState();
 
   const [user, setUser] = useState<User | null>(initial.user);
-  const [accessToken, setAccessToken] = useState<string | null>(
+  const [accessToken, setAccessTokenState] = useState<string | null>(
     initial.accessToken
   );
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     initial.isAuthenticated
   );
+
+  /* =========================
+     SILENT REFRESH ON APP LOAD
+  ========================= */
+
+  useEffect(() => {
+    const refreshSession = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/api/users/refresh",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+          logout();
+          return;
+        }
+
+        const data = await res.json();
+
+        setAccessTokenState(data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
+      } catch {
+        logout();
+      }
+    };
+
+    refreshSession();
+  }, []);
 
   /* =========================
      LOGIN
@@ -63,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem("email", user.email);
 
     setUser(user);
-    setAccessToken(token);
+    setAccessTokenState(token);
     setIsAuthenticated(true);
   };
 
@@ -77,8 +114,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.removeItem("email");
 
     setUser(null);
-    setAccessToken(null);
+    setAccessTokenState(null);
     setIsAuthenticated(false);
+  };
+
+  /* =========================
+     SET TOKEN (MANUAL REFRESH SUPPORT)
+  ========================= */
+
+  const setAccessToken = (token: string | null) => {
+    setAccessTokenState(token);
+
+    if (token) {
+      localStorage.setItem("accessToken", token);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
   };
 
   return (

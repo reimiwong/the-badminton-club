@@ -18,7 +18,7 @@ if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
    TOKEN HELPERS
 ========================= */
 
-const ACCESS_TOKEN_EXPIRES = "15m";
+const ACCESS_TOKEN_EXPIRES = "30m";
 const REFRESH_TOKEN_EXPIRES = "7d";
 
 function createAccessToken(payload: { id: number; email: string }) {
@@ -76,6 +76,7 @@ userRouter.post("/login", async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: "Missing email or password" });
   }
+  
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -85,9 +86,8 @@ userRouter.post("/login", async (req, res) => {
     }
 
     if (!user.password) {
-      console.error("User missing password hash:", user.id);
-      return res.status(500).json({ error: "Corrupt user record" });
-    }
+  return res.status(500).json({ error: "Invalid user state" });
+}
 
     const isValid = await bcrypt.compare(password, user.password);
 
@@ -105,12 +105,13 @@ userRouter.post("/login", async (req, res) => {
       email: user.email,
     });
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/api/users/refresh",
-    });
+   res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/api/users/refresh",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
     return res.json({
       accessToken,
@@ -129,7 +130,7 @@ userRouter.post("/login", async (req, res) => {
    REFRESH TOKEN
 ========================= */
 
-userRouter.post("/refresh", (req, res) => {
+userRouter.post("/refresh", async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
@@ -142,14 +143,22 @@ userRouter.post("/refresh", (req, res) => {
       process.env.JWT_REFRESH_SECRET!
     ) as { id: number; email: string };
 
-    const newAccessToken = createAccessToken({
-      id: payload.id,
-      email: payload.email,
+    // IMPORTANT: verify user still exists
+    const user = await prisma.user.findUnique({
+      where: { id: payload.id },
     });
 
-    res.json({ accessToken: newAccessToken });
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+
+    const newAccessToken = createAccessToken({
+      id: user.id,
+      email: user.email,
+    });
+
+    return res.json({ accessToken: newAccessToken });
   } catch (err) {
-    console.error("REFRESH ERROR:", err);
     return res.status(401).json({ error: "Invalid refresh token" });
   }
 });
@@ -157,10 +166,12 @@ userRouter.post("/refresh", (req, res) => {
 /* =========================
    LOGOUT
 ========================= */
-
 userRouter.post("/logout", (_req, res) => {
   res.clearCookie("refreshToken", {
     path: "/api/users/refresh",
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   });
 
   res.sendStatus(204);

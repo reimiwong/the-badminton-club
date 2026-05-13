@@ -44,60 +44,62 @@ export default function MySessions() {
   /* =========================
      LOAD BOOKINGS
   ========================= */
+async function loadBookings() {
+  setLoading(true);
+  try {
+    const res = await apiFetch(`${API_URL}/api/bookings`, {}, auth);
 
-  useEffect(() => {
-    async function loadBookings() {
-      try {
-        const res = await apiFetch(
-          `${API_URL}/api/bookings`,
-          {},
-          auth
-        );
+    if (!res.ok) throw new Error("Failed to load bookings");
 
-        if (!res.ok) throw new Error("Failed to load bookings");
+    const data: BookingResponse[] = await res.json();
 
-        const data: BookingResponse[] = await res.json();
+    const upcoming = data
+      .filter((b) => b.session && b.session.date)
+      .map((b) => {
+        const dateObj = new Date(b.session.date);
 
-      const upcoming = data
-  .filter((b) => b.session && b.session.date)
-  .map((b) => {
-    const dateObj = new Date(b.session.date);
+        return {
+          bookingId: b.id,
+          id: b.session.id,
+          title: b.session.title,
+          type: b.session.type,
+          date: b.session.date,
+          startTime: dateObj.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          endTime: new Date(dateObj.getTime() + 90 * 60000).toLocaleTimeString(
+            [],
+            { hour: "2-digit", minute: "2-digit" }
+          ),
+          coach: b.session.coach || undefined,
+          location: b.session.location,
+          price: b.session.price,
+        };
+      });
 
-    return {
-      bookingId: b.id,
-      id: b.session.id,
-      title: b.session.title,
-      type: b.session.type,
-      date: b.session.date,
-      startTime: dateObj.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      endTime: new Date(dateObj.getTime() + 90 * 60000).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      coach: b.session.coach || undefined,
-      location: b.session.location,
-      price: b.session.price,
-            };
-          })
-          .filter(Boolean) as SessionCard[];
+    setSessions(upcoming);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}
 
-        setSessions(upcoming);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
 
-    if (auth.isAuthenticated) {
-      loadBookings();
-    } else {
-      setLoading(false);
-    }
-  }, [auth, API_URL]);
+useEffect(() => {
+  if (auth.isAuthenticated) {
+    loadBookings();
+  } else {
+    setLoading(false);
+  }
+}, [auth.isAuthenticated]);
+
+
+  
+
+
+
 
   /* =========================
      AUTO‑HIDE SUCCESS MESSAGE
