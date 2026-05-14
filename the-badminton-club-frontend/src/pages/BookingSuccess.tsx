@@ -61,7 +61,7 @@ export default function BookingSuccess() {
       </div>
 
       {/* Confirmation Text */}
-      <div className="bg-green-50 text-primary mt-6 px-4 py-3 rounded-lg text-center max-w-md">
+      <div className="bg-primary text-primary mt-6 px-4 py-3 rounded-lg text-center max-w-md">
         A confirmation email has been sent to your registered email address with all the details.
       </div>
 
