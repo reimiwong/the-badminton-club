@@ -2,10 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "../components/Skeleton";
 
-/* =========================
-   SKELETON
-========================= */
-
 function SessionsSkeleton() {
   return (
     <div className="space-y-10">
@@ -27,10 +23,6 @@ function SessionsSkeleton() {
   );
 }
 
-/* =========================
-   TYPES
-========================= */
-
 interface Session {
   id: number;
   date: string;
@@ -44,10 +36,6 @@ interface Session {
     price: number;
   };
 }
-
-/* =========================
-   COMPONENT
-========================= */
 
 const SessionsPage: React.FC = () => {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -64,20 +52,14 @@ const SessionsPage: React.FC = () => {
     "All" | "Beginner" | "Intermediate" | "Advanced"
   >("All");
 
-
-
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
 
-  /* =========================
-     HELPERS
-  ========================= */
+  /* HELPERS */
 
   const startOfDay = (d: Date) =>
     new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
   const getWeekRange = (date: Date) => {
-
-    
     const day = date.getDay();
     const diffToMonday = date.getDate() - day + (day === 0 ? -6 : 1);
 
@@ -89,10 +71,10 @@ const SessionsPage: React.FC = () => {
 
     return [weekStart, weekEnd] as const;
   };
-const todayWeekStart = useMemo(() => {
-  const today = new Date();
-  return getWeekRange(today)[0];
-}, []);
+  const todayWeekStart = useMemo(() => {
+    const today = new Date();
+    return getWeekRange(today)[0];
+  }, []);
   const [weekStart, weekEnd] = useMemo(
     () => getWeekRange(currentWeekStart),
     [currentWeekStart],
@@ -101,10 +83,7 @@ const todayWeekStart = useMemo(() => {
   const formatDate = (date: Date) =>
     date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 
-  /* =========================
-     FETCH (runs once)
-  ========================= */
-
+  /*  FETCH (runs once) */
   useEffect(() => {
     async function fetchSessions() {
       try {
@@ -129,10 +108,7 @@ const todayWeekStart = useMemo(() => {
     fetchSessions();
   }, []); // KEEP EMPTY
 
-  /* =========================
-     FILTERED DATA (DERIVED)
-  ========================= */
-
+  /* FILTERED DATA (DERIVED) */
   const visibleSessions = useMemo(() => {
     let filtered = [...sessions];
 
@@ -152,23 +128,20 @@ const todayWeekStart = useMemo(() => {
     return filtered;
   }, [sessions, typeFilter, levelFilter, weekStart, weekEnd]);
 
-  /* =========================
-     WEEK NAV
-  ========================= */
+  /* WEEK NAV */
+  const prevWeek = () => {
+    setCurrentWeekStart((prev) => {
+      const next = new Date(prev);
+      next.setDate(prev.getDate() - 7);
 
-const prevWeek = () => {
-  setCurrentWeekStart((prev) => {
-    const next = new Date(prev);
-    next.setDate(prev.getDate() - 7);
+      // BLOCK going before current week
+      if (startOfDay(next) < startOfDay(todayWeekStart)) {
+        return prev;
+      }
 
-    // BLOCK going before current week
-    if (startOfDay(next) < startOfDay(todayWeekStart)) {
-      return prev;
-    }
-
-    return next;
-  });
-};
+      return next;
+    });
+  };
   const nextWeek = () => {
     setCurrentWeekStart((prev) => {
       const next = new Date(prev);
@@ -177,9 +150,7 @@ const prevWeek = () => {
     });
   };
 
-  /* =========================
-     LOADING STATE
-  ========================= */
+  /* LOADING STATE */
   if (loading) {
     return (
       <div className="container mx-auto max-w-[1400px] bg-background px-5 sm:px-6 pt-16 sm:pt-24 lg:pt-28 pb-14 sm:pb-20">
@@ -227,7 +198,7 @@ const prevWeek = () => {
             <div className="flex items-center justify-between mb-5">
               <button
                 onClick={prevWeek}
-             disabled={startOfDay(weekStart) <= startOfDay(todayWeekStart)}
+                disabled={startOfDay(weekStart) <= startOfDay(todayWeekStart)}
                 className="p-2 rounded-xl hover:bg-background transition disabled:opacity-30"
               >
                 <img src="/images/icons/left-icon.svg" alt="" />
@@ -250,62 +221,68 @@ const prevWeek = () => {
 
             {/* FILTERS */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              {/* SESSION TYPE */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-muted font-medium">
+                  Session type
+                </span>
 
-  {/* SESSION TYPE */}
-  <div className="flex flex-col gap-1">
-    <span className="text-xs text-muted font-medium">Session type</span>
-
-    <div className="flex gap-2 overflow-x-auto no-scrollbar">
-      {["All", "Match Play", "Coaching"].map((type) => (
-        <button
-          key={type}
-          onClick={() =>
-            setTypeFilter(type as "All" | "Coaching" | "Match Play")
-          }
-          className={`whitespace-nowrap px-3 py-1.5 text-xs md:text-sm font-medium rounded-full transition-all duration-200
+                <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                  {["All", "Match Play", "Coaching"].map((type) => (
+                    <button
+                      key={type}
+                      onClick={() =>
+                        setTypeFilter(type as "All" | "Coaching" | "Match Play")
+                      }
+                      className={`whitespace-nowrap px-3 py-1.5 text-xs md:text-sm font-medium rounded-full transition-all duration-200
             ${
               typeFilter === type
                 ? "bg-primary text-white shadow-sm"
                 : "bg-primary/10 text-text hover:bg-primary/20"
             }
           `}
-        >
-          {type}
-        </button>
-      ))}
-    </div>
-  </div>
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-  {/* SESSION LEVEL */}
-  <div className="flex flex-col gap-1">
-    <span className="text-xs text-muted font-medium">Session level</span>
+              {/* SESSION LEVEL */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-muted font-medium">
+                  Session level
+                </span>
 
-    <div className="flex gap-2 overflow-x-auto no-scrollbar">
-      {["All", "Beginner", "Intermediate", "Advanced"].map((level) => (
-        <button
-          key={level}
-          onClick={() =>
-            setLevelFilter(
-              level as "All" | "Beginner" | "Intermediate" | "Advanced"
-            )
-          }
-          className={`whitespace-nowrap px-3 py-1.5 text-xs md:text-sm font-medium rounded-full transition-all duration-200
+                <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                  {["All", "Beginner", "Intermediate", "Advanced"].map(
+                    (level) => (
+                      <button
+                        key={level}
+                        onClick={() =>
+                          setLevelFilter(
+                            level as
+                              | "All"
+                              | "Beginner"
+                              | "Intermediate"
+                              | "Advanced",
+                          )
+                        }
+                        className={`whitespace-nowrap px-3 py-1.5 text-xs md:text-sm font-medium rounded-full transition-all duration-200
             ${
               levelFilter === level
                 ? "bg-primary text-white shadow-sm"
                 : "bg-primary/10 text-text hover:bg-primary/20"
             }
           `}
-        >
-          {level}
-        </button>
-      ))}
-    </div>
-  </div>
-
-
-
-</div>
+                      >
+                        {level}
+                      </button>
+                    ),
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

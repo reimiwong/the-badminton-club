@@ -19,15 +19,14 @@ function TeamCard({ person }: { person: TeamMember }) {
     >
       <div
         className={`relative w-full h-full transition-transform duration-700 ease-out [transform-style:preserve-3d]
-        ${flipped
-          ? "[transform:rotateY(180deg)] scale-[1.02]"
-          : "group-hover:[transform:rotateY(180deg)] group-hover:scale-[1.01]"
+        ${
+          flipped
+            ? "[transform:rotateY(180deg)] scale-[1.02]"
+            : "group-hover:[transform:rotateY(180deg)] group-hover:scale-[1.01]"
         }`}
       >
-
         {/* FRONT */}
         <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-lg [backface-visibility:hidden] bg-surface">
-
           <img
             src={image}
             alt={name}
@@ -40,22 +39,17 @@ function TeamCard({ person }: { person: TeamMember }) {
             <h3 className="h3 text-white">{name}</h3>
             <p className="text-sm text-white/80">{role}</p>
           </div>
-
         </div>
 
         {/* BACK */}
         <div className="absolute inset-0 rounded-3xl bg-surface shadow-lg p-6 flex flex-col justify-between [transform:rotateY(180deg)] [backface-visibility:hidden]">
-
           {/* TOP */}
           <div className="flex flex-col gap-5">
-
             <span className="text-xs font-semibold uppercase tracking-wide text-primary bg-primary/10 px-3 py-1 rounded-full w-fit">
               Player Profile
             </span>
 
-            <p className="text-body text-muted leading-relaxed">
-              {funIntro}
-            </p>
+            <p className="text-body text-muted leading-relaxed">{funIntro}</p>
 
             <div className="rounded-2xl bg-primary/5 border border-primary/10 p-4">
               <p className="text-xs text-primary font-semibold uppercase tracking-wide mb-1">
@@ -63,12 +57,10 @@ function TeamCard({ person }: { person: TeamMember }) {
               </p>
               <p className="font-medium text-text">{role}</p>
             </div>
-
           </div>
 
           {/* BOTTOM */}
           <div className="flex items-center justify-between pt-4 border-t border-border">
-
             <div className="flex items-center gap-3">
               <img
                 src={image}
@@ -77,9 +69,7 @@ function TeamCard({ person }: { person: TeamMember }) {
               />
 
               <div>
-                <p className="font-semibold text-text leading-tight">
-                  {name}
-                </p>
+                <p className="font-semibold text-text leading-tight">{name}</p>
                 <p className="text-xs text-muted">Coach</p>
               </div>
             </div>
@@ -87,11 +77,8 @@ function TeamCard({ person }: { person: TeamMember }) {
             <span className="text-xs font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
               Active
             </span>
-
           </div>
-
         </div>
-
       </div>
     </div>
   );
@@ -100,12 +87,9 @@ function TeamCard({ person }: { person: TeamMember }) {
 export default function Team() {
   return (
     <section className="bg-background py-16 sm:py-24 lg:py-32 px-5 sm:px-6">
-
       <div className="w-full max-w-7xl mx-auto">
-
         {/* HEADER */}
         <div className="flex flex-col gap-4 mb-12 sm:mb-16 text-center">
-
           <h2 className="h1">
             Meet the <span className="text-primary">Team</span>
           </h2>
@@ -113,12 +97,10 @@ export default function Team() {
           <p className="text-lg text-muted max-w-2xl mx-auto">
             Coaches and staff behind the club’s training and day-to-day running.
           </p>
-
         </div>
 
         {/* MOBILE CAROUSEL */}
         <div className="lg:hidden flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 px-2 scroll-smooth">
-
           {team.map((person) => (
             <div
               key={person.name}
@@ -127,20 +109,15 @@ export default function Team() {
               <TeamCard person={person} />
             </div>
           ))}
-
         </div>
 
         {/* DESKTOP GRID */}
         <div className="hidden lg:grid grid-cols-4 gap-6 lg:gap-8">
-
           {team.map((person) => (
             <TeamCard key={person.name} person={person} />
           ))}
-
         </div>
-
       </div>
-
     </section>
   );
 }
