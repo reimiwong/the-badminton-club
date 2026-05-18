@@ -104,13 +104,16 @@ userRouter.post("/login", async (req, res) => {
       email: user.email,
     });
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true, // must be true for SameSite=None
-      sameSite: "none", // allow cross-site cookies
-      path: "/api/users/refresh",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+   
+res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  domain: ".azurewebsites.net",   // ✅ ADD THIS
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
 
     return res.json({
       accessToken,
@@ -166,12 +169,15 @@ userRouter.post("/refresh", async (req, res) => {
    LOGOUT
 ========================= */
 userRouter.post("/logout", (_req, res) => {
-  res.clearCookie("refreshToken", {
-    path: "/api/users/refresh",
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-  });
+ 
+res.clearCookie("refreshToken", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  domain: ".azurewebsites.net",
+  path: "/",
+});
+
 
   res.sendStatus(204);
 });
