@@ -1,12 +1,11 @@
 // src/seed.ts
-import { prisma } from "./lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 
 async function main() {
   console.log("Clearing existing data...");
+  // Only delete bookings and users to safely reseed users and sessions if needed
   await prisma.booking.deleteMany();
-  await prisma.session.deleteMany();
-  await prisma.sessionTemplate.deleteMany();
   await prisma.user.deleteMany();
 
   // ----------------------

@@ -1,5 +1,5 @@
 // src/generateWeeklySessions.ts
-import { prisma } from "./lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 
 // Map weekdays to numbers
 const weekdays: Record<string, number> = {
