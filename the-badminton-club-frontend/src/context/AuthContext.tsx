@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface User {
   username: string;
@@ -21,9 +16,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-/* =========================
-   INITIAL STATE
-========================= */
+/* INITIAL STATE*/
 
 const getInitialAuthState = () => {
   const accessToken = localStorage.getItem("accessToken");
@@ -49,29 +42,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const initial = getInitialAuthState();
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState<User | null>(initial.user);
   const [accessToken, setAccessTokenState] = useState<string | null>(
-    initial.accessToken
+    initial.accessToken,
   );
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    initial.isAuthenticated
+    initial.isAuthenticated,
   );
 
-  /* =========================
-     SILENT REFRESH ON APP LOAD
-  ========================= */
+  /* SILENT REFRESH ON APP LOAD */
 
   useEffect(() => {
     const refreshSession = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:3000/api/users/refresh",
-          {
-            method: "POST",
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${API_URL}/api/users/refresh`, {
+          method: "POST",
+          credentials: "include",
+        });
 
         if (!res.ok) {
           logout();
@@ -88,11 +76,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     refreshSession();
-  }, []);
+  }, [API_URL]);
 
-  /* =========================
-     LOGIN
-  ========================= */
+  /* LOGIN */
 
   const login = (user: User, token: string) => {
     localStorage.setItem("accessToken", token);
@@ -104,9 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsAuthenticated(true);
   };
 
-  /* =========================
-     LOGOUT
-  ========================= */
+  /* LOGOUT */
 
   const logout = () => {
     localStorage.removeItem("accessToken");
@@ -118,9 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsAuthenticated(false);
   };
 
-  /* =========================
-     SET TOKEN (MANUAL REFRESH SUPPORT)
-  ========================= */
+  /* SET TOKEN (MANUAL REFRESH SUPPORT) */
 
   const setAccessToken = (token: string | null) => {
     setAccessTokenState(token);
