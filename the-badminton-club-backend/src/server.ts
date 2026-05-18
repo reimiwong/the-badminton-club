@@ -7,24 +7,15 @@ import userRouter from "./routes/users.js";
 import sessionsRouter from "./routes/sessions.js";
 import bookingsRouter from "./routes/bookings.js";
 
-console.log("✅ server.js started");
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-/* =========================
-   CORS CONFIG
-========================= */
-
-
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
   "https://shamrockbadminton.co.uk",
   "https://www.shamrockbadminton.co.uk",
   "https://icy-pond-0b7ff0910.7.azurestaticapps.net",
 ];
-
 
 app.use(
   cors({
@@ -39,32 +30,20 @@ app.use(
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
-  })
+  }),
 );
 
-/* =========================
-   MIDDLEWARE ORDER (CRITICAL)
-========================= */
-
+/* MIDDLEWARE ORDER (CRITICAL) */
 app.set("trust proxy", 1);
-
-// ✅ MUST be before routes (for refresh tokens)
+// MUST be before routes (for refresh tokens)
 app.use(cookieParser());
-
-// ✅ Parse JSON bodies
+// Parse JSON bodies
 app.use(express.json());
 
-/* =========================
-   ROUTES
-========================= */
-
+/*  ROUTES */
 app.use("/api/users", userRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/bookings", bookingsRouter);
-
-/* =========================
-   HEALTH CHECK
-========================= */
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date() });
@@ -74,10 +53,7 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-/* =========================
-   START SERVER
-========================= */
-
+/* START SERVER */
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
