@@ -109,7 +109,6 @@ res.cookie("refreshToken", refreshToken, {
   httpOnly: true,
   secure: true,
   sameSite: "none",
-  domain: ".azurewebsites.net",   // ✅ ADD THIS
   path: "/",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
@@ -174,7 +173,6 @@ res.clearCookie("refreshToken", {
   httpOnly: true,
   secure: true,
   sameSite: "none",
-  domain: ".azurewebsites.net",
   path: "/",
 });
 
