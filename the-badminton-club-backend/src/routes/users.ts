@@ -76,7 +76,6 @@ userRouter.post("/login", async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ error: "Missing email or password" });
   }
-  
 
   try {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -86,8 +85,8 @@ userRouter.post("/login", async (req, res) => {
     }
 
     if (!user.password) {
-  return res.status(500).json({ error: "Invalid user state" });
-}
+      return res.status(500).json({ error: "Invalid user state" });
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
 
@@ -105,13 +104,13 @@ userRouter.post("/login", async (req, res) => {
       email: user.email,
     });
 
-   res.cookie("refreshToken", refreshToken, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  path: "/api/users/refresh",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true, // must be true for SameSite=None
+      sameSite: "none", // allow cross-site cookies
+      path: "/api/users/refresh",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     return res.json({
       accessToken,
@@ -140,7 +139,7 @@ userRouter.post("/refresh", async (req, res) => {
   try {
     const payload = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET!
+      process.env.JWT_REFRESH_SECRET!,
     ) as { id: number; email: string };
 
     // IMPORTANT: verify user still exists
@@ -170,8 +169,8 @@ userRouter.post("/logout", (_req, res) => {
   res.clearCookie("refreshToken", {
     path: "/api/users/refresh",
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+    secure: true,
   });
 
   res.sendStatus(204);
