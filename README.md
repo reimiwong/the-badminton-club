@@ -60,7 +60,7 @@ This project helped me gain hands-on experience with:
 
 ### Homepage
 
-![Homepage](screenshot/homepage.png)
+![Homepage](screenshots/homepage.png)
 
 ---
  portfolio purposes as part of my full-stack development practice.
