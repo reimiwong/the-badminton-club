@@ -61,6 +61,3 @@ This project helped me gain hands-on experience with:
 ### Homepage
 
 ![Homepage](screenshots/homepage.png)
-
----
- portfolio purposes as part of my full-stack development practice.
